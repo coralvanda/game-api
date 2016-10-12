@@ -19,17 +19,23 @@ class Game(ndb.Model):
     move_count = ndb.IntegerProperty()
     game_over = ndb.BooleanProperty(required=True, default=False)
     user = ndb.KeyProperty(required=True, kind='User')
-    player_board = ndb.KeyProperty(kind='Board')
-    player_chart = ndb.KeyProperty(kind='Board')
+    user_fleet = ndb.KeyProperty(kind='Fleet')
+    user_board = ndb.KeyProperty(kind='Board')
+    user_chart = ndb.KeyProperty(kind='Board')
+    AI_fleet = ndb.KeyProperty(kind='Fleet')
     AI_board = ndb.KeyProperty(kind='Board')
     AI_chart = ndb.KeyProperty(kind='Board')
 
     @classmethod
     def new_game(cls, user):
         """Creates and returns a new game"""
-        #if max < min:
-        #    raise ValueError('Maximum must be greater than minimum')
         game = Game(user=user,
+                    user_fleet=Fleet().key,
+                    user_board=Board().key,
+                    user_chart=Board().key,
+                    AI_fleet=Fleet().key,
+                    AI_board=Board().key,
+                    AI_chart=Board().key,
                     game_over=False)
         game.put()
         return game
@@ -45,7 +51,10 @@ class Game(ndb.Model):
         return form
 
     def make_move(self, move):
+        """No need to update move count here, it's already done in
+        api.py"""
         pass
+
 
     def check_state(self):
         pass
@@ -77,11 +86,36 @@ class Board(ndb.Model):
     def build_board(self):
         pass
 
-    def place_ship(self, ship):
+    def place_ship(self, ship, bow_position, orientation):
         pass
 
-    def validate_placement(self, ship_size, bow_position, orientation):
-        pass
+    def valid_placement(self, ship_size, bow_row, bow_position, orientation):
+        """Confirms that a ship has been placed in a legal position
+
+        Args:
+            Ship_size: The length of the ship from stem to stern
+            Bow_row: The DB row on which the bow is placed
+            Bow_position: The index of the DB row on which the bow is placed
+            Orientation: can be vertical or horizontal, but the game will
+                assume that the ship will always either extend down from the
+                bow, or extend to the right from the bow
+        Returns:
+            Either True or False for legal or illegal placements"""
+        if getattr(getattr(self, bow_row), bow_position):
+            return False
+        if orientation == 'Vertical':
+            for x in range(1, ship_size + 1):
+                if ship_size + x > 9:
+                    return False
+                if getattr(getattr(self, bow_row + x), bow_position):
+                    return False
+        else:
+            for x in range(1, ship_size + 1):
+                if ship_size + x > 9:
+                    return False
+                if getattr(getattr(self, bow_row), bow_position + x):
+                    return False
+        return True
 
     def mark_board(self, location):
         pass
@@ -91,15 +125,39 @@ class Board(ndb.Model):
 
 
 class Fleet(ndb.Model):
-    """Ships model"""
-    carrier     = ndb.IntegerProperty(default=5)
-    battleship  = ndb.IntegerProperty(default=4)
-    cruiser     = ndb.IntegerProperty(default=3)
-    submarine   = ndb.IntegerProperty(default=3)
-    destroyer   = ndb.IntegerProperty(default=2)
+    """Ships model
+
+    Ship status will be empty until the ship has been placed
+    on the board.  Then its status will show as either 'placed'
+    or as 'sunk'."""
+    carrier_hp          = ndb.IntegerProperty(default=5)
+    carrier_status      = ndb.StringProperty()
+    battleship_hp       = ndb.IntegerProperty(default=4)
+    battleship_status   = ndb.StringProperty()
+    cruiser_hp          = ndb.IntegerProperty(default=3)
+    cruiser_status      = ndb.StringProperty()
+    submarine_hp        = ndb.IntegerProperty(default=3)
+    submarine_status    = ndb.StringProperty()
+    destroyer_hp        = ndb.IntegerProperty(default=2)
+    destroyer_status    = ndb.StringProperty()
+
+    def return_size(self, ship):
+        """Returns an integer indicating the size of the ship"""
+        sizes = {'carrier': 5,
+                'battleship': 4,
+                'cruiser': 3,
+                'submarine': 3,
+                'deestroyer': 2}
+        return getattr(sizes, ship)
 
     def register_hit(self, ship):
-        pass
+        health = getattr(self, ship)
+        health -= 1
+        setattr(self, ship, health)
+        if health < 1:
+            return StringMessage(message=str(ship) + ' sunk!')
+        else:
+            return StringMessage(message=str(ship) + ' hit!')
 
 
 class Score(ndb.Model):

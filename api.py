@@ -82,8 +82,21 @@ class BattleshipAPI(remote.Service):
                       path=,
                       name='place_ships',
                       http_method=)
-    def place_ships(self, request):
-      pass
+    def place_ship(self, request):
+        #query board
+        #query fleet?
+        board = #query
+        fleet = #query
+        if board.valid_placement(fleet.return_size(request.ship),
+                                request.bow_row,
+                                request.bow_position,
+                                request.orientation):
+            board.place_ship(request.ship,
+                            request.bow_row,
+                            request.bow_position,
+                            request.orientation):
+        else:
+            raise Error('Invalid ship placement')
 
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
                       response_message=GameForm,
@@ -107,7 +120,7 @@ class BattleshipAPI(remote.Service):
 
         game_state = game.check_state()
 
-        if game_state == 'Player wins':
+        if game_state == 'User wins':
             game.end_game(True)
             return game.to_form(msg + ' You win!')
         elif game_state == 'AI wins':
