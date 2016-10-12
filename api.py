@@ -28,7 +28,7 @@ USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
 MEMCACHE_MOVES_REMAINING = 'MOVES_REMAINING'
 
 @endpoints.api(name='guess_a_number', version='v1')
-class GuessANumberApi(remote.Service):
+class BattleshipAPI(remote.Service):
     """Game API"""
     @endpoints.method(request_message=USER_REQUEST,
                       response_message=StringMessage,
@@ -56,18 +56,13 @@ class GuessANumberApi(remote.Service):
         if not user:
             raise endpoints.NotFoundException(
                     'A User with that name does not exist!')
-        try:
-            game = Game.new_game(user.key, request.min,
-                                 request.max, request.attempts)
-        except ValueError:
-            raise endpoints.BadRequestException('Maximum must be greater '
-                                                'than minimum!')
+        game = Game.new_game(user.key)
 
         # Use a task queue to update the average attempts remaining.
         # This operation is not needed to complete the creation of a new game
         # so it is performed out of sequence.
-        taskqueue.add(url='/tasks/cache_average_attempts')
-        return game.to_form('Good luck playing Guess a Number!')
+        #taskqueue.add(url='/tasks/cache_average_attempts')
+        return game.to_form('Good luck playing Battleship!')
 
     @endpoints.method(request_message=GET_GAME_REQUEST,
                       response_message=GameForm,
@@ -78,9 +73,17 @@ class GuessANumberApi(remote.Service):
         """Return the current game state."""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if game:
-            return game.to_form('Time to make a move!')
+            return game.to_form('Time to play!')
         else:
             raise endpoints.NotFoundException('Game not found!')
+
+    @endpoints.method(request_message=,
+                      response_message=,
+                      path=,
+                      name='place_ships',
+                      http_method=)
+    def place_ships(self, request):
+      pass
 
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
                       response_message=GameForm,
@@ -93,19 +96,23 @@ class GuessANumberApi(remote.Service):
         if game.game_over:
             return game.to_form('Game already over!')
 
-        game.attempts_remaining -= 1
-        if request.guess == game.target:
-            game.end_game(True)
-            return game.to_form('You win!')
-
-        if request.guess < game.target:
-            msg = 'Too low!'
+        game.move_count += 1
+        result = game.make_move(request.move)
+        if result:
+            msg = 'Hit!'
         else:
-            msg = 'Too high!'
+            msg = 'Miss'
 
-        if game.attempts_remaining < 1:
+        # Should also check here for newly sunken ship
+
+        game_state = game.check_state()
+
+        if game_state == 'Player wins':
+            game.end_game(True)
+            return game.to_form(msg + ' You win!')
+        elif game_state == 'AI wins':
             game.end_game(False)
-            return game.to_form(msg + ' Game over!')
+            return game.to_form(msg + ' Computer wins!')
         else:
             game.put()
             return game.to_form(msg)
