@@ -13,10 +13,11 @@ from google.appengine.api import taskqueue
 
 from models import User, Game, Score
 from models import StringMessage, NewGameForm, GameForm, MakeMoveForm,\
-    ScoreForms
+    ScoreForms, PlaceShipForm
 from utils import get_by_urlsafe
 
 NEW_GAME_REQUEST = endpoints.ResourceContainer(NewGameForm)
+PLACE_SHIP_REQUEST = endpoints.ResourceContainer(PlaceShipForm)
 GET_GAME_REQUEST = endpoints.ResourceContainer(
         urlsafe_game_key=messages.StringField(1),)
 MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
@@ -77,11 +78,11 @@ class BattleshipAPI(remote.Service):
         else:
             raise endpoints.NotFoundException('Game not found!')
 
-    @endpoints.method(request_message=,
-                      response_message=,
-                      path=,
+    @endpoints.method(request_message=PLACE_SHIP_REQUEST,
+                      response_message=StringMessage,
+                      path='game/{urlsafe_game_key}',
                       name='place_ships',
-                      http_method=)
+                      http_method='POST')
     def place_ship(self, request):
         #query board
         #query fleet?
@@ -94,7 +95,9 @@ class BattleshipAPI(remote.Service):
             board.place_ship(request.ship,
                             request.bow_row,
                             request.bow_position,
-                            request.orientation):
+                            request.orientation)
+            board.put()
+            return StringMessage(message='{} placed'.format(request.ship))
         else:
             raise Error('Invalid ship placement')
 

@@ -143,17 +143,18 @@ class Fleet(ndb.Model):
 
     def return_size(self, ship):
         """Returns an integer indicating the size of the ship"""
-        sizes = {'carrier': 5,
-                'battleship': 4,
-                'cruiser': 3,
-                'submarine': 3,
-                'deestroyer': 2}
+        sizes = {'Carrier': 5,
+                'Battleship': 4,
+                'Cruiser': 3,
+                'Submarine': 3,
+                'Destroyer': 2}
         return getattr(sizes, ship)
 
     def register_hit(self, ship):
         health = getattr(self, ship)
         health -= 1
         setattr(self, ship, health)
+        self.put()
         if health < 1:
             return StringMessage(message=str(ship) + ' sunk!')
         else:
@@ -188,10 +189,18 @@ class NewGameForm(messages.Message):
 
 class PlaceShipForm(messages.Message):
     """Used to position a ship on a board"""
-    ship = messages.StringField(1, required=True)
+    ship = messages.EnumField('Ships', 1, required=True)
     bow_row = messages.IntegerField(2, required=True)
     bow_position = messages.IntegerField(3, required=True)
     orientation = messages.EnumField('Orientation', 4, required=True)
+
+
+class Ships(messages.Enum):
+    Carrier = 1
+    Battleship = 2
+    Cruiser = 3
+    Sumbarine = 4
+    Destroyer = 5
 
 
 class Orientation(messages.Enum):
