@@ -191,7 +191,13 @@ class PlaceShipForm(messages.Message):
     ship = messages.StringField(1, required=True)
     bow_row = messages.IntegerField(2, required=True)
     bow_position = messages.IntegerField(3, required=True)
-    orientation = messages.StringField(4, required=True)
+    orientation = messages.EnumField('Orientation', 4, required=True)
+
+
+class Orientation(messages.Enum):
+    """Ship orientation enumeration values"""
+    vertical = 1
+    horizontal = 2
 
 
 class BoardForm(messages.Message):
