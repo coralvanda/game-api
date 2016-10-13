@@ -184,7 +184,14 @@ class GameForm(messages.Message):
 class NewGameForm(messages.Message):
     """Used to create a new game"""
     user_name = messages.StringField(1, required=True)
-    #attempts = messages.IntegerField(4, default=5)
+
+
+class PlaceShipForm(messages.Message):
+    """Used to position a ship on a board"""
+    ship = messages.StringField(1, required=True)
+    bow_row = messages.IntegerField(2, required=True)
+    bow_position = messages.IntegerField(3, required=True)
+    orientation = messages.StringField(4, required=True)
 
 
 class BoardForm(messages.Message):
