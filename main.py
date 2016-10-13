@@ -10,7 +10,7 @@ from api import BattleshipAPI
 
 from models import User
 
-
+'''
 class SendReminderEmail(webapp2.RequestHandler):
     def get(self):
         """Send a reminder email to each User with an email about games.
@@ -39,3 +39,6 @@ app = webapp2.WSGIApplication([
     ('/crons/send_reminder', SendReminderEmail),
     ('/tasks/cache_average_attempts', UpdateAverageMovesRemaining),
 ], debug=True)
+'''
+
+app = webapp2.WSGIApplication(debug=True)

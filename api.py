@@ -11,11 +11,13 @@ from protorpc import remote, messages
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 
-from models import User, Game, Score
-from models import StringMessage, NewGameForm, GameForm, MakeMoveForm,\
-    ScoreForms, PlaceShipForm
+from models import User, Game, Score, Board, Fleet
+from models import StringMessage, NewGameForm, GameForm
+from models import MakeMoveForm, ScoreForms, PlaceShipForm
 from utils import get_by_urlsafe
+from settings import WEB_CLIENT_ID
 
+API_EXPLORER_CLIENT_ID = endpoints.API_EXPLORER_CLIENT_ID
 NEW_GAME_REQUEST = endpoints.ResourceContainer(NewGameForm)
 PLACE_SHIP_REQUEST = endpoints.ResourceContainer(PlaceShipForm)
 GET_GAME_REQUEST = endpoints.ResourceContainer(
@@ -26,9 +28,11 @@ MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
 USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
                                            email=messages.StringField(2))
 
-MEMCACHE_MOVES_REMAINING = 'MOVES_REMAINING'
+#MEMCACHE_MOVES_REMAINING = 'MOVES_REMAINING'
 
-@endpoints.api(name='guess_a_number', version='v1')
+@endpoints.api( name='battleship',
+                version='v1',
+                allowed_client_ids=[WEB_CLIENT_ID, API_EXPLORER_CLIENT_ID])
 class BattleshipAPI(remote.Service):
     """Game API"""
     @endpoints.method(request_message=USER_REQUEST,
@@ -86,8 +90,8 @@ class BattleshipAPI(remote.Service):
     def place_ship(self, request):
         #query board
         #query fleet?
-        board = #query
-        fleet = #query
+        board = Board.Query()
+        fleet = Fleet.Query()
         if board.valid_placement(fleet.return_size(request.ship),
                                 request.bow_row,
                                 request.bow_position,
@@ -155,6 +159,7 @@ class BattleshipAPI(remote.Service):
         scores = Score.query(Score.user == user.key)
         return ScoreForms(items=[score.to_form() for score in scores])
 
+    '''
     @endpoints.method(response_message=StringMessage,
                       path='games/average_attempts',
                       name='get_average_attempts_remaining',
@@ -174,6 +179,7 @@ class BattleshipAPI(remote.Service):
             average = float(total_attempts_remaining)/count
             memcache.set(MEMCACHE_MOVES_REMAINING,
                          'The average moves remaining is {:.2f}'.format(average))
+    '''
 
 
-api = endpoints.api_server([GuessANumberApi])
+api = endpoints.api_server([BattleshipAPI])
