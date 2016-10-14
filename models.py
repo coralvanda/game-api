@@ -10,21 +10,21 @@ from google.appengine.ext import ndb
 
 class User(ndb.Model):
     """User profile"""
-    name = ndb.StringProperty(required=True)
-    email =ndb.StringProperty()
+    name    = ndb.StringProperty(required=True)
+    email   = ndb.StringProperty()
 
 
 class Game(ndb.Model):
     """Game object"""
-    move_count = ndb.IntegerProperty()
-    game_over = ndb.BooleanProperty(required=True, default=False)
-    user = ndb.KeyProperty(required=True, kind='User')
-    user_fleet = ndb.KeyProperty(kind='Fleet')
-    user_board = ndb.KeyProperty(kind='Board')
-    user_chart = ndb.KeyProperty(kind='Board')
-    AI_fleet = ndb.KeyProperty(kind='Fleet')
-    AI_board = ndb.KeyProperty(kind='Board')
-    AI_chart = ndb.KeyProperty(kind='Board')
+    move_count  = ndb.IntegerProperty()
+    game_over   = ndb.BooleanProperty(required=True, default=False)
+    user        = ndb.KeyProperty(required=True, kind='User')
+    user_fleet  = ndb.KeyProperty(kind='Fleet')
+    user_board  = ndb.KeyProperty(kind='Board')
+    user_chart  = ndb.KeyProperty(kind='Board')
+    AI_fleet    = ndb.KeyProperty(kind='Fleet')
+    AI_board    = ndb.KeyProperty(kind='Board')
+    AI_chart    = ndb.KeyProperty(kind='Board')
 
     @classmethod
     def new_game(cls, user):
@@ -72,21 +72,28 @@ class Game(ndb.Model):
 
 class Board(ndb.Model):
     """Board object"""
-    row_1 = ndb.StringProperty(repeated=True)
-    row_2 = ndb.StringProperty(repeated=True)
-    row_3 = ndb.StringProperty(repeated=True)
-    row_4 = ndb.StringProperty(repeated=True)
-    row_5 = ndb.StringProperty(repeated=True)
-    row_6 = ndb.StringProperty(repeated=True)
-    row_7 = ndb.StringProperty(repeated=True)
-    row_8 = ndb.StringProperty(repeated=True)
-    row_9 = ndb.StringProperty(repeated=True)
-    row_10 = ndb.StringProperty(repeated=True)
+    row_0 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_1 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_2 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_3 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_4 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_5 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_6 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_7 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_8 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_9 = ndb.StringProperty(repeated=True,
+        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
 
-    def build_board(self):
-        pass
-
-    def place_ship(self, ship, bow_position, orientation):
+    def place_ship(self, ship, bow_row, bow_position, orientation):
         pass
 
     def valid_placement(self, ship_size, bow_row, bow_position, orientation):
@@ -107,13 +114,13 @@ class Board(ndb.Model):
             for x in range(1, ship_size + 1):
                 if ship_size + x > 9:
                     return False
-                if getattr(getattr(self, bow_row + x), bow_position):
+                if getattr(getattr(self, 'row_' + str(bow_row) + x), bow_position):
                     return False
         else:
             for x in range(1, ship_size + 1):
                 if ship_size + x > 9:
                     return False
-                if getattr(getattr(self, bow_row), bow_position + x):
+                if getattr(getattr(self, 'row_' + str(bow_row)), bow_position + x):
                     return False
         return True
 
@@ -163,10 +170,10 @@ class Fleet(ndb.Model):
 
 class Score(ndb.Model):
     """Score object"""
-    user = ndb.KeyProperty(required=True, kind='User')
-    date = ndb.DateProperty(required=True)
-    won = ndb.BooleanProperty(required=True)
-    moves = ndb.IntegerProperty(required=True)
+    user    = ndb.KeyProperty(required=True, kind='User')
+    date    = ndb.DateProperty(required=True)
+    won     = ndb.BooleanProperty(required=True)
+    moves   = ndb.IntegerProperty(required=True)
 
     def to_form(self):
         return ScoreForm(user_name=self.user.get().name, won=self.won,
@@ -176,10 +183,10 @@ class Score(ndb.Model):
 class GameForm(messages.Message):
     """GameForm for outbound game state information"""
     urlsafe_key = messages.StringField(1, required=True)
-    move_count = messages.IntegerField(2, required=True)
-    game_over = messages.BooleanField(3, required=True)
-    message = messages.StringField(4, required=True)
-    user_name = messages.StringField(5, required=True)
+    move_count  = messages.IntegerField(2, required=True)
+    game_over   = messages.BooleanField(3, required=True)
+    message     = messages.StringField(4, required=True)
+    user_name   = messages.StringField(5, required=True)
 
 
 class NewGameForm(messages.Message):
@@ -189,24 +196,24 @@ class NewGameForm(messages.Message):
 
 class PlaceShipForm(messages.Message):
     """Used to position a ship on a board"""
-    ship = messages.EnumField('Ships', 1, required=True)
-    bow_row = messages.IntegerField(2, required=True)
-    bow_position = messages.IntegerField(3, required=True)
-    orientation = messages.EnumField('Orientation', 4, required=True)
+    ship            = messages.EnumField('Ships', 1, required=True)
+    bow_row         = messages.IntegerField(2, required=True)
+    bow_position    = messages.IntegerField(3, required=True)
+    orientation     = messages.EnumField('Orientation', 4, required=True)
 
 
 class Ships(messages.Enum):
-    Carrier = 1
-    Battleship = 2
-    Cruiser = 3
-    Sumbarine = 4
-    Destroyer = 5
+    Carrier     = 1
+    Battleship  = 2
+    Cruiser     = 3
+    Sumbarine   = 4
+    Destroyer   = 5
 
 
 class Orientation(messages.Enum):
     """Ship orientation enumeration values"""
-    vertical = 1
-    horizontal = 2
+    vertical    = 1
+    horizontal  = 2
 
 
 class BoardForm(messages.Message):
@@ -221,10 +228,10 @@ class MakeMoveForm(messages.Message):
 
 class ScoreForm(messages.Message):
     """ScoreForm for outbound Score information"""
-    user_name = messages.StringField(1, required=True)
-    date = messages.StringField(2, required=True)
-    won = messages.BooleanField(3, required=True)
-    moves = messages.IntegerField(4, required=True)
+    user_name   = messages.StringField(1, required=True)
+    date        = messages.StringField(2, required=True)
+    won         = messages.BooleanField(3, required=True)
+    moves       = messages.IntegerField(4, required=True)
 
 
 class ScoreForms(messages.Message):
