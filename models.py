@@ -38,6 +38,10 @@ class Game(ndb.Model):
                     AI_chart=Board().key,
                     game_over=False)
         game.put()
+        game.user_board.build_board()
+        game.user_chart.build_board()
+        game.AI_board.build_board()
+        game.AI_chart.build_board()
         return game
 
     def to_form(self, message):
@@ -45,7 +49,6 @@ class Game(ndb.Model):
         form = GameForm()
         form.urlsafe_key = self.key.urlsafe()
         form.user_name = self.user.get().name
-        form.move_count = self.move_count
         form.game_over = self.game_over
         form.message = message
         return form
@@ -72,29 +75,34 @@ class Game(ndb.Model):
 
 class Board(ndb.Model):
     """Board object"""
-    row_0 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
-    row_1 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
-    row_2 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
-    row_3 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
-    row_4 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
-    row_5 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
-    row_6 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
-    row_7 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
-    row_8 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
-    row_9 = ndb.StringProperty(repeated=True,
-        default=['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'])
+    row_0 = ndb.StringProperty(repeated=True)
+    row_1 = ndb.StringProperty(repeated=True)
+    row_2 = ndb.StringProperty(repeated=True)
+    row_3 = ndb.StringProperty(repeated=True)
+    row_4 = ndb.StringProperty(repeated=True)
+    row_5 = ndb.StringProperty(repeated=True)
+    row_6 = ndb.StringProperty(repeated=True)
+    row_7 = ndb.StringProperty(repeated=True)
+    row_8 = ndb.StringProperty(repeated=True)
+    row_9 = ndb.StringProperty(repeated=True)
+
+    def build_board(self):
+        for x in range(10):
+            content = ['0' for _ in range(10)]
+            settattr(self, 'row_' + str(x), content)
+        self.put()
 
     def place_ship(self, ship, bow_row, bow_position, orientation):
-        pass
+        ship_size = Fleet.return_size(ship)
+        if orientation == 'Vertical':
+            for x in range(ship_size):
+                settattr(self, getattr(getattr(self, 'row_' + str(bow_row + x)),
+                    bow_position), '1')
+        else:
+            for x in range(ship_size):
+                setattr(self, getattr(getattr(self, 'row_' + str(bow_row)),
+                    bow_position + x), '1')
+        self.put()
 
     def valid_placement(self, ship_size, bow_row, bow_position, orientation):
         """Confirms that a ship has been placed in a legal position
@@ -108,19 +116,21 @@ class Board(ndb.Model):
                 bow, or extend to the right from the bow
         Returns:
             Either True or False for legal or illegal placements"""
-        if getattr(getattr(self, bow_row), bow_position):
+        if getattr(getattr(self, 'row_' + str(bow_row)), bow_position) == '1':
             return False
         if orientation == 'Vertical':
-            for x in range(1, ship_size + 1):
-                if ship_size + x > 9:
+            for x in range(ship_size):
+                if bow_row + x > 9:
                     return False
-                if getattr(getattr(self, 'row_' + str(bow_row) + x), bow_position):
+                if getattr(getattr(self, 'row_' + str(bow_row + x)),
+                    bow_position) == '1':
                     return False
         else:
-            for x in range(1, ship_size + 1):
-                if ship_size + x > 9:
+            for x in range(ship_size):
+                if bow_position + x > 9:
                     return False
-                if getattr(getattr(self, 'row_' + str(bow_row)), bow_position + x):
+                if getattr(getattr(self, 'row_' + str(bow_row)),
+                    bow_position + x) == '1':
                     return False
         return True
 
@@ -183,7 +193,6 @@ class Score(ndb.Model):
 class GameForm(messages.Message):
     """GameForm for outbound game state information"""
     urlsafe_key = messages.StringField(1, required=True)
-    move_count  = messages.IntegerField(2, required=True)
     game_over   = messages.BooleanField(3, required=True)
     message     = messages.StringField(4, required=True)
     user_name   = messages.StringField(5, required=True)

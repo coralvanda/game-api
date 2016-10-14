@@ -19,9 +19,11 @@ from settings import WEB_CLIENT_ID
 
 API_EXPLORER_CLIENT_ID = endpoints.API_EXPLORER_CLIENT_ID
 NEW_GAME_REQUEST = endpoints.ResourceContainer(NewGameForm)
-PLACE_SHIP_REQUEST = endpoints.ResourceContainer(PlaceShipForm)
+PLACE_SHIP_REQUEST = endpoints.ResourceContainer(
+    PlaceShipForm,
+    urlsafe_game_key=messages.StringField(1))
 GET_GAME_REQUEST = endpoints.ResourceContainer(
-        urlsafe_game_key=messages.StringField(1),)
+    urlsafe_game_key=messages.StringField(1),)
 MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
     MakeMoveForm,
     urlsafe_game_key=messages.StringField(1),)
@@ -84,15 +86,14 @@ class BattleshipAPI(remote.Service):
 
     @endpoints.method(request_message=PLACE_SHIP_REQUEST,
                       response_message=StringMessage,
-                      path='game/{urlsafe_game_key}',
-                      name='place_ships',
+                      path='game/{urlsafe_game_key}/place_ship',
+                      name='place_ship',
                       http_method='POST')
     def place_ship(self, request):
-        #query board
-        #query fleet?
-        board = Board.Query()
-        fleet = Fleet.Query()
-        if board.valid_placement(fleet.return_size(request.ship),
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        board = game.user_board.get()
+        #fleet = game.user_fleet.get()
+        if board.valid_placement(Fleet.return_size(request.ship),
                                 request.bow_row,
                                 request.bow_position,
                                 request.orientation):
@@ -100,11 +101,11 @@ class BattleshipAPI(remote.Service):
                             request.bow_row,
                             request.bow_position,
                             request.orientation)
-            board.put()
             return StringMessage(message='{} placed'.format(request.ship))
         else:
             raise Error('Invalid ship placement')
 
+    '''IN PROGRESS, TEMPORARILY DISABLED
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
                       response_message=GameForm,
                       path='game/{urlsafe_game_key}',
@@ -136,6 +137,7 @@ class BattleshipAPI(remote.Service):
         else:
             game.put()
             return game.to_form(msg)
+    '''
 
     @endpoints.method(response_message=ScoreForms,
                       path='scores',
