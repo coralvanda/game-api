@@ -29,19 +29,31 @@ class Game(ndb.Model):
     @classmethod
     def new_game(cls, user):
         """Creates and returns a new game"""
+        user_fleet = Fleet()
+        user_board = Board()
+        user_chart = Board()
+        AI_fleet = Fleet()
+        AI_board = Board()
+        AI_chart = Board()
+        user_fleet_key = user_fleet.put()
+        user_board_key = user_board.put()
+        user_chart_key = user_chart.put()
+        AI_fleet_key = AI_fleet.put()
+        AI_board_key = AI_board.put()
+        AI_chart_key = AI_chart.put()
         game = Game(user=user,
-                    user_fleet=Fleet().key,
-                    user_board=Board().key,
-                    user_chart=Board().key,
-                    AI_fleet=Fleet().key,
-                    AI_board=Board().key,
-                    AI_chart=Board().key,
+                    user_fleet=user_fleet_key,
+                    user_board=user_board_key,
+                    user_chart=user_chart_key,
+                    AI_fleet=AI_fleet_key,
+                    AI_board=AI_board_key,
+                    AI_chart=AI_chart_key,
                     game_over=False)
         game.put()
-        game.user_board.build_board()
-        game.user_chart.build_board()
-        game.AI_board.build_board()
-        game.AI_chart.build_board()
+        user_board.build_board()
+        user_chart.build_board()
+        AI_board.build_board()
+        AI_chart.build_board()
         return game
 
     def to_form(self, message):
@@ -89,14 +101,14 @@ class Board(ndb.Model):
     def build_board(self):
         for x in range(10):
             content = ['0' for _ in range(10)]
-            settattr(self, 'row_' + str(x), content)
+            setattr(self, 'row_' + str(x), content)
         self.put()
 
     def place_ship(self, ship, bow_row, bow_position, orientation):
         ship_size = Fleet.return_size(ship)
         if orientation == 'Vertical':
             for x in range(ship_size):
-                settattr(self, getattr(getattr(self, 'row_' + str(bow_row + x)),
+                setattr(self, getattr(getattr(self, 'row_' + str(bow_row + x)),
                     bow_position), '1')
         else:
             for x in range(ship_size):
@@ -237,9 +249,8 @@ class Orientation(messages.Enum):
 
 
 class BoardRequestForm(messages.Message):
-    urlsafe_key = messages.StringField(1, required=True)
-    user_name   = messages.StringField(2, required=True)
-    board       = messages.EnumField('Boards', 3, required=True)
+    user_name   = messages.StringField(1, required=True)
+    board       = messages.EnumField('Boards', 2, required=True)
 
 
 class Boards(messages.Enum):
