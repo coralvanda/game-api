@@ -138,7 +138,18 @@ class Board(ndb.Model):
         pass
 
     def to_form(self):
-        pass
+        form = BoardForm()
+        form.row_0 = self.row_0
+        form.row_1 = self.row_1
+        form.row_2 = self.row_2
+        form.row_3 = self.row_3
+        form.row_4 = self.row_4
+        form.row_5 = self.row_5
+        form.row_6 = self.row_6
+        form.row_7 = self.row_7
+        form.row_8 = self.row_8
+        form.row_9 = self.row_9
+        return form
 
 
 class Fleet(ndb.Model):
@@ -160,15 +171,15 @@ class Fleet(ndb.Model):
 
     def return_size(self, ship):
         """Returns an integer indicating the size of the ship"""
-        sizes = {'Carrier': 5,
-                'Battleship': 4,
-                'Cruiser': 3,
-                'Submarine': 3,
-                'Destroyer': 2}
+        sizes = {'carrier': 5,
+                'battleship': 4,
+                'cruiser': 3,
+                'submarine': 3,
+                'destroyer': 2}
         return getattr(sizes, ship)
 
     def register_hit(self, ship):
-        health = getattr(self, ship)
+        health = getattr(self, ship + '_hp')
         health -= 1
         setattr(self, ship, health)
         self.put()
@@ -225,9 +236,29 @@ class Orientation(messages.Enum):
     horizontal  = 2
 
 
+class BoardRequestForm(messages.Message):
+    urlsafe_key = messages.StringField(1, required=True)
+    user_name   = messages.StringField(2, required=True)
+    board       = messages.EnumField('Boards', 3, required=True)
+
+
+class Boards(messages.Enum):
+    user_board = 1
+    user_chart = 2
+
+
 class BoardForm(messages.Message):
     """Used to show a board state"""
-    pass
+    row_0 = ndb.StringField(1, repeated=True)
+    row_1 = ndb.StringField(2, repeated=True)
+    row_2 = ndb.StringField(3, repeated=True)
+    row_3 = ndb.StringField(4, repeated=True)
+    row_4 = ndb.StringField(5, repeated=True)
+    row_5 = ndb.StringField(6, repeated=True)
+    row_6 = ndb.StringField(7, repeated=True)
+    row_7 = ndb.StringField(8, repeated=True)
+    row_8 = ndb.StringField(9, repeated=True)
+    row_9 = ndb.StringField(10, repeated=True)
 
 
 class MakeMoveForm(messages.Message):

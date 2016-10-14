@@ -12,8 +12,8 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 
 from models import User, Game, Score, Board, Fleet
-from models import StringMessage, NewGameForm, GameForm
-from models import MakeMoveForm, ScoreForms, PlaceShipForm
+from models import StringMessage, NewGameForm, GameForm, MakeMoveForm
+from models import ScoreForms, PlaceShipForm, BoardRequestForm
 from utils import get_by_urlsafe
 from settings import WEB_CLIENT_ID
 
@@ -24,6 +24,9 @@ PLACE_SHIP_REQUEST = endpoints.ResourceContainer(
     urlsafe_game_key=messages.StringField(1))
 GET_GAME_REQUEST = endpoints.ResourceContainer(
     urlsafe_game_key=messages.StringField(1),)
+BOARD_REQUEST = endpoints.ResourceContainer(
+    BoardRequestForm,
+    urlsafe_game_key=messages.StringField(1))
 MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
     MakeMoveForm,
     urlsafe_game_key=messages.StringField(1),)
@@ -105,6 +108,18 @@ class BattleshipAPI(remote.Service):
             return StringMessage(message='{} placed'.format(request.ship))
         else:
             raise Error('Invalid ship placement')
+
+    @endpoints.method(request_message=BOARD_REQUEST,
+                    response_message=BoardForm,
+                    path='game/{urlsafe_game_key}/board',
+                    name='show_board',
+                    http_method='GET')
+    def show_board(self):
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        board_key = getattr(game, request.board)
+        board = board_key.get()
+        return board.to_form()
+
 
     '''IN PROGRESS, TEMPORARILY DISABLED
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
