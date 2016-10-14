@@ -11,8 +11,8 @@ from protorpc import remote, messages
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 
-from models import User, Game, Score, Board, Fleet
-from models import StringMessage, NewGameForm, GameForm, MakeMoveForm
+from models import User, Game, Score, Board, Fleet, StringMessage
+from models import BoardForm, NewGameForm, GameForm, MakeMoveForm
 from models import ScoreForms, PlaceShipForm, BoardRequestForm
 from utils import get_by_urlsafe
 from settings import WEB_CLIENT_ID
@@ -115,6 +115,7 @@ class BattleshipAPI(remote.Service):
                     name='show_board',
                     http_method='GET')
     def show_board(self):
+        """Display a board state"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board_key = getattr(game, request.board)
         board = board_key.get()

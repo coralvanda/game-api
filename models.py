@@ -249,16 +249,16 @@ class Boards(messages.Enum):
 
 class BoardForm(messages.Message):
     """Used to show a board state"""
-    row_0 = ndb.StringField(1, repeated=True)
-    row_1 = ndb.StringField(2, repeated=True)
-    row_2 = ndb.StringField(3, repeated=True)
-    row_3 = ndb.StringField(4, repeated=True)
-    row_4 = ndb.StringField(5, repeated=True)
-    row_5 = ndb.StringField(6, repeated=True)
-    row_6 = ndb.StringField(7, repeated=True)
-    row_7 = ndb.StringField(8, repeated=True)
-    row_8 = ndb.StringField(9, repeated=True)
-    row_9 = ndb.StringField(10, repeated=True)
+    row_0 = messages.StringField(1, repeated=True)
+    row_1 = messages.StringField(2, repeated=True)
+    row_2 = messages.StringField(3, repeated=True)
+    row_3 = messages.StringField(4, repeated=True)
+    row_4 = messages.StringField(5, repeated=True)
+    row_5 = messages.StringField(6, repeated=True)
+    row_6 = messages.StringField(7, repeated=True)
+    row_7 = messages.StringField(8, repeated=True)
+    row_8 = messages.StringField(9, repeated=True)
+    row_9 = messages.StringField(10, repeated=True)
 
 
 class MakeMoveForm(messages.Message):
