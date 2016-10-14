@@ -90,6 +90,7 @@ class BattleshipAPI(remote.Service):
                       name='place_ship',
                       http_method='POST')
     def place_ship(self, request):
+        """Position a ship on your board"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board = game.user_board.get()
         #fleet = game.user_fleet.get()
