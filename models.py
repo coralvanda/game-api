@@ -152,16 +152,16 @@ class Board(ndb.Model):
 
     def to_form(self):
         form = BoardForm()
-        form.row_0 = self.row_0
-        form.row_1 = self.row_1
-        form.row_2 = self.row_2
-        form.row_3 = self.row_3
-        form.row_4 = self.row_4
-        form.row_5 = self.row_5
-        form.row_6 = self.row_6
-        form.row_7 = self.row_7
-        form.row_8 = self.row_8
-        form.row_9 = self.row_9
+        form.row_0 = ''.join(self.row_0)
+        form.row_1 = ''.join(self.row_1)
+        form.row_2 = ''.join(self.row_2)
+        form.row_3 = ''.join(self.row_3)
+        form.row_4 = ''.join(self.row_4)
+        form.row_5 = ''.join(self.row_5)
+        form.row_6 = ''.join(self.row_6)
+        form.row_7 = ''.join(self.row_7)
+        form.row_8 = ''.join(self.row_8)
+        form.row_9 = ''.join(self.row_9)
         return form
 
 
@@ -260,16 +260,16 @@ class BoardRequestForm(messages.Message):
 
 class BoardForm(messages.Message):
     """Used to show a board state"""
-    row_0 = messages.StringField(1, repeated=True)
-    row_1 = messages.StringField(2, repeated=True)
-    row_2 = messages.StringField(3, repeated=True)
-    row_3 = messages.StringField(4, repeated=True)
-    row_4 = messages.StringField(5, repeated=True)
-    row_5 = messages.StringField(6, repeated=True)
-    row_6 = messages.StringField(7, repeated=True)
-    row_7 = messages.StringField(8, repeated=True)
-    row_8 = messages.StringField(9, repeated=True)
-    row_9 = messages.StringField(10, repeated=True)
+    row_0 = messages.StringField(1)
+    row_1 = messages.StringField(2)
+    row_2 = messages.StringField(3)
+    row_3 = messages.StringField(4)
+    row_4 = messages.StringField(5)
+    row_5 = messages.StringField(6)
+    row_6 = messages.StringField(7)
+    row_7 = messages.StringField(8)
+    row_8 = messages.StringField(9)
+    row_9 = messages.StringField(10)
 
 
 class MakeMoveForm(messages.Message):
