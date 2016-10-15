@@ -255,12 +255,7 @@ class Orientation(messages.Enum):
 
 class BoardRequestForm(messages.Message):
     user_name   = messages.StringField(1, required=True)
-    board       = messages.EnumField('Boards', 2, required=True)
-
-
-class Boards(messages.Enum):
-    user_board = 1
-    user_chart = 2
+    board       = messages.StringField(2, required=True)
 
 
 class BoardForm(messages.Message):

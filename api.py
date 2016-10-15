@@ -127,7 +127,7 @@ class BattleshipAPI(remote.Service):
                     response_message=BoardForm,
                     path='game/{urlsafe_game_key}/board',
                     name='show_board',
-                    http_method='GET')
+                    http_method='POST')
     def show_board(self, request):
         """Display a board state"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
