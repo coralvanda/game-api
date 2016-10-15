@@ -115,6 +115,7 @@ class Board(ndb.Model):
                 setattr(self, getattr(getattr(self, 'row_' + str(bow_row)),
                     bow_position + x), '1')
         self.put()
+        # need to update the ship status as well
 
     def valid_placement(self, ship_size, bow_row, bow_position, orientation):
         """Confirms that a ship has been placed in a legal position
