@@ -12,8 +12,9 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 
 from models import User, Game, Score, Board, Fleet, StringMessage
-from models import BoardForm, NewGameForm, GameForm, MakeMoveForm
-from models import ScoreForms, PlaceShipForm, BoardRequestForm
+from models import BoardForm, NewGameForm, GameForm, GameForms
+from models import MakeMoveForm, ScoreForms
+from models import PlaceShipForm, BoardRequestForm
 from utils import get_by_urlsafe
 from settings import WEB_CLIENT_ID
 
@@ -87,6 +88,19 @@ class BattleshipAPI(remote.Service):
         else:
             raise endpoints.NotFoundException('Game not found!')
 
+    @endpoints.method(request_message=USER_REQUEST,
+                    response_message=GameForms,
+                    path='games/player',
+                    name='get_games_by_player',
+                    http_method='GET')
+    def get_games_by_player(self, request):
+        """Return a list of active games a player is engaged in"""
+        user = User.query(User.name == request.user_name).get()
+        games = Game.query()
+        games = games.filter(Game.user == user.key)
+        games = games.filter(Game.game_over == False).fetch()
+        return GameForms(games=[game.to_form('') for game in games])
+
     @endpoints.method(request_message=PLACE_SHIP_REQUEST,
                       response_message=StringMessage,
                       path='game/{urlsafe_game_key}/place_ship',
@@ -114,7 +128,7 @@ class BattleshipAPI(remote.Service):
                     path='game/{urlsafe_game_key}/board',
                     name='show_board',
                     http_method='GET')
-    def show_board(self):
+    def show_board(self, request):
         """Display a board state"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board_key = getattr(game, request.board)
