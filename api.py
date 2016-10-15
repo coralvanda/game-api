@@ -10,6 +10,7 @@ import endpoints
 from protorpc import remote, messages
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
+from google.appengine.ext import ndb
 
 from models import User, Game, Score, Board, Fleet, StringMessage
 from models import BoardForm, NewGameForm, GameForm, GameForms
