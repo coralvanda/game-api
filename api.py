@@ -116,27 +116,48 @@ class BattleshipAPI(remote.Service):
             Either True or False for legal or illegal placements"""
         ship_size = Fleet.return_size(ship)
         game = get_by_urlsafe(game_key, Game)
+        board = game.user_board.get()
         fleet = game.user_fleet.get()
         ship_status = getattr(fleet, ship + '_status')
         if ship_status != '':
             return False
-        if getattr(getattr(self, 'row_' + str(bow_row)), bow_position) == '1':
+        if getattr(getattr(board, 'row_' + str(bow_row)), bow_position) == '1':
             return False
         if orientation == 'Vertical':
             for x in range(ship_size):
                 if bow_row + x > 9:
                     return False
-                if getattr(getattr(self, 'row_' + str(bow_row + x)),
+                if getattr(getattr(board, 'row_' + str(bow_row + x)),
                     bow_position) == '1':
                     return False
         else:
             for x in range(ship_size):
                 if bow_position + x > 9:
                     return False
-                if getattr(getattr(self, 'row_' + str(bow_row)),
+                if getattr(getattr(board, 'row_' + str(bow_row)),
                     bow_position + x) == '1':
                     return False
         return True
+
+    @ndb.transactional(xg=True)
+    def _execute_placement(self, game_key, ship, bow_row,
+                        bow_position, orientation):
+        game = get_by_urlsafe(game_key, Game)
+        board = game.user_board.get()
+        fleet = game.user_fleet.get()
+        ship_size = Fleet.return_size(ship)
+        if orientation == 'Vertical':
+            for x in range(ship_size):
+                setattr(board, getattr(getattr(board,
+                    'row_' + str(bow_row + x)), bow_position), '1')
+        else:
+            for x in range(ship_size):
+                setattr(board, getattr(getattr(board,
+                    'row_' + str(bow_row)), bow_position + x), '1')
+        board.put()
+        setattr(fleet, ship + '_status', 'placed')
+        fleet.put()
+        return StringMessage(message='{} placed'.format(ship))
 
     @endpoints.method(request_message=PLACE_SHIP_REQUEST,
                       response_message=StringMessage,
@@ -145,18 +166,14 @@ class BattleshipAPI(remote.Service):
                       http_method='POST')
     def place_ship(self, request):
         """Position a ship on your board"""
-        game = get_by_urlsafe(request.urlsafe_game_key, Game)
-        board = game.user_board.get()
         if self._valid_placement(urlsafe_game_key,
                                 request.ship,
                                 request.bow_row,
                                 request.bow_position,
                                 request.orientation):
-            board.place_ship(request.ship,
-                            request.bow_row,
-                            request.bow_position,
-                            request.orientation)
-            return StringMessage(message='{} placed'.format(request.ship))
+            return self._execute_placement(request.urlsafe_game_key,
+                request.ship, request.bow_row,
+                request.bow_position, request.orientation)
         else:
             raise Error('Invalid ship placement')
 

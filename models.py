@@ -104,19 +104,6 @@ class Board(ndb.Model):
             setattr(self, 'row_' + str(x), content)
         self.put()
 
-    def place_ship(self, ship, bow_row, bow_position, orientation):
-        ship_size = Fleet.return_size(ship)
-        if orientation == 'Vertical':
-            for x in range(ship_size):
-                setattr(self, getattr(getattr(self, 'row_' + str(bow_row + x)),
-                    bow_position), '1')
-        else:
-            for x in range(ship_size):
-                setattr(self, getattr(getattr(self, 'row_' + str(bow_row)),
-                    bow_position + x), '1')
-        self.put()
-        # need to update the ship status as well
-
     def mark_board(self, location):
         pass
 
