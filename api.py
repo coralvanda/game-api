@@ -115,28 +115,28 @@ class BattleshipAPI(remote.Service):
                 bow, or extend to the right from the bow
         Returns:
             Either True or False for legal or illegal placements"""
-        ship_size = Fleet.return_size(ship)
         game = get_by_urlsafe(game_key, Game)
         board = game.user_board.get()
         fleet = game.user_fleet.get()
+        ship_size = fleet.return_size(ship)
         ship_status = getattr(fleet, ship + '_status')
-        if ship_status != '':
+        if ship_status == 'placed' or ship_status == 'sunk':
             return False
-        if getattr(getattr(board, 'row_' + str(bow_row)), bow_position) == '1':
+        if getattr(board, 'row_' + str(bow_row))[bow_position] == '1':
             return False
         if orientation == 'Vertical':
             for x in range(ship_size):
                 if bow_row + x > 9:
                     return False
-                if getattr(getattr(board, 'row_' + str(bow_row + x)),
-                    bow_position) == '1':
+                if getattr(board,
+                    'row_' + str(bow_row + x))[bow_position] == '1':
                     return False
         else:
             for x in range(ship_size):
                 if bow_position + x > 9:
                     return False
-                if getattr(getattr(board, 'row_' + str(bow_row)),
-                    bow_position + x) == '1':
+                if getattr(board,
+                    'row_' + str(bow_row))[bow_position + x] == '1':
                     return False
         return True
 
@@ -146,15 +146,15 @@ class BattleshipAPI(remote.Service):
         game = get_by_urlsafe(game_key, Game)
         board = game.user_board.get()
         fleet = game.user_fleet.get()
-        ship_size = Fleet.return_size(ship)
+        ship_size = fleet.return_size(ship)
         if orientation == 'Vertical':
             for x in range(ship_size):
-                setattr(board, getattr(getattr(board,
-                    'row_' + str(bow_row + x)), bow_position), '1')
+                setattr(board, getattr(board,
+                    'row_' + str(bow_row + x))[bow_position], '1')
         else:
             for x in range(ship_size):
-                setattr(board, getattr(getattr(board,
-                    'row_' + str(bow_row)), bow_position + x), '1')
+                setattr(board, getattr(board,
+                    'row_' + str(bow_row))[bow_position + x], '1')
         board.put()
         setattr(fleet, ship + '_status', 'placed')
         fleet.put()
@@ -167,7 +167,7 @@ class BattleshipAPI(remote.Service):
                       http_method='POST')
     def place_ship(self, request):
         """Position a ship on your board"""
-        if self._valid_placement(urlsafe_game_key,
+        if self._valid_placement(request.urlsafe_game_key,
                                 request.ship,
                                 request.bow_row,
                                 request.bow_position,

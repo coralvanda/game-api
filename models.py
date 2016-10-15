@@ -146,7 +146,7 @@ class Fleet(ndb.Model):
                 'cruiser': 3,
                 'submarine': 3,
                 'destroyer': 2}
-        return getattr(sizes, ship)
+        return sizes[ship]
 
     def register_hit(self, ship):
         health = getattr(self, ship + '_hp')
@@ -190,24 +190,10 @@ class NewGameForm(messages.Message):
 
 class PlaceShipForm(messages.Message):
     """Used to position a ship on a board"""
-    ship            = messages.EnumField('Ships', 1, required=True)
+    ship            = messages.StringField(1, required=True)
     bow_row         = messages.IntegerField(2, required=True)
     bow_position    = messages.IntegerField(3, required=True)
-    orientation     = messages.EnumField('Orientation', 4, required=True)
-
-
-class Ships(messages.Enum):
-    Carrier     = 1
-    Battleship  = 2
-    Cruiser     = 3
-    Sumbarine   = 4
-    Destroyer   = 5
-
-
-class Orientation(messages.Enum):
-    """Ship orientation enumeration values"""
-    vertical    = 1
-    horizontal  = 2
+    orientation     = messages.StringField(4, required=True)
 
 
 class BoardRequestForm(messages.Message):
