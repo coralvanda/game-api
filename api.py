@@ -101,6 +101,43 @@ class BattleshipAPI(remote.Service):
         games = games.filter(Game.game_over == False).fetch()
         return GameForms(games=[game.to_form('') for game in games])
 
+    def _valid_placement(self, game_key, ship, bow_row,
+        bow_position, orientation):
+        """Confirms that a ship has been placed in a legal position
+
+        Args:
+            Ship_size: The length of the ship from stem to stern
+            Bow_row: The DB row on which the bow is placed
+            Bow_position: The index of the DB row on which the bow is placed
+            Orientation: can be vertical or horizontal, but the game will
+                assume that the ship will always either extend down from the
+                bow, or extend to the right from the bow
+        Returns:
+            Either True or False for legal or illegal placements"""
+        ship_size = Fleet.return_size(ship)
+        game = get_by_urlsafe(game_key, Game)
+        fleet = game.user_fleet.get()
+        ship_status = getattr(fleet, ship + '_status')
+        if ship_status != '':
+            return False
+        if getattr(getattr(self, 'row_' + str(bow_row)), bow_position) == '1':
+            return False
+        if orientation == 'Vertical':
+            for x in range(ship_size):
+                if bow_row + x > 9:
+                    return False
+                if getattr(getattr(self, 'row_' + str(bow_row + x)),
+                    bow_position) == '1':
+                    return False
+        else:
+            for x in range(ship_size):
+                if bow_position + x > 9:
+                    return False
+                if getattr(getattr(self, 'row_' + str(bow_row)),
+                    bow_position + x) == '1':
+                    return False
+        return True
+
     @endpoints.method(request_message=PLACE_SHIP_REQUEST,
                       response_message=StringMessage,
                       path='game/{urlsafe_game_key}/place_ship',
@@ -110,8 +147,8 @@ class BattleshipAPI(remote.Service):
         """Position a ship on your board"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board = game.user_board.get()
-        #fleet = game.user_fleet.get()
-        if board.valid_placement(Fleet.return_size(request.ship),
+        if self._valid_placement(urlsafe_game_key,
+                                request.ship,
                                 request.bow_row,
                                 request.bow_position,
                                 request.orientation):

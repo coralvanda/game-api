@@ -117,36 +117,6 @@ class Board(ndb.Model):
         self.put()
         # need to update the ship status as well
 
-    def valid_placement(self, ship_size, bow_row, bow_position, orientation):
-        """Confirms that a ship has been placed in a legal position
-
-        Args:
-            Ship_size: The length of the ship from stem to stern
-            Bow_row: The DB row on which the bow is placed
-            Bow_position: The index of the DB row on which the bow is placed
-            Orientation: can be vertical or horizontal, but the game will
-                assume that the ship will always either extend down from the
-                bow, or extend to the right from the bow
-        Returns:
-            Either True or False for legal or illegal placements"""
-        if getattr(getattr(self, 'row_' + str(bow_row)), bow_position) == '1':
-            return False
-        if orientation == 'Vertical':
-            for x in range(ship_size):
-                if bow_row + x > 9:
-                    return False
-                if getattr(getattr(self, 'row_' + str(bow_row + x)),
-                    bow_position) == '1':
-                    return False
-        else:
-            for x in range(ship_size):
-                if bow_position + x > 9:
-                    return False
-                if getattr(getattr(self, 'row_' + str(bow_row)),
-                    bow_position + x) == '1':
-                    return False
-        return True
-
     def mark_board(self, location):
         pass
 
