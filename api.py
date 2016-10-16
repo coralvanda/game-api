@@ -101,8 +101,7 @@ class BattleshipAPI(remote.Service):
         games = games.filter(Game.game_over == False).fetch()
         return GameForms(games=[game.to_form('') for game in games])
 
-    def _valid_placement(self, game_key, ship, bow_row,
-        bow_position, orientation):
+    def _valid_placement(self, request):
         """Confirms that a ship has been placed in a legal position
 
         Args:
@@ -114,50 +113,59 @@ class BattleshipAPI(remote.Service):
                 bow, or extend to the right from the bow
         Returns:
             Either True or False for legal or illegal placements"""
-        game = get_by_urlsafe(game_key, Game)
+        logging.debug('inside _valid_placement')
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board = game.user_board.get()
         fleet = game.user_fleet.get()
-        ship_size = fleet.return_size(ship)
-        ship_status = getattr(fleet, ship + '_status')
+        ship_size = fleet.return_size(request.ship)
+        ship_status = getattr(fleet, request.ship + '_status')
         if ship_status == 'placed' or ship_status == 'sunk':
+            logging.debug('ship_status == placed or sunk, return False')
             return False
-        if getattr(board, 'row_' + str(bow_row))[bow_position] == '1':
+        if getattr(board, 'row_' +
+            str(request.bow_row))[request.bow_position] == '1':
+            logging.debug('bow location already == 1, return False')
             return False
-        if orientation == 'Vertical':
+        if request.orientation == 'vertical':
+            logging.debug('orientation == vertical')
             for x in range(ship_size):
-                if bow_row + x > 9:
+                if request.bow_row + x > 9:
+                    logging.debug('ship exceeds size of board, return False')
                     return False
-                if getattr(board,
-                    'row_' + str(bow_row + x))[bow_position] == '1':
+                if getattr(board, 'row_' +
+                    str(request.bow_row + x))[request.bow_position] == '1':
+                    logging.debug('ship overlaps with another, return False')
                     return False
         else:
             for x in range(ship_size):
-                if bow_position + x > 9:
+                if request.bow_position + x > 9:
+                    logging.debug('ship exceeds size of board, return False')
                     return False
-                if getattr(board,
-                    'row_' + str(bow_row))[bow_position + x] == '1':
+                if getattr(board,'row_' +
+                    str(request.bow_row))[request.bow_position + x] == '1':
+                    logging.debug('ship overlaps with another, return False')
                     return False
+        logging.debug('_valid_placement ends, returns True')
         return True
 
     @ndb.transactional(xg=True)
-    def _execute_placement(self, game_key, ship, bow_row,
-                        bow_position, orientation):
-        game = get_by_urlsafe(game_key, Game)
+    def _execute_placement(self, request):
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board = game.user_board.get()
         fleet = game.user_fleet.get()
-        ship_size = fleet.return_size(ship)
-        if orientation == 'Vertical':
+        ship_size = fleet.return_size(request.ship)
+        if request.orientation == 'vertical':
             for x in range(ship_size):
-                setattr(board, getattr(board,
-                    'row_' + str(bow_row + x))[bow_position], '1')
+                setattr(board, getattr(board, 'row_' +
+                    str(request.bow_row + x))[request.bow_position], '1')
         else:
             for x in range(ship_size):
-                setattr(board, getattr(board,
-                    'row_' + str(bow_row))[bow_position + x], '1')
+                setattr(board, getattr(board, 'row_' +
+                    str(request.bow_row))[request.bow_position + x], '1')
         board.put()
-        setattr(fleet, ship + '_status', 'placed')
+        setattr(fleet, request.ship + '_status', 'placed')
         fleet.put()
-        return StringMessage(message='{} placed'.format(ship))
+        return StringMessage(message='{} placed'.format(request.ship))
 
     @endpoints.method(request_message=PLACE_SHIP_REQUEST,
                       response_message=StringMessage,
@@ -166,16 +174,16 @@ class BattleshipAPI(remote.Service):
                       http_method='POST')
     def place_ship(self, request):
         """Position a ship on your board"""
-        if self._valid_placement(request.urlsafe_game_key,
-                                request.ship,
-                                request.bow_row,
-                                request.bow_position,
-                                request.orientation):
-            return self._execute_placement(request.urlsafe_game_key,
-                request.ship, request.bow_row,
-                request.bow_position, request.orientation)
+        logging.debug('place_ship endpoint calls _valid_placement')
+        if self._valid_placement(request):
+            logging.debug('_valid_placement==true, call _execute_placement')
+            return self._execute_placement(request)
         else:
-            raise Error('Invalid ship placement')
+            logging.debug('_valid_placement == False, raise exception')
+            raise endpoints.BadRequestException('Invalid ship placement')
+
+
+    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgMDvCww
 
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
