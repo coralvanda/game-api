@@ -27,8 +27,8 @@ PLACE_SHIP_REQUEST = endpoints.ResourceContainer(
 GET_GAME_REQUEST = endpoints.ResourceContainer(
     urlsafe_game_key=messages.StringField(1),)
 BOARD_REQUEST = endpoints.ResourceContainer(
-    BoardRequestForm,
-    urlsafe_game_key=messages.StringField(1))
+    urlsafe_game_key=messages.StringField(1),
+    board=messages.StringField(2))
 MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
     MakeMoveForm,
     urlsafe_game_key=messages.StringField(1),)
