@@ -196,11 +196,6 @@ class PlaceShipForm(messages.Message):
     orientation     = messages.StringField(4, required=True)
 
 
-class BoardRequestForm(messages.Message):
-    user_name   = messages.StringField(1, required=True)
-    board       = messages.StringField(2, required=True)
-
-
 class BoardForm(messages.Message):
     """Used to show a board state"""
     row_0 = messages.StringField(1)

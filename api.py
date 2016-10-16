@@ -14,8 +14,7 @@ from google.appengine.ext import ndb
 
 from models import User, Game, Score, Board, Fleet, StringMessage
 from models import BoardForm, NewGameForm, GameForm, GameForms
-from models import MakeMoveForm, ScoreForms
-from models import PlaceShipForm, BoardRequestForm
+from models import MakeMoveForm, ScoreForms, PlaceShipForm
 from utils import get_by_urlsafe
 from settings import WEB_CLIENT_ID
 
