@@ -15,7 +15,8 @@ from google.appengine.ext import ndb
 from models import User, Game, Score, Board, Fleet, StringMessage
 from models import BoardForm, NewGameForm, GameForm, GameForms
 from models import MakeMoveForm, ScoreForms, PlaceShipForm
-from utils import get_by_urlsafe
+
+from utils import get_by_urlsafe, ai_fleet_builder
 from settings import WEB_CLIENT_ID
 
 API_EXPLORER_CLIENT_ID = endpoints.API_EXPLORER_CLIENT_ID
@@ -61,6 +62,7 @@ class BattleshipAPI(remote.Service):
                       path='game',
                       name='new_game',
                       http_method='POST')
+    @ndb.transactional(xg=True)
     def new_game(self, request):
         """Creates new game"""
         user = User.query(User.name == request.user_name).get()
@@ -68,6 +70,18 @@ class BattleshipAPI(remote.Service):
             raise endpoints.NotFoundException(
                     'A User with that name does not exist!')
         game = Game.new_game(user.key)
+        ai_fleet = game.ai_fleet.get()
+        ai_board = game.ai_board.get()
+        ai_fleet_formation = ai_fleet_builder()
+        for x in range(len(ai_fleet_formation)):
+            setattr(ai_board, 'row_' + str(x), ai_fleet_formation[x])
+        ai_fleet.carrier_status = 'placed'
+        ai_fleet.battleship_status = 'placed'
+        ai_fleet.cruiser_status = 'placed'
+        ai_fleet.submarine_status = 'placed'
+        ai_fleet.destroyer_status = 'placed'
+        ai_fleet.put()
+        ai_board.put()
 
         # Use a task queue to update the average attempts remaining.
         # This operation is not needed to complete the creation of a new game
@@ -147,6 +161,7 @@ class BattleshipAPI(remote.Service):
 
     @ndb.transactional(xg=True)
     def _execute_placement(self, request):
+        """new logic needed to specify which ship is placed"""
         logging.info('inside _execute_placement')
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board = game.user_board.get()

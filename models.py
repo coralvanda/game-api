@@ -2,7 +2,6 @@
 entities used by the Game. Because these classes are also regular Python
 classes they can include methods (such as 'to_form' and 'new_game')."""
 
-import random
 from datetime import date
 from protorpc import messages
 from google.appengine.ext import ndb
@@ -27,6 +26,7 @@ class Game(ndb.Model):
     AI_chart    = ndb.KeyProperty(kind='Board')
 
     @classmethod
+    @ndb.transactional(xg=True)
     def new_game(cls, user):
         """Creates and returns a new game"""
         user_fleet = Fleet()
