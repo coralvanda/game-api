@@ -113,59 +113,59 @@ class BattleshipAPI(remote.Service):
                 bow, or extend to the right from the bow
         Returns:
             Either True or False for legal or illegal placements"""
-        logging.error('inside _valid_placement')
+        logging.info('inside _valid_placement')
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board = game.user_board.get()
         fleet = game.user_fleet.get()
         ship_size = fleet.return_size(request.ship)
         ship_status = getattr(fleet, request.ship + '_status')
         if ship_status == 'placed' or ship_status == 'sunk':
-            logging.error('ship_status: ' + ship_status)
-            logging.error('ship_status == placed or sunk, return False')
+            logging.info('ship_status: ' + ship_status)
+            logging.info('ship_status == placed or sunk, return False')
             return False
         if request.orientation == 'vertical':
-            logging.error('orientation == vertical')
+            logging.info('orientation == vertical')
             for x in range(ship_size):
                 if request.bow_row + x > 9:
-                    logging.error('ship exceeds size of board, return False')
+                    logging.info('ship exceeds size of board, return False')
                     return False
                 if getattr(board, 'row_' +
                     str(request.bow_row + x))[request.bow_position] == '1':
-                    logging.error('ship overlaps with another, return False')
+                    logging.info('ship overlaps with another, return False')
                     return False
         else:
             for x in range(ship_size):
                 if request.bow_position + x > 9:
-                    logging.error('ship exceeds size of board, return False')
+                    logging.info('ship exceeds size of board, return False')
                     return False
                 if getattr(board,'row_' +
                     str(request.bow_row))[request.bow_position + x] == '1':
-                    logging.error('ship overlaps with another, return False')
+                    logging.info('ship overlaps with another, return False')
                     return False
-        logging.error('_valid_placement ends, returns True')
+        logging.info('_valid_placement ends, returns True')
         return True
 
     @ndb.transactional(xg=True)
     def _execute_placement(self, request):
-        logging.error('inside _execute_placement')
+        logging.info('inside _execute_placement')
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board = game.user_board.get()
         fleet = game.user_fleet.get()
         ship_size = fleet.return_size(request.ship)
         if request.orientation == 'vertical':
-            logging.error('orientation == vertical')
+            logging.info('orientation == vertical')
             for x in range(ship_size):
                 row = getattr(board, 'row_' + str(request.bow_row + x))
                 row[request.bow_position] = '1'
                 setattr(board, 'row_' + str(request.bow_row + x), row)
-                logging.error('set row to ' + ''.join(row))
+                logging.info('set row to ' + ''.join(row))
         else:
-            logging.error('orientation == horizontal')
+            logging.info('orientation == horizontal')
             for x in range(ship_size):
                 row = getattr(board, 'row_' + str(request.bow_row))
                 row[request.bow_position + x] = '1'
                 setattr(board, 'row_' + str(request.bow_row), row)
-                logging.error('set row to ' + ''.join(row))
+                logging.info('set row to ' + ''.join(row))
         board.put()
         setattr(fleet, request.ship + '_status', 'placed')
         fleet.put()
@@ -178,12 +178,12 @@ class BattleshipAPI(remote.Service):
                       http_method='POST')
     def place_ship(self, request):
         """Position a ship on your board"""
-        logging.error('place_ship endpoint calls _valid_placement')
+        logging.info('place_ship endpoint calls _valid_placement')
         if self._valid_placement(request):
-            logging.error('_valid_placement==true, call _execute_placement')
+            logging.info('_valid_placement==true, call _execute_placement')
             return self._execute_placement(request)
         else:
-            logging.error('_valid_placement == False, raise exception')
+            logging.info('_valid_placement == False, raise exception')
             raise endpoints.BadRequestException('Invalid ship placement')
 
 
