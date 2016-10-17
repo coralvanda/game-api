@@ -123,10 +123,10 @@ class BattleshipAPI(remote.Service):
             logging.error('ship_status: ' + ship_status)
             logging.error('ship_status == placed or sunk, return False')
             return False
-        if getattr(board, 'row_' +
+        '''if getattr(board, 'row_' +
             str(request.bow_row))[request.bow_position] == '1':
             logging.error('bow location already == 1, return False')
-            return False
+            return False'''
         if request.orientation == 'vertical':
             logging.error('orientation == vertical')
             for x in range(ship_size):
@@ -191,7 +191,7 @@ class BattleshipAPI(remote.Service):
             raise endpoints.BadRequestException('Invalid ship placement')
 
 
-    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgMDvCww
+    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgODXCww
 
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
