@@ -199,6 +199,10 @@ class BattleshipAPI(remote.Service):
                       http_method='POST')
     def place_ship(self, request):
         """Position a ship on your board"""
+        ship_list = ['carrier', 'battleship', 'cruiser',
+                    'submarine', 'destroyer']
+        if request.ship not in ship_list:
+            raise endpoints.BadRequestException('Invalid ship type')
         logging.info('place_ship endpoint calls _valid_placement')
         if self._valid_placement(request):
             logging.info('_valid_placement==true, call _execute_placement')
