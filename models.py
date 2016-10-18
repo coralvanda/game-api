@@ -15,7 +15,7 @@ class User(ndb.Model):
 
 class Game(ndb.Model):
     """Game object"""
-    move_count  = ndb.IntegerProperty()
+    move_count  = ndb.IntegerProperty(default=0)
     game_over   = ndb.BooleanProperty(required=True, default=False)
     user        = ndb.KeyProperty(required=True, kind='User')
     user_fleet  = ndb.KeyProperty(kind='Fleet')
