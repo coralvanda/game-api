@@ -62,7 +62,6 @@ class BattleshipAPI(remote.Service):
                       path='game',
                       name='new_game',
                       http_method='POST')
-    @ndb.transactional(xg=True)
     def new_game(self, request):
         """Creates new game"""
         user = User.query(User.name == request.user_name).get()
@@ -202,7 +201,7 @@ class BattleshipAPI(remote.Service):
             raise endpoints.BadRequestException('Invalid ship placement')
 
 
-    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgODXCww
+    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgMjzCgw
 
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,

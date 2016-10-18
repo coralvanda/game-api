@@ -21,9 +21,9 @@ class Game(ndb.Model):
     user_fleet  = ndb.KeyProperty(kind='Fleet')
     user_board  = ndb.KeyProperty(kind='Board')
     user_chart  = ndb.KeyProperty(kind='Board')
-    AI_fleet    = ndb.KeyProperty(kind='Fleet')
-    AI_board    = ndb.KeyProperty(kind='Board')
-    AI_chart    = ndb.KeyProperty(kind='Board')
+    ai_fleet    = ndb.KeyProperty(kind='Fleet')
+    ai_board    = ndb.KeyProperty(kind='Board')
+    ai_chart    = ndb.KeyProperty(kind='Board')
 
     @classmethod
     @ndb.transactional(xg=True)
@@ -32,28 +32,28 @@ class Game(ndb.Model):
         user_fleet = Fleet()
         user_board = Board()
         user_chart = Board()
-        AI_fleet = Fleet()
-        AI_board = Board()
-        AI_chart = Board()
+        ai_fleet = Fleet()
+        ai_board = Board()
+        ai_chart = Board()
         user_fleet_key = user_fleet.put()
         user_board_key = user_board.put()
         user_chart_key = user_chart.put()
-        AI_fleet_key = AI_fleet.put()
-        AI_board_key = AI_board.put()
-        AI_chart_key = AI_chart.put()
+        ai_fleet_key = ai_fleet.put()
+        ai_board_key = ai_board.put()
+        ai_chart_key = ai_chart.put()
         game = Game(user=user,
                     user_fleet=user_fleet_key,
                     user_board=user_board_key,
                     user_chart=user_chart_key,
-                    AI_fleet=AI_fleet_key,
-                    AI_board=AI_board_key,
-                    AI_chart=AI_chart_key,
+                    ai_fleet=ai_fleet_key,
+                    ai_board=ai_board_key,
+                    ai_chart=ai_chart_key,
                     game_over=False)
         game.put()
         user_board.build_board()
         user_chart.build_board()
-        AI_board.build_board()
-        AI_chart.build_board()
+        ai_board.build_board()
+        ai_chart.build_board()
         return game
 
     def to_form(self, message):
