@@ -16,7 +16,7 @@ from models import User, Game, Score, Board, Fleet, StringMessage
 from models import BoardForm, NewGameForm, GameForm, GameForms
 from models import MakeMoveForm, ScoreForms, PlaceShipForm
 
-from utils import get_by_urlsafe, ai_fleet_builder
+from utils import get_by_urlsafe
 from settings import WEB_CLIENT_ID
 
 API_EXPLORER_CLIENT_ID = endpoints.API_EXPLORER_CLIENT_ID
@@ -62,7 +62,6 @@ class BattleshipAPI(remote.Service):
                       path='game',
                       name='new_game',
                       http_method='POST')
-    @ndb.transactional(xg=True)
     def new_game(self, request):
         """Creates new game"""
         user = User.query(User.name == request.user_name).get()
@@ -70,19 +69,6 @@ class BattleshipAPI(remote.Service):
             raise endpoints.NotFoundException(
                     'A User with that name does not exist!')
         game = Game.new_game(user.key)
-        ai_fleet = game.ai_fleet.get()
-        ai_board = game.ai_board.get()
-        ai_fleet_formation = ai_fleet_builder()
-        for x in range(len(ai_fleet_formation)):
-            setattr(ai_board, 'row_' + str(x), ai_fleet_formation[x])
-        ai_fleet.carrier_status = 'placed'
-        ai_fleet.battleship_status = 'placed'
-        ai_fleet.cruiser_status = 'placed'
-        ai_fleet.submarine_status = 'placed'
-        ai_fleet.destroyer_status = 'placed'
-        ai_fleet.put()
-        ai_board.put()
-
         # Use a task queue to update the average attempts remaining.
         # This operation is not needed to complete the creation of a new game
         # so it is performed out of sequence.
@@ -111,7 +97,7 @@ class BattleshipAPI(remote.Service):
         """Return a list of active games a player is engaged in"""
         user = User.query(User.name == request.user_name).get()
         games = Game.query()
-        games = games.filter(Game.user == user.key)
+        games = games.filter(Game.user_id == user.key)
         games = games.filter(Game.game_over == False).fetch()
         return GameForms(games=[game.to_form('') for game in games])
 
@@ -144,7 +130,7 @@ class BattleshipAPI(remote.Service):
                     logging.info('ship exceeds size of board, return False')
                     return False
                 if getattr(board, 'row_' +
-                    str(request.bow_row + x))[request.bow_position] == '1':
+                    str(request.bow_row + x))[request.bow_position] != '0':
                     logging.info('ship overlaps with another, return False')
                     return False
         else:
@@ -153,7 +139,7 @@ class BattleshipAPI(remote.Service):
                     logging.info('ship exceeds size of board, return False')
                     return False
                 if getattr(board,'row_' +
-                    str(request.bow_row))[request.bow_position + x] == '1':
+                    str(request.bow_row))[request.bow_position + x] != '0':
                     logging.info('ship overlaps with another, return False')
                     return False
         logging.info('_valid_placement ends, returns True')
@@ -202,7 +188,7 @@ class BattleshipAPI(remote.Service):
             raise endpoints.BadRequestException('Invalid ship placement')
 
 
-    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgODXCww
+    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIiCxIEVXNlchiAgICAgICACgwLEgRHYW1lGICAgICA0OcLDA
 
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
@@ -270,7 +256,7 @@ class BattleshipAPI(remote.Service):
         if not user:
             raise endpoints.NotFoundException(
                     'A User with that name does not exist!')
-        scores = Score.query(Score.user == user.key)
+        scores = Score.query(Score.user_id == user.key)
         return ScoreForms(items=[score.to_form() for score in scores])
 
     '''

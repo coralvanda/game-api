@@ -5,6 +5,7 @@ classes they can include methods (such as 'to_form' and 'new_game')."""
 from datetime import date
 from protorpc import messages
 from google.appengine.ext import ndb
+from utils import ai_fleet_builder
 
 
 class User(ndb.Model):
@@ -17,50 +18,68 @@ class Game(ndb.Model):
     """Game object"""
     move_count  = ndb.IntegerProperty()
     game_over   = ndb.BooleanProperty(required=True, default=False)
-    user        = ndb.KeyProperty(required=True, kind='User')
+    user_id     = ndb.KeyProperty(required=True, kind='User')
     user_fleet  = ndb.KeyProperty(kind='Fleet')
     user_board  = ndb.KeyProperty(kind='Board')
     user_chart  = ndb.KeyProperty(kind='Board')
-    AI_fleet    = ndb.KeyProperty(kind='Fleet')
-    AI_board    = ndb.KeyProperty(kind='Board')
-    AI_chart    = ndb.KeyProperty(kind='Board')
+    ai_fleet    = ndb.KeyProperty(kind='Fleet')
+    ai_board    = ndb.KeyProperty(kind='Board')
+    ai_chart    = ndb.KeyProperty(kind='Board')
 
     @classmethod
     @ndb.transactional(xg=True)
     def new_game(cls, user):
         """Creates and returns a new game"""
-        user_fleet = Fleet()
-        user_board = Board()
-        user_chart = Board()
-        AI_fleet = Fleet()
-        AI_board = Board()
-        AI_chart = Board()
+        game = Game(parent=user)
+        game.user_id=user
+        game.game_over=False
+        game_key = game.put()
+
+        user_fleet = Fleet(parent=game_key)
+        user_board = Board(parent=game_key)
+        user_chart = Board(parent=game_key)
+        ai_fleet = Fleet(parent=game_key)
+        ai_board = Board(parent=game_key)
+        ai_chart = Board(parent=game_key)
+
         user_fleet_key = user_fleet.put()
         user_board_key = user_board.put()
         user_chart_key = user_chart.put()
-        AI_fleet_key = AI_fleet.put()
-        AI_board_key = AI_board.put()
-        AI_chart_key = AI_chart.put()
-        game = Game(user=user,
-                    user_fleet=user_fleet_key,
-                    user_board=user_board_key,
-                    user_chart=user_chart_key,
-                    AI_fleet=AI_fleet_key,
-                    AI_board=AI_board_key,
-                    AI_chart=AI_chart_key,
-                    game_over=False)
+        ai_fleet_key = ai_fleet.put()
+        ai_board_key = ai_board.put()
+        ai_chart_key = ai_chart.put()
+
+        game.user_fleet = user_fleet_key
+        game.user_board = user_board_key
+        game.user_chart = user_chart_key
+        game.AI_fleet = ai_fleet_key
+        game.AI_board = ai_board_key
+        game.AI_chart = ai_chart_key
         game.put()
+
         user_board.build_board()
         user_chart.build_board()
-        AI_board.build_board()
-        AI_chart.build_board()
+        ai_board.build_board()
+        ai_chart.build_board()
+
+        ai_fleet_formation = ai_fleet_builder()
+        for x in range(len(ai_fleet_formation)):
+            setattr(ai_board, 'row_' + str(x), ai_fleet_formation[x])
+        ai_fleet.carrier_status = 'placed'
+        ai_fleet.battleship_status = 'placed'
+        ai_fleet.cruiser_status = 'placed'
+        ai_fleet.submarine_status = 'placed'
+        ai_fleet.destroyer_status = 'placed'
+        ai_fleet.put()
+        ai_board.put()
+
         return game
 
     def to_form(self, message):
         """Returns a GameForm representation of the Game"""
         form = GameForm()
         form.urlsafe_key = self.key.urlsafe()
-        form.user_name = self.user.get().name
+        form.user_name = self.user_id.get().name
         form.game_over = self.game_over
         form.message = message
         return form
@@ -80,7 +99,7 @@ class Game(ndb.Model):
         self.game_over = True
         self.put()
         # Add the game to the score 'board'
-        score = Score(user=self.user, date=date.today(), won=won,
+        score = Score(user_id=self.user_id, date=date.today(), won=won,
                       moves=self.move_count)
         score.put()
 
@@ -161,13 +180,13 @@ class Fleet(ndb.Model):
 
 class Score(ndb.Model):
     """Score object"""
-    user    = ndb.KeyProperty(required=True, kind='User')
+    user_id = ndb.KeyProperty(required=True, kind='User')
     date    = ndb.DateProperty(required=True)
     won     = ndb.BooleanProperty(required=True)
     moves   = ndb.IntegerProperty(required=True)
 
     def to_form(self):
-        return ScoreForm(user_name=self.user.get().name, won=self.won,
+        return ScoreForm(user_name=self.user_id.get().name, won=self.won,
                          date=str(self.date), moves=self.moves)
 
 
