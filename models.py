@@ -30,11 +30,10 @@ class Game(ndb.Model):
     def new_game(cls, user):
         """Creates and returns a new game"""
         new_game_id = Game.allocate_ids(size=1, parent=user)[0]
-        new_game_key = ndb.Key(Game, new_game_id, parent=user)
-        game = Game(key=new_game_key,
+        game_key = ndb.Key(Game, new_game_id, parent=user)
+        game = Game(key=game_key,
                     user_id=user,
                     game_over=False)
-        game_key = game.put()
 
         new_user_fleet_id = Fleet.allocate_ids(size=1, parent=game_key)[0]
         new_user_fleet_key = ndb.Key(Fleet, new_user_fleet_id, parent=game_key)

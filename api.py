@@ -188,7 +188,7 @@ class BattleshipAPI(remote.Service):
             raise endpoints.BadRequestException('Invalid ship placement')
 
 
-    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIbCxIEVXNlchiAgICAgICACgwLEgRHYW1lGAEM
+    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIbCxIEVXNlchiAgICAgICACgwLEgRHYW1lGAkM
 
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
