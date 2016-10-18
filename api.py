@@ -188,7 +188,7 @@ class BattleshipAPI(remote.Service):
             raise endpoints.BadRequestException('Invalid ship placement')
 
 
-    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIiCxIEVXNlchiAgICAgICACgwLEgRHYW1lGICAgICA0OcLDA
+    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIbCxIEVXNlchiAgICAgICACgwLEgRHYW1lGAEM
 
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
@@ -198,7 +198,9 @@ class BattleshipAPI(remote.Service):
     def show_board(self, request):
         """Display a board state"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        logging.info('game: ' + str(game))
         board_key = getattr(game, request.board)
+        logging.info('board_key: ' + str(board_key))
         board = board_key.get()
         return board.to_form()
 

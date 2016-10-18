@@ -27,26 +27,43 @@ class Game(ndb.Model):
     ai_chart    = ndb.KeyProperty(kind='Board')
 
     @classmethod
-    @ndb.transactional(xg=True)
     def new_game(cls, user):
         """Creates and returns a new game"""
-        game = Game(parent=user)
-        game.user_id=user
-        game.game_over=False
+        new_game_id = Game.allocate_ids(size=1, parent=user)[0]
+        new_game_key = ndb.Key(Game, new_game_id, parent=user)
+        game = Game(key=new_game_key,
+                    user_id=user,
+                    game_over=False)
         game_key = game.put()
 
-        user_fleet = Fleet(parent=game_key)
-        user_board = Board(parent=game_key)
-        user_chart = Board(parent=game_key)
-        ai_fleet = Fleet(parent=game_key)
-        ai_board = Board(parent=game_key)
-        ai_chart = Board(parent=game_key)
-
+        new_user_fleet_id = Fleet.allocate_ids(size=1, parent=game_key)[0]
+        new_user_fleet_key = ndb.Key(Fleet, new_user_fleet_id, parent=game_key)
+        user_fleet = Fleet(key=new_user_fleet_key)
         user_fleet_key = user_fleet.put()
+
+        new_user_board_id = Board.allocate_ids(size=1, parent=game_key)[0]
+        new_user_board_key = ndb.Key(Board, new_user_board_id, parent=game_key)
+        user_board = Board(key=new_user_board_key)
         user_board_key = user_board.put()
+
+        new_user_chart_id = Board.allocate_ids(size=1, parent=game_key)[0]
+        new_user_chart_key = ndb.Key(Board, new_user_chart_id, parent=game_key)
+        user_chart = Board(key=new_user_chart_key)
         user_chart_key = user_chart.put()
+
+        new_ai_fleet_id = Fleet.allocate_ids(size=1, parent=game_key)[0]
+        new_ai_fleet_key = ndb.Key(Fleet, new_ai_fleet_id, parent=game_key)
+        ai_fleet = Fleet(key=new_ai_fleet_key)
         ai_fleet_key = ai_fleet.put()
+
+        new_ai_board_id = Board.allocate_ids(size=1, parent=game_key)[0]
+        new_ai_board_key = ndb.Key(Board, new_ai_board_id, parent=game_key)
+        ai_board = Board(key=new_ai_board_key)
         ai_board_key = ai_board.put()
+
+        new_ai_chart_id = Board.allocate_ids(size=1, parent=game_key)[0]
+        new_ai_chart_key = ndb.Key(Board, new_ai_chart_id, parent=game_key)
+        ai_chart = Board(key=new_ai_chart_key)
         ai_chart_key = ai_chart.put()
 
         game.user_fleet = user_fleet_key
