@@ -143,7 +143,7 @@ class BattleshipAPI(remote.Service):
                     logging.info('ship exceeds size of board, return False')
                     return False
                 if getattr(board, 'row_' +
-                    str(request.bow_row + x))[request.bow_position] == '1':
+                    str(request.bow_row + x))[request.bow_position] != '0':
                     logging.info('ship overlaps with another, return False')
                     return False
         else:
@@ -152,7 +152,7 @@ class BattleshipAPI(remote.Service):
                     logging.info('ship exceeds size of board, return False')
                     return False
                 if getattr(board,'row_' +
-                    str(request.bow_row))[request.bow_position + x] == '1':
+                    str(request.bow_row))[request.bow_position + x] != '0':
                     logging.info('ship overlaps with another, return False')
                     return False
         logging.info('_valid_placement ends, returns True')
@@ -166,18 +166,25 @@ class BattleshipAPI(remote.Service):
         board = game.user_board.get()
         fleet = game.user_fleet.get()
         ship_size = fleet.return_size(request.ship)
+        ship_string_dict = {'carrier': 'C',
+                            'battleship': 'B',
+                            'cruiser': 'c',
+                            'submarine': 'S',
+                            'destroyer': 'D'}
+        ship_string = ship_string_dict[request.ship]
+
         if request.orientation == 'vertical':
             logging.info('orientation == vertical')
             for x in range(ship_size):
                 row = getattr(board, 'row_' + str(request.bow_row + x))
-                row[request.bow_position] = '1'
+                row[request.bow_position] = ship_string
                 setattr(board, 'row_' + str(request.bow_row + x), row)
                 logging.info('set row to ' + ''.join(row))
         else:
             logging.info('orientation == horizontal')
             for x in range(ship_size):
                 row = getattr(board, 'row_' + str(request.bow_row))
-                row[request.bow_position + x] = '1'
+                row[request.bow_position + x] = ship_string
                 setattr(board, 'row_' + str(request.bow_row), row)
                 logging.info('set row to ' + ''.join(row))
         board.put()
