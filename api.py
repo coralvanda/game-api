@@ -355,6 +355,9 @@ class BattleshipAPI(remote.Service):
             raise endpoints.BadRequestException('Coordinates not valid')
         game.move_count += 1
         user_chart = game.user_chart.get()
+        if (getattr(chart, 'row_' + str(move_row))[move_col] == 'X') or
+            (getattr(chart, 'row_' + str(move_row))[move_col] == '-'):
+            raise endpoints.BadRequestException('You have already fired there')
         ai_board = game.ai_board.get()
         ai_fleet = game.ai_fleet.get()
         result = self._process_move(request.move_row,
