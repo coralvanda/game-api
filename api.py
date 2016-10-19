@@ -368,6 +368,8 @@ class BattleshipAPI(remote.Service):
                 msg = result + ' Enemy fleet annihilated, you win!'
                 game.put()
                 return game.to_form(msg)
+            else:
+                msg = 'Your shot hit! ' + result
         game.put()
 
         # now the computer makes a move
@@ -393,6 +395,8 @@ class BattleshipAPI(remote.Service):
                 msg += ' Computer wins!'
                 game.put()
                 return game.to_form(msg)
+            else:
+                msg += ' Enemy returns fire with a hit! ' + ai_result
         game.put()
         return game.to_form(msg)
 
