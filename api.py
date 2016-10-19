@@ -205,7 +205,7 @@ class BattleshipAPI(remote.Service):
             raise endpoints.BadRequestException('Invalid ship placement')
 
 
-    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgMjzCgw
+    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgOjdCww
 
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
@@ -308,8 +308,10 @@ class BattleshipAPI(remote.Service):
         search for other sections of a ship that was hit but not sunk."""
         ai_chart = game.ai_chart.get()
         do_random_move = True
-        for row in ai_chart:
-            if 'X' in row:
+        rows = ['row_0', 'row_1', 'row_2', 'row_3', 'row_4', 'row_5',
+            'row_6', 'row_7', 'row_8', 'row_9']
+        for row in rows:
+            if 'X' in ai_chart.row:
                 do_random_move = False
                 break
         if do_random_move:
@@ -318,9 +320,9 @@ class BattleshipAPI(remote.Service):
         # build a list of all X locations on the chart
         hits = []
         row_index = 0
-        for row in ai_chart:
-            for i in range(len(row)):
-                if row[i] == 'X':
+        for row in rows:
+            for i in range(len(ai_chart.row)):
+                if ai_chart.row[i] == 'X':
                     hits.append([row_index, i])
             row_index += 1
         # have computer check around each hit marked on the chart
