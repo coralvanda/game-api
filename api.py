@@ -225,7 +225,8 @@ class BattleshipAPI(remote.Service):
         If so, updates the hp of the hit ship, and status if the
         hit sinks it, as well as updates the chart of the attacker.
         Locations on the chart that have been fired at will be marked
-        with 'O', whereas empty spots not fired upon are '0'.
+        with '-' if no ship, and 'X' if a ship, whereas empty spots
+        not fired upon are '0'.
 
         Returns:
             A string containing 'Hit!', 'Miss', or 'x sunk' with
@@ -254,7 +255,7 @@ class BattleshipAPI(remote.Service):
             fleet.put()
             return result
         else:
-            getattr(chart, 'row_' + str(move_row))[move_col] = 'O'
+            getattr(chart, 'row_' + str(move_row))[move_col] = '-'
             chart.put()
             return result
 
