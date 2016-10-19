@@ -315,7 +315,7 @@ class BattleshipAPI(remote.Service):
                 do_random_move = False
                 break
         if do_random_move:
-            move_row, move_col = self._make_random_move()
+            move_row, move_col = self._make_random_move(ai_chart)
             return move_row, move_col
         # build a list of all X locations on the chart
         hits = []
@@ -334,7 +334,7 @@ class BattleshipAPI(remote.Service):
                 return target[0], target[1]
         # if all existing hits are fully surrounded by missed shots,
         # then try again with a random move
-        return self._make_random_move()
+        return self._make_random_move(ai_chart)
 
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
                       response_message=GameForm,
