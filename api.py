@@ -247,7 +247,7 @@ class BattleshipAPI(remote.Service):
             setattr(fleet, hit_ship + '_hp', hit_ship_hp)
             if hit_ship_hp <= 0:
                 setattr(fleet, hit_ship + '_status', 'sunk')
-                result = hit ship + ' sunk!'
+                result = hit_ship + ' sunk!'
             fleet.put()
             return result
         else:
@@ -394,7 +394,6 @@ class BattleshipAPI(remote.Service):
         game.put()
         return game.to_form(msg)
 
-    '''
     @endpoints.method(response_message=ScoreForms,
                       path='scores',
                       name='get_scores',
