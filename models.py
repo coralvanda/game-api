@@ -65,9 +65,6 @@ class Game(ndb.Model):
         form.message = message
         return form
 
-    def check_state(self):
-        pass
-
     def end_game(self, won=False):
         """Adds completed game to the score board
 
@@ -150,6 +147,23 @@ class Fleet(ndb.Model):
         else:
             return StringMessage(message=str(ship) + ' hit!')
 
+    def fleet_status(self):
+        form = FleetStatusForm()
+        if (self.carrier_hp == 0) and (self.battleship_hp == 0) \
+            and (self.cruiser_hp == 0) and (self.submarine_hp == 0) \
+            and (self.destroyer_hp == 0):
+            form.condition = 'Fleet destroyed'
+            return form
+        else:
+            cruiser_condition = 'Cruiser HP: ' + str(cruiser_hp)
+            battleship_condition = 'Battleship HP ' + str(battleship_hp)
+            carrier_condition = 'Carrier HP ' + str(carrier_hp)
+            submarine_condition = 'Submarine HP ' + str(submarine_hp)
+            destroyer_condition = 'Destroyer HP ' + str(destroyer_hp)
+            form.condition = [cruiser_condition, battleship_condition,
+                carrier_condition, submarine_condition, destroyer_condition]
+            return form
+
 
 class Score(ndb.Model):
     """Score object"""
@@ -206,6 +220,10 @@ class MakeMoveForm(messages.Message):
     """Used to make a move in an existing game"""
     move_row = messages.IntegerField(1, required=True)
     move_col = messages.IntegerField(2, required=True)
+
+
+class FleetStatusForm(messages.Message):
+    condition = messages.StringField(1, repeated=True)
 
 
 class ScoreForm(messages.Message):

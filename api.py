@@ -275,18 +275,17 @@ class BattleshipAPI(remote.Service):
         elif result == 'Miss'
             msg = 'Miss'
         else:
-            game_state = game.check_state()
-            if game_state == 'User wins':
+            if ai_fleet.fleet_status() == 'Fleet destroyed':
                 game.end_game(True)
                 game.game_over = True
                 msg = result + ' You win!'
-            elif game_state == 'AI wins':
-                game.end_game(False)
-                game.game_over = True
-                msg = result + ' Computer wins!'
         game.put()
 
         # Should also include logic to make the AI move here
+        if user_fleet.fleet_status() == 'Fleet destroyed':
+            game.end_game(False)
+            game.game_over = True
+            msg = result + ' Computer wins!'
 
         return game.to_form(msg)
 
