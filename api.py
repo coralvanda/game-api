@@ -224,6 +224,8 @@ class BattleshipAPI(remote.Service):
 
         If so, updates the hp of the hit ship, and status if the
         hit sinks it, as well as updates the chart of the attacker.
+        Locations on the chart that have been fired at will be marked
+        with 'O', whereas empty spots not fired upon are '0'.
 
         Returns:
             A string containing 'Hit!', 'Miss', or 'x sunk' with
@@ -240,7 +242,7 @@ class BattleshipAPI(remote.Service):
         if board_row[col] in ships.keys():
             result = 'Hit!'
             hit_ship = ships[board_row[col]]
-            setattr(chart, 'row_' + str(row)[col], 'X')
+            getattr(chart, 'row_' + str(row))[col] = 'X'
             chart.put()
             hit_ship_hp = getattr(fleet, hit_ship + '_hp')
             hit_ship_hp -= 1
@@ -251,6 +253,8 @@ class BattleshipAPI(remote.Service):
             fleet.put()
             return result
         else:
+            getattr(chart, 'row_' + str(row))[col] = 'O'
+            chart.put()
             return result
 
     def _make_random_move(self):
@@ -267,9 +271,11 @@ class BattleshipAPI(remote.Service):
                 break
         if not existing_hits:
             move_row, move_col = self._make_random_move()
-            # if move location was already tried, retry making a move
-            # loop until a location is found that hasn't been tried
-            # return the coordinates
+            chart_row = getattr(ai_chart, 'row_' + str(move_row))
+            while chart_row[move_col] != '0':
+                move_row, move_col = self._make_random_move()
+                chart_row = getattr(ai_chart, 'row_' + str(move_row))
+            return move_row, move_col
         pass
 
 
@@ -303,7 +309,7 @@ class BattleshipAPI(remote.Service):
                 return game.to_form(msg)
         game.put()
 
-        ai_move = self._get_ai_move(game)
+        ai_move_row, ai_move_col = self._get_ai_move(game)
         if user_fleet.fleet_status() == 'Fleet destroyed':
             game.end_game(False)
             game.game_over = True
