@@ -14,7 +14,7 @@ from google.appengine.ext import ndb
 
 from models import User, Game, Score, Board, Fleet, StringMessage
 from models import BoardForm, NewGameForm, GameForm, GameForms
-from models import MakeMoveForm, ScoreForms, PlaceShipForm
+from models import MakeMoveForm, ScoreForms, PlaceShipForm, FleetStatusForm
 
 from utils import get_by_urlsafe, ai_fleet_builder
 from settings import WEB_CLIENT_ID
@@ -29,6 +29,9 @@ GET_GAME_REQUEST = endpoints.ResourceContainer(
 BOARD_REQUEST = endpoints.ResourceContainer(
     urlsafe_game_key=messages.StringField(1),
     board=messages.StringField(2))
+FLEET_REQUEST = endpoints.ResourceContainer(
+    FleetStatusForm,
+    urlsafe_game_key=messages.StringField(1))
 MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
     MakeMoveForm,
     urlsafe_game_key=messages.StringField(1),)
@@ -218,6 +221,13 @@ class BattleshipAPI(remote.Service):
         board_key = getattr(game, request.board)
         board = board_key.get()
         return board.to_form()
+
+    @endpoints.method(response_message=FLEET_REQUEST,
+                    path='game/{urlsafe_game_key}/fleet',
+                    name='view_fleet_health',
+                    http_method='GET')
+    def view_fleet_health(self):
+        pass
 
     def _process_move(self, move_row, move_col, chart, board, fleet):
         """Checks whether a move hits the opposing fleet
