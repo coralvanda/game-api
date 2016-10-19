@@ -256,6 +256,10 @@ class BattleshipAPI(remote.Service):
             return result
 
     def _make_random_move(self, ai_chart):
+        """Returns a tuple of two random ints between 0-9
+
+        Confirms that the location has not already been fired upon
+        before returning a value"""
         row = random.randint(0, 9)
         col = random.randint(0, 9)
         chart_row = getattr(ai_chart, 'row_' + str(row))
@@ -265,20 +269,70 @@ class BattleshipAPI(remote.Service):
             chart_row = getattr(ai_chart, 'row_' + str(row))
         return row, col
 
+    def _check_round(self, chart, coordinates):
+        """Looks at all chart positions around coordinates parameter
+
+        Considers only up, down, left, and right.  If a location is
+        found that hasn't been fired upon, it returns a list containing
+        the coordinates of that location"""
+        row = coordinates[0]
+        col = coordinates[1]
+        try:
+            if getattr(chart, 'row_' + str(row - 1))[col] == '0':
+                return [row - 1, col]
+        except IndexError:
+            pass
+        try:
+            if getattr(chart, 'row_' + str(row))[col - 1] == '0':
+                return [row, col - 1]
+        except IndexError:
+            pass
+        try:
+            if getattr(chart, 'row_' + str(row))[col + 1] == '0':
+                return [row, col + 1]
+        except IndexError:
+            pass
+        try:
+            if getattr(chart, 'row_' + str(row + 1))[col] == '0':
+                return [row + 1, col]
+        except IndexError:
+            pass
+        return None
+
     def _get_ai_move(self, game):
+        """Returns a tuple of coordinates for the AI to use as its move
+
+        Will return a random target if no ships have been hit yet, or
+        if all positions around hit locations have been fired upon.
+        If hits are marked on the chart, it will fire around them to
+        search for other sections of a ship that was hit but not sunk."""
         ai_chart = game.ai_chart.get()
-        existing_hits = False
+        do_random_move = True
         for row in ai_chart:
             if 'X' in row:
-                existing_hits = True
+                do_random_move = False
                 break
-        if not existing_hits:
+        if do_random_move:
             move_row, move_col = self._make_random_move()
             return move_row, move_col
+        # build a list of all X locations on the chart
+        hits = []
+        row_index = 0
+        for row in ai_chart:
+            for i in range(len(row)):
+                if row[i] == 'X':
+                    hits.append([row_index, i])
+            row_index += 1
         # have computer check around each hit marked on the chart
+        for coordinates in hits:
+            target = self._check_round(ai_chart, coordinates)
+            if target == None:
+                continue
+            else:
+                return target[0], target[1]
         # if all existing hits are fully surrounded by missed shots,
         # then try again with a random move
-
+        return self._make_random_move()
 
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
                       response_message=GameForm,
