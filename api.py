@@ -4,7 +4,7 @@ This can also contain game logic. For more complex games it would be wise to
 move game logic to another file. Ideally the API will be simple, concerned
 primarily with communication to/from the API's users."""
 
-
+import random
 import logging
 import endpoints
 from protorpc import remote, messages
