@@ -365,11 +365,12 @@ class BattleshipAPI(remote.Service):
             if ai_fleet.fleet_status() == 'Fleet destroyed':
                 game.end_game(True)
                 game.game_over = True
-                msg = result + ' Enemy fleet annihilated, you win!'
+                msg = 'Your shot hit, ' + result
+                msg += ' Enemy fleet annihilated, you win!'
                 game.put()
                 return game.to_form(msg)
             else:
-                msg = 'Your shot hit! ' + result
+                msg = 'Your shot hit, ' + result
         game.put()
 
         # now the computer makes a move
