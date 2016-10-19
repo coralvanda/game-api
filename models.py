@@ -65,21 +65,13 @@ class Game(ndb.Model):
         form.message = message
         return form
 
-    def make_move(self, move):
-        """No need to update move count here, it's already done in
-        api.py"""
-        pass
-
-
     def check_state(self):
         pass
 
     def end_game(self, won=False):
-        """Ends the game - if won is True, the player won. - if won is False,
-        the player lost."""
-        self.game_over = True
-        self.put()
-        # Add the game to the score 'board'
+        """Adds completed game to the score board
+
+        If won is True, the player won. - if won is False, the player lost."""
         score = Score(user=self.user, date=date.today(), won=won,
                       moves=self.move_count)
         score.put()
@@ -212,7 +204,8 @@ class BoardForm(messages.Message):
 
 class MakeMoveForm(messages.Message):
     """Used to make a move in an existing game"""
-    move = messages.IntegerField(1, required=True)
+    move_row = messages.IntegerField(1, required=True)
+    move_col = messages.IntegerField(2, required=True)
 
 
 class ScoreForm(messages.Message):

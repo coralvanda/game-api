@@ -86,7 +86,7 @@ class BattleshipAPI(remote.Service):
         # This operation is not needed to complete the creation of a new game
         # so it is performed out of sequence.
         #taskqueue.add(url='/tasks/cache_average_attempts')
-        return game.to_form('Good luck playing Battleship!')
+        return game.to_form('Good luck playing Battleship! Your move.')
 
     @endpoints.method(request_message=GET_GAME_REQUEST,
                       response_message=GameForm,
@@ -117,13 +117,6 @@ class BattleshipAPI(remote.Service):
     def _valid_placement(self, request):
         """Confirms that a ship has been placed in a legal position
 
-        Args:
-            Ship_size: The length of the ship from stem to stern
-            Bow_row: The DB row on which the bow is placed
-            Bow_position: The index of the DB row on which the bow is placed
-            Orientation: can be vertical or horizontal, but the game will
-                assume that the ship will always either extend down from the
-                bow, or extend to the right from the bow
         Returns:
             Either True or False for legal or illegal placements"""
         logging.info('inside _valid_placement')
@@ -160,7 +153,7 @@ class BattleshipAPI(remote.Service):
 
     @ndb.transactional(xg=True)
     def _execute_placement(self, request):
-        """new logic needed to specify which ship is placed"""
+        """Places a ship on the user's board and updates ship status"""
         logging.info('inside _execute_placement')
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board = game.user_board.get()
@@ -226,8 +219,40 @@ class BattleshipAPI(remote.Service):
         board = board_key.get()
         return board.to_form()
 
+    def _process_move(self, request, chart, board, fleet):
+        """Checks whether a move hits the opposing fleet
 
-    '''IN PROGRESS, TEMPORARILY DISABLED
+        If so, updates the hp of the hit ship, and status if the
+        hit sinks it, as well as updates the chart of the attacker.
+
+        Returns:
+            A string containing 'Hit!', 'Miss', or 'x sunk' with
+            x being the type of ship that was hit."""
+        ships = {'C': 'carrier',
+                'B': 'battleship',
+                'c': 'cruiser',
+                'S': 'submarine',
+                'D': 'destroyer'}
+        result = 'Miss'
+        row = request.move_row
+        col = request.move_col
+        board_row = getattr(board, 'row_' + str(row))
+        if board_row[col] in ships.keys():
+            result = 'Hit!'
+            hit_ship = ships[board_row[col]]
+            setattr(chart, 'row_' + str(row)[col], 'X')
+            chart.put()
+            hit_ship_hp = getattr(fleet, hit_ship + '_hp')
+            hit_ship_hp -= 1
+            setattr(fleet, hit_ship + '_hp', hit_ship_hp)
+            if hit_ship_hp <= 0:
+                setattr(fleet, hit_ship + '_status', 'sunk')
+                result = hit ship + ' sunk!'
+            fleet.put()
+            return result
+        else:
+            return result
+
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
                       response_message=GameForm,
                       path='game/{urlsafe_game_key}',
@@ -238,27 +263,33 @@ class BattleshipAPI(remote.Service):
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if game.game_over:
             return game.to_form('Game already over!')
-
+        if (0 > request.move_row > 9) or (0 > request.move_col > 9):
+            raise endpoints.BadRequestException('Coordinates not valid')
         game.move_count += 1
-        result = game.make_move(request.move)
-        if result:
+        user_chart = game.user_chart.get()
+        ai_board = game.ai_board.get()
+        ai_fleet = game.ai_fleet.get()
+        result = self._process_move(request, user_chart, ai_board, ai_fleet)
+        if result == 'Hit!'
             msg = 'Hit!'
-        else:
+        elif result == 'Miss'
             msg = 'Miss'
-
-        # Should also check here for newly sunken ship
-
-        game_state = game.check_state()
-
-        if game_state == 'User wins':
-            game.end_game(True)
-            return game.to_form(msg + ' You win!')
-        elif game_state == 'AI wins':
-            game.end_game(False)
-            return game.to_form(msg + ' Computer wins!')
         else:
-            game.put()
-            return game.to_form(msg)
+            game_state = game.check_state()
+            if game_state == 'User wins':
+                game.end_game(True)
+                game.game_over = True
+                msg = result + ' You win!'
+            elif game_state == 'AI wins':
+                game.end_game(False)
+                game.game_over = True
+                msg = result + ' Computer wins!'
+        game.put()
+
+        # Should also include logic to make the AI move here
+
+        return game.to_form(msg)
+
     '''
 
     @endpoints.method(response_message=ScoreForms,
