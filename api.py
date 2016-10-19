@@ -219,7 +219,7 @@ class BattleshipAPI(remote.Service):
         board = board_key.get()
         return board.to_form()
 
-    def _process_move(self, request, chart, board, fleet):
+    def _process_move(self, move_row, move_col, chart, board, fleet):
         """Checks whether a move hits the opposing fleet
 
         If so, updates the hp of the hit ship, and status if the
@@ -236,13 +236,11 @@ class BattleshipAPI(remote.Service):
                 'S': 'submarine',
                 'D': 'destroyer'}
         result = 'Miss'
-        row = request.move_row
-        col = request.move_col
-        board_row = getattr(board, 'row_' + str(row))
-        if board_row[col] in ships.keys():
+        board_row = getattr(board, 'row_' + str(move_row))
+        if board_row[move_col] in ships.keys():
             result = 'Hit!'
-            hit_ship = ships[board_row[col]]
-            getattr(chart, 'row_' + str(row))[col] = 'X'
+            hit_ship = ships[board_row[move_col]]
+            getattr(chart, 'row_' + str(move_row))[move_col] = 'X'
             chart.put()
             hit_ship_hp = getattr(fleet, hit_ship + '_hp')
             hit_ship_hp -= 1
@@ -253,7 +251,7 @@ class BattleshipAPI(remote.Service):
             fleet.put()
             return result
         else:
-            getattr(chart, 'row_' + str(row))[col] = 'O'
+            getattr(chart, 'row_' + str(move_row))[move_col] = 'O'
             chart.put()
             return result
 
@@ -295,7 +293,11 @@ class BattleshipAPI(remote.Service):
         user_chart = game.user_chart.get()
         ai_board = game.ai_board.get()
         ai_fleet = game.ai_fleet.get()
-        result = self._process_move(request, user_chart, ai_board, ai_fleet)
+        result = self._process_move(request.move_row,
+                                    request.move_col,
+                                    user_chart,
+                                    ai_board,
+                                    ai_fleet)
         if result == 'Hit!'
             msg = 'Hit!'
         elif result == 'Miss'
