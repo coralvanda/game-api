@@ -253,6 +253,26 @@ class BattleshipAPI(remote.Service):
         else:
             return result
 
+    def _make_random_move(self):
+        row = random.randint(0, 9)
+        col = random.randint(0, 9)
+        return row, col
+
+    def _get_ai_move(self, game):
+        ai_chart = game.ai_chart.get()
+        existing_hits = False
+        for row in ai_chart:
+            if 'X' in row:
+                existing_hits = True
+                break
+        if not existing_hits:
+            move_row, move_col = self._make_random_move()
+            # if move location was already tried, retry making a move
+            # loop until a location is found that hasn't been tried
+            # return the coordinates
+        pass
+
+
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
                       response_message=GameForm,
                       path='game/{urlsafe_game_key}',
@@ -279,9 +299,11 @@ class BattleshipAPI(remote.Service):
                 game.end_game(True)
                 game.game_over = True
                 msg = result + ' You win!'
+                game.put()
+                return game.to_form(msg)
         game.put()
 
-        # Should also include logic to make the AI move here
+        ai_move = self._get_ai_move(game)
         if user_fleet.fleet_status() == 'Fleet destroyed':
             game.end_game(False)
             game.game_over = True
