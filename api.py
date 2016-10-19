@@ -255,9 +255,14 @@ class BattleshipAPI(remote.Service):
             chart.put()
             return result
 
-    def _make_random_move(self):
+    def _make_random_move(self, ai_chart):
         row = random.randint(0, 9)
         col = random.randint(0, 9)
+        chart_row = getattr(ai_chart, 'row_' + str(row))
+        while chart_row[col] != '0':
+            row = random.randint(0, 9)
+            col = random.randint(0, 9)
+            chart_row = getattr(ai_chart, 'row_' + str(row))
         return row, col
 
     def _get_ai_move(self, game):
@@ -269,12 +274,10 @@ class BattleshipAPI(remote.Service):
                 break
         if not existing_hits:
             move_row, move_col = self._make_random_move()
-            chart_row = getattr(ai_chart, 'row_' + str(move_row))
-            while chart_row[move_col] != '0':
-                move_row, move_col = self._make_random_move()
-                chart_row = getattr(ai_chart, 'row_' + str(move_row))
             return move_row, move_col
-        pass
+        # have computer check around each hit marked on the chart
+        # if all existing hits are fully surrounded by missed shots,
+        # then try again with a random move
 
 
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
@@ -298,29 +301,46 @@ class BattleshipAPI(remote.Service):
                                     user_chart,
                                     ai_board,
                                     ai_fleet)
-        if result == 'Hit!'
-            msg = 'Hit!'
-        elif result == 'Miss'
-            msg = 'Miss'
+        if result == 'Hit!':
+            msg = 'Your shot hit!'
+        elif result == 'Miss':
+            msg = 'Your shot missed.'
         else:
             if ai_fleet.fleet_status() == 'Fleet destroyed':
                 game.end_game(True)
                 game.game_over = True
-                msg = result + ' You win!'
+                msg = result + ' Enemy fleet annihilated, you win!'
                 game.put()
                 return game.to_form(msg)
         game.put()
 
+        # now the computer makes a move
+        ai_chart = game.ai_chart.get()
+        user_board = game.user_board.get()
+        user_fleet = game.user_fleet.get()
         ai_move_row, ai_move_col = self._get_ai_move(game)
-        if user_fleet.fleet_status() == 'Fleet destroyed':
-            game.end_game(False)
-            game.game_over = True
-            msg = result + ' Computer wins!'
-
+        ai_result = self._process_move(ai_move_row,
+                                    ai_move_col,
+                                    ai_chart,
+                                    user_board,
+                                    user_fleet)
+        if ai_result == 'Hit!':
+            msg += ' Enemy returns fire with a hit!'
+        elif ai_result == 'Miss':
+            msg += ' Enemy returns fire, but misses.'
+        else:
+            if user_fleet.fleet_status() == 'Fleet destroyed':
+                game.end_game(False)
+                game.game_over = True
+                msg += ' Enemy returns fire, ' + ai_result
+                msg += ' Your fleet now rests at the bottom of the sea.'
+                msg += ' Computer wins!'
+                game.put()
+                return game.to_form(msg)
+        game.put()
         return game.to_form(msg)
 
     '''
-
     @endpoints.method(response_message=ScoreForms,
                       path='scores',
                       name='get_scores',
