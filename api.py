@@ -243,9 +243,12 @@ class BattleshipAPI(remote.Service):
             getattr(chart, 'row_' + str(move_row))[move_col] = 'X'
             chart.put()
             hit_ship_hp = getattr(fleet, hit_ship + '_hp')
+            logging.info('ship hp before modifying: ' + str(hit_ship_hp))
             hit_ship_hp -= 1
+            logging.info('ship hp after modifying: ' + str(hit_ship_hp))
             setattr(fleet, hit_ship + '_hp', hit_ship_hp)
             if hit_ship_hp <= 0:
+                logging.info('inside hp <= 0 statement')
                 setattr(fleet, hit_ship + '_status', 'sunk')
                 result = hit_ship + ' sunk!'
             fleet.put()
@@ -343,6 +346,7 @@ class BattleshipAPI(remote.Service):
                       http_method='PUT')
     def make_move(self, request):
         """Makes a move. Returns a game state with message"""
+        msg = ''
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if game.game_over:
             return game.to_form('Game already over!')
