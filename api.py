@@ -467,6 +467,16 @@ class BattleshipAPI(remote.Service):
         scores = Score.query(Score.user == user.key)
         return ScoreForms(items=[score.to_form() for score in scores])
 
+    @endpoints.method(response_message=ScoreForms,
+                    path='top-scores',
+                    name='get_top_scores',
+                    http_method='GET')
+    def get_top_scores(self, request):
+        """Returns the top 10 scores"""
+        scores = Score.query(Score.won == True)
+        scores = scores.order(Score.moves).fetch(10)
+        return ScoreForms(items=[score.to_form() for score in scores])
+
     '''
     @endpoints.method(response_message=StringMessage,
                       path='games/average_attempts',
