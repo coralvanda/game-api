@@ -160,8 +160,8 @@ class Fleet(ndb.Model):
             cruiser_condition = 'Cruiser HP: ' + str(self.cruiser_hp)
             submarine_condition = 'Submarine HP ' + str(self.submarine_hp)
             destroyer_condition = 'Destroyer HP ' + str(self.destroyer_hp)
-            form.condition = [cruiser_condition, battleship_condition,
-                carrier_condition, submarine_condition, destroyer_condition]
+            form.condition = [carrier_condition, battleship_condition,
+                cruiser_condition, submarine_condition, destroyer_condition]
             return form
 
 

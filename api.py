@@ -207,6 +207,21 @@ class BattleshipAPI(remote.Service):
             logging.info('_valid_placement == False, raise exception')
             raise endpoints.BadRequestException('Invalid ship placement')
 
+    def _all_ships_placed(self, game):
+        user_fleet = game.user_fleet.get()
+        if user_fleet.carrier_status == '':
+            return False
+        if user_fleet.battleship_status == '':
+            return False
+        if user_fleet.cruiser_status == '':
+            return False
+        if user_fleet.submarine_status == '':
+            return False
+        if user_fleet.destroyer_status == '':
+            return False
+        return True
+
+
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
                     path='game/{urlsafe_game_key}/board',
@@ -363,6 +378,8 @@ class BattleshipAPI(remote.Service):
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if game.game_over:
             return game.to_form('Game already over!')
+        if self._all_ships_placed(game) == False:
+            raise endpoints.BadRequestException('Must place all ships first')
         if (0 > request.move_row > 9) or (0 > request.move_col > 9):
             raise endpoints.BadRequestException('Coordinates not valid')
         game.move_count += 1
