@@ -386,7 +386,7 @@ class BattleshipAPI(remote.Service):
         elif result == 'Miss':
             msg = 'Your shot missed.'
         else:
-            if ai_fleet.fleet_status() == 'Fleet destroyed':
+            if ai_fleet.fleet_status()[0] == 'Fleet destroyed':
                 game.end_game(True)
                 game.game_over = True
                 msg = 'Your shot hit, ' + result
@@ -412,7 +412,7 @@ class BattleshipAPI(remote.Service):
         elif ai_result == 'Miss':
             msg += ' Enemy returns fire, but misses.'
         else:
-            if user_fleet.fleet_status() == 'Fleet destroyed':
+            if user_fleet.fleet_status()[0] == 'Fleet destroyed':
                 game.end_game(False)
                 game.game_over = True
                 msg += ' Enemy returns fire, ' + ai_result

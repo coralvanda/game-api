@@ -152,12 +152,12 @@ class Fleet(ndb.Model):
         if (self.carrier_hp == 0) and (self.battleship_hp == 0) \
             and (self.cruiser_hp == 0) and (self.submarine_hp == 0) \
             and (self.destroyer_hp == 0):
-            form.condition = 'Fleet destroyed'
+            form.condition = ['Fleet destroyed']
             return form
         else:
-            cruiser_condition = 'Cruiser HP: ' + str(self.cruiser_hp)
-            battleship_condition = 'Battleship HP ' + str(self.battleship_hp)
             carrier_condition = 'Carrier HP ' + str(self.carrier_hp)
+            battleship_condition = 'Battleship HP ' + str(self.battleship_hp)
+            cruiser_condition = 'Cruiser HP: ' + str(self.cruiser_hp)
             submarine_condition = 'Submarine HP ' + str(self.submarine_hp)
             destroyer_condition = 'Destroyer HP ' + str(self.destroyer_hp)
             form.condition = [cruiser_condition, battleship_condition,
