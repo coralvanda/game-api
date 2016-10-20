@@ -242,3 +242,8 @@ class ScoreForms(messages.Message):
 class StringMessage(messages.Message):
     """StringMessage-- outbound (single) string message"""
     message = messages.StringField(1, required=True)
+
+
+class StringMessages(messages.Message):
+    """Outbound (multiple) string message"""
+    items = messages.StringField(1, repeated=True)

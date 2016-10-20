@@ -14,7 +14,8 @@ from google.appengine.ext import ndb
 
 from models import User, Game, Score, Board, Fleet, StringMessage
 from models import BoardForm, NewGameForm, GameForm, GameForms
-from models import MakeMoveForm, ScoreForms, PlaceShipForm, FleetStatusForm
+from models import MakeMoveForm, ScoreForms, PlaceShipForm
+from models import StringMessages, FleetStatusForm
 
 from utils import get_by_urlsafe, ai_fleet_builder
 from settings import WEB_CLIENT_ID
@@ -476,30 +477,53 @@ class BattleshipAPI(remote.Service):
         scores = Score.query(Score.won == True)
         scores = scores.order(Score.moves).fetch(10)
         return ScoreForms(items=[score.to_form() for score in scores])
-
+    '''
     @endpoints.method(request_message=,
                     response_message=,
                     path='game/{urlsafe_game_key}/cancel',
                     name='cancel_game',
                     http_method='POST')
     def cancel_game(self, request):
+        """Allows a user to cancel a game in progress"""
         pass
-
-    @endpoints.method(response_message=,
+    '''
+    @endpoints.method(response_message=StringMessages,
                     path='rankings',
                     name='get_user_rankings',
                     http_method='GET')
     def get_user_rankings(self, request):
-        pass
-
+        """Returns a list of users ranked by win percentage"""
+        users = User.query()
+        user_ratings = []
+        for user in users:
+            user_name = user.name
+            scores = Score.query(Score.user == user.key)
+            wins = scores.filter(Score.won == True).fetch()
+            loses = scores.filter(Score.won == False).fetch()
+            win_percentage = (len(wins) / (len(wins) + len(loses))) * 100
+            avg_moves = 0
+            for score in scores:
+                avg_moves += score.moves
+            avg_moves = avg_moves / (len(wins) + len(loses))
+            user_ratings.append([user_name, win_percentage, avg_moves])
+        user_ratings = sorted(user_ratings, key=lambda x: (-x[1], x[2]))
+        messages = []
+        for rating in user_ratings:
+            message = 'Name: ' + rating[0] + ', Win rating: '
+            message += str(rating[1]) + '%, Average Moves: '
+            message += str(rating[2])
+            messages.append(message)
+        return StringMessages(items=[m for m in messages])
+    '''
     @endpoints.method(request_message=,
                     response_message=,
                     path='game/{urlsafe_game_key}/history',
                     name='get_game_history',
                     http_method='GET')
     def get_game_history(self, request):
+        """Returns a play-by-play history of a given game"""
         pass
-
+    '''
     '''
     @endpoints.method(response_message=StringMessage,
                       path='games/average_attempts',
