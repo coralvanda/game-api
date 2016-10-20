@@ -207,9 +207,6 @@ class BattleshipAPI(remote.Service):
             logging.info('_valid_placement == False, raise exception')
             raise endpoints.BadRequestException('Invalid ship placement')
 
-
-    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgNj1Cww
-
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
                     path='game/{urlsafe_game_key}/board',
@@ -386,7 +383,7 @@ class BattleshipAPI(remote.Service):
         elif result == 'Miss':
             msg = 'Your shot missed.'
         else:
-            if ai_fleet.fleet_status()[0] == 'Fleet destroyed':
+            if ai_fleet.fleet_status().condition == ['Fleet destroyed']:
                 game.end_game(True)
                 game.game_over = True
                 msg = 'Your shot hit, ' + result
@@ -412,7 +409,7 @@ class BattleshipAPI(remote.Service):
         elif ai_result == 'Miss':
             msg += ' Enemy returns fire, but misses.'
         else:
-            if user_fleet.fleet_status()[0] == 'Fleet destroyed':
+            if user_fleet.fleet_status().condition == ['Fleet destroyed']:
                 game.end_game(False)
                 game.game_over = True
                 msg += ' Enemy returns fire, ' + ai_result
