@@ -311,22 +311,22 @@ class BattleshipAPI(remote.Service):
         try:
             if getattr(chart, 'row_' + str(row - 1))[col] == '0':
                 return [row - 1, col]
-        except IndexError:
+        except (AttributeError, IndexError):
             pass
         try:
             if getattr(chart, 'row_' + str(row))[col - 1] == '0':
                 return [row, col - 1]
-        except IndexError:
+        except (AttributeError, IndexError):
             pass
         try:
             if getattr(chart, 'row_' + str(row))[col + 1] == '0':
                 return [row, col + 1]
-        except IndexError:
+        except (AttributeError, IndexError):
             pass
         try:
             if getattr(chart, 'row_' + str(row + 1))[col] == '0':
                 return [row + 1, col]
-        except IndexError:
+        except (AttributeError, IndexError):
             pass
         return None
 
