@@ -114,19 +114,19 @@ class Board(ndb.Model):
 class Fleet(ndb.Model):
     """Ships model
 
-    Ship status will be empty until the ship has been placed
+    Ship status will be the empty string until the ship has been placed
     on the board.  Then its status will show as either 'placed'
     or as 'sunk'."""
     carrier_hp          = ndb.IntegerProperty(default=5)
-    carrier_status      = ndb.StringProperty()
+    carrier_status      = ndb.StringProperty(default='')
     battleship_hp       = ndb.IntegerProperty(default=4)
-    battleship_status   = ndb.StringProperty()
+    battleship_status   = ndb.StringProperty(default='')
     cruiser_hp          = ndb.IntegerProperty(default=3)
-    cruiser_status      = ndb.StringProperty()
+    cruiser_status      = ndb.StringProperty(default='')
     submarine_hp        = ndb.IntegerProperty(default=3)
-    submarine_status    = ndb.StringProperty()
+    submarine_status    = ndb.StringProperty(default='')
     destroyer_hp        = ndb.IntegerProperty(default=2)
-    destroyer_status    = ndb.StringProperty()
+    destroyer_status    = ndb.StringProperty(default='')
 
     def return_size(self, ship):
         """Returns an integer indicating the size of the ship"""
