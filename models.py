@@ -24,6 +24,7 @@ class Game(ndb.Model):
     ai_fleet    = ndb.KeyProperty(kind='Fleet')
     ai_board    = ndb.KeyProperty(kind='Board')
     ai_chart    = ndb.KeyProperty(kind='Board')
+    move_hist   = ndb.StringProperty(repeated=True)
 
     @classmethod
     @ndb.transactional(xg=True)
@@ -64,6 +65,10 @@ class Game(ndb.Model):
         form.game_over = self.game_over
         form.message = message
         return form
+
+    def return_history(self):
+        """Returns a GameHistoryForm with the moves of the game"""
+        return GameHistoryForm(moves=[move for move in self.move_hist])
 
     def end_game(self, won=False):
         """Adds completed game to the score board
@@ -224,6 +229,10 @@ class MakeMoveForm(messages.Message):
 
 class FleetStatusForm(messages.Message):
     condition = messages.StringField(1, repeated=True)
+
+
+class GameHistoryForm(messages.Message):
+    moves = messages.StringField(1, repeated=True)
 
 
 class ScoreForm(messages.Message):

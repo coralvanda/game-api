@@ -15,7 +15,7 @@ from google.appengine.ext import ndb
 from models import User, Game, Score, Board, Fleet, StringMessage
 from models import BoardForm, NewGameForm, GameForm, GameForms
 from models import MakeMoveForm, ScoreForms, PlaceShipForm
-from models import StringMessages, FleetStatusForm
+from models import StringMessages, FleetStatusForm, GameHistoryForm
 
 from utils import get_by_urlsafe, ai_fleet_builder
 from settings import WEB_CLIENT_ID
@@ -382,6 +382,7 @@ class BattleshipAPI(remote.Service):
     def make_move(self, request):
         """Makes a move. Returns a game state with message"""
         msg = ''
+        move = ''
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if game.game_over:
             return game.to_form('Game already over!')
@@ -402,6 +403,9 @@ class BattleshipAPI(remote.Service):
                                     user_chart,
                                     ai_board,
                                     ai_fleet)
+        move = 'Player: ' + str(request.move_row) + ', ' + str(request.move_col)
+        move += ' ' + result
+        game.move_hist.append(move)
         if result == 'Hit!':
             msg = 'Your shot hit!'
         elif result == 'Miss':
@@ -428,6 +432,9 @@ class BattleshipAPI(remote.Service):
                                     ai_chart,
                                     user_board,
                                     user_fleet)
+        move = 'Computer: ' + str(ai_move_row) + ', ' + str(ai_move_col)
+        move += ' ' + ai_result
+        game.move_hist.append(move)
         if ai_result == 'Hit!':
             msg += ' Enemy returns fire with a hit!'
         elif ai_result == 'Miss':
@@ -521,16 +528,17 @@ class BattleshipAPI(remote.Service):
             message += str(rating[2])
             messages.append(message)
         return StringMessages(items=[m for m in messages])
-    '''
-    @endpoints.method(request_message=,
-                    response_message=,
+
+    @endpoints.method(request_message=GET_GAME_REQUEST,
+                    response_message=GameHistoryForm,
                     path='game/{urlsafe_game_key}/history',
                     name='get_game_history',
                     http_method='GET')
     def get_game_history(self, request):
         """Returns a play-by-play history of a given game"""
-        pass
-    '''
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        return game.return_history()
+
     '''
     @endpoints.method(response_message=StringMessage,
                       path='games/average_attempts',
@@ -555,3 +563,6 @@ class BattleshipAPI(remote.Service):
 
 
 api = endpoints.api_server([BattleshipAPI])
+
+
+# ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgPjlCQw
