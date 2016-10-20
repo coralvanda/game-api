@@ -477,6 +477,29 @@ class BattleshipAPI(remote.Service):
         scores = scores.order(Score.moves).fetch(10)
         return ScoreForms(items=[score.to_form() for score in scores])
 
+    @endpoints.method(request_message=,
+                    response_message=,
+                    path='game/{urlsafe_game_key}/cancel',
+                    name='cancel_game',
+                    http_method='POST')
+    def cancel_game(self, request):
+        pass
+
+    @endpoints.method(response_message=,
+                    path='rankings',
+                    name='get_user_rankings',
+                    http_method='GET')
+    def get_user_rankings(self, request):
+        pass
+
+    @endpoints.method(request_message=,
+                    response_message=,
+                    path='game/{urlsafe_game_key}/history',
+                    name='get_game_history',
+                    http_method='GET')
+    def get_game_history(self, request):
+        pass
+
     '''
     @endpoints.method(response_message=StringMessage,
                       path='games/average_attempts',
