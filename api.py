@@ -30,8 +30,8 @@ BOARD_REQUEST = endpoints.ResourceContainer(
     urlsafe_game_key=messages.StringField(1),
     board=messages.StringField(2))
 FLEET_REQUEST = endpoints.ResourceContainer(
-    FleetStatusForm,
-    urlsafe_game_key=messages.StringField(1))
+    urlsafe_game_key=messages.StringField(1),
+    fleet=messages.StringField(2))
 MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
     MakeMoveForm,
     urlsafe_game_key=messages.StringField(1),)
@@ -208,7 +208,7 @@ class BattleshipAPI(remote.Service):
             raise endpoints.BadRequestException('Invalid ship placement')
 
 
-    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgOjdCww
+    #
 
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
@@ -222,12 +222,16 @@ class BattleshipAPI(remote.Service):
         board = board_key.get()
         return board.to_form()
 
-    @endpoints.method(response_message=FLEET_REQUEST,
+    @endpoints.method(request_message=FLEET_REQUEST,
+                    response_message=FleetStatusForm,
                     path='game/{urlsafe_game_key}/fleet',
                     name='view_fleet_health',
                     http_method='GET')
     def view_fleet_health(self):
-        pass
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        fleet_key = getattr(game, request.fleet)
+        fleet = fleet_key.get()
+        return fleet.fleet_status()
 
     def _process_move(self, move_row, move_col, chart, board, fleet):
         """Checks whether a move hits the opposing fleet
