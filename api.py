@@ -208,7 +208,7 @@ class BattleshipAPI(remote.Service):
             raise endpoints.BadRequestException('Invalid ship placement')
 
 
-    #
+    # ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgNj1Cww
 
     @endpoints.method(request_message=BOARD_REQUEST,
                     response_message=BoardForm,
@@ -227,7 +227,8 @@ class BattleshipAPI(remote.Service):
                     path='game/{urlsafe_game_key}/fleet',
                     name='view_fleet_health',
                     http_method='GET')
-    def view_fleet_health(self):
+    def view_fleet_health(self, request):
+        """Returns a form displaying the current status of a fleet"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         fleet_key = getattr(game, request.fleet)
         fleet = fleet_key.get()
