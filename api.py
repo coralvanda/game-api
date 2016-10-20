@@ -477,16 +477,23 @@ class BattleshipAPI(remote.Service):
         scores = Score.query(Score.won == True)
         scores = scores.order(Score.moves).fetch(10)
         return ScoreForms(items=[score.to_form() for score in scores])
-    '''
-    @endpoints.method(request_message=,
-                    response_message=,
+
+    @endpoints.method(request_message=GET_GAME_REQUEST,
+                    response_message=StringMessage,
                     path='game/{urlsafe_game_key}/cancel',
                     name='cancel_game',
                     http_method='POST')
     def cancel_game(self, request):
         """Allows a user to cancel a game in progress"""
-        pass
-    '''
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        if game.game_over == True:
+            raise endpoints.BadRequestException('Cannot cancel completed games')
+        keys = [game.user_fleet, game.user_board, game.user_chart,
+                game.ai_fleet, game.ai_board, game.ai_chart, game.key]
+        ndb.delete_multi(keys)
+        return StringMessage(message='Deleted game and its boards and fleets')
+
+
     @endpoints.method(response_message=StringMessages,
                     path='rankings',
                     name='get_user_rankings',
