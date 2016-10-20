@@ -100,6 +100,8 @@ class BattleshipAPI(remote.Service):
         """Return the current game state."""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if game:
+            if game.game_over:
+                return game.to_form('Game concluded')
             return game.to_form('Time to play!')
         else:
             raise endpoints.NotFoundException('Game not found!')
