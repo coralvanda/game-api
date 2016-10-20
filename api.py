@@ -311,22 +311,26 @@ class BattleshipAPI(remote.Service):
         try:
             if getattr(chart, 'row_' + str(row - 1))[col] == '0':
                 return [row - 1, col]
-        except (AttributeError, IndexError):
+        except (AttributeError, IndexError) as e:
+            logging.info('exception in _check_round for error ' + str(e))
             pass
         try:
             if getattr(chart, 'row_' + str(row))[col - 1] == '0':
                 return [row, col - 1]
-        except (AttributeError, IndexError):
+        except (AttributeError, IndexError) as e:
+            logging.info('exception in _check_round for error ' + str(e))
             pass
         try:
             if getattr(chart, 'row_' + str(row))[col + 1] == '0':
                 return [row, col + 1]
-        except (AttributeError, IndexError):
+        except (AttributeError, IndexError) as e:
+            logging.info('exception in _check_round for error ' + str(e))
             pass
         try:
             if getattr(chart, 'row_' + str(row + 1))[col] == '0':
                 return [row + 1, col]
-        except (AttributeError, IndexError):
+        except (AttributeError, IndexError) as e:
+            logging.info('exception in _check_round for error ' + str(e))
             pass
         return None
 
