@@ -90,7 +90,7 @@ class BattleshipAPI(remote.Service):
         # This operation is not needed to complete the creation of a new game
         # so it is performed out of sequence.
         #taskqueue.add(url='/tasks/cache_average_attempts')
-        return game.to_form('Good luck playing Battleship! Your move.')
+        return game.to_form('Good luck playing Battleship!')
 
     @endpoints.method(request_message=GET_GAME_REQUEST,
                       response_message=GameForm,
@@ -226,7 +226,7 @@ class BattleshipAPI(remote.Service):
 
 
     @endpoints.method(request_message=BOARD_REQUEST,
-                    response_message=BoardForm,
+                    response_message=StringMessages,
                     path='game/{urlsafe_game_key}/board',
                     name='show_board',
                     http_method='POST')
@@ -235,7 +235,13 @@ class BattleshipAPI(remote.Service):
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         board_key = getattr(game, request.board)
         board = board_key.get()
-        return board.to_form()
+        board_form = board.to_form()
+        board_list = [board_form.row_0, board_form.row_1,
+            board_form.row_2, board_form.row_3, board_form.row_4,
+            board_form.row_5, board_form.row_6, board_form.row_7,
+            board_form.row_8, board_form.row_9]
+        return StringMessages(items=[str(i) + \
+            ": " + board_list[i] for i in range(len(board_list))])
 
     @endpoints.method(request_message=FLEET_REQUEST,
                     response_message=FleetStatusForm,
