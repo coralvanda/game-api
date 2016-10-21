@@ -39,7 +39,6 @@ MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
 USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
                                            email=messages.StringField(2))
 
-#MEMCACHE_MOVES_REMAINING = 'MOVES_REMAINING'
 
 @endpoints.api( name='battleship',
                 version='v1',
@@ -85,11 +84,6 @@ class BattleshipAPI(remote.Service):
         ai_fleet.destroyer_status = 'placed'
         ai_fleet.put()
         ai_board.put()
-
-        # Use a task queue to update the average attempts remaining.
-        # This operation is not needed to complete the creation of a new game
-        # so it is performed out of sequence.
-        #taskqueue.add(url='/tasks/cache_average_attempts')
         return game.to_form('Good luck playing Battleship!')
 
     @endpoints.method(request_message=GET_GAME_REQUEST,
@@ -361,7 +355,6 @@ class BattleshipAPI(remote.Service):
         if do_random_move:
             move_row, move_col = self._make_random_move(ai_chart)
             return move_row, move_col
-        # build a list of all X locations on the chart
         hits = []
         row_index = 0
         for row in rows:
@@ -369,15 +362,12 @@ class BattleshipAPI(remote.Service):
                 if getattr(ai_chart, row)[i] == 'X':
                     hits.append([row_index, i])
             row_index += 1
-        # have computer check around each hit marked on the chart
         for coordinates in hits:
             target = self._check_round(ai_chart, coordinates)
             if target == None:
                 continue
             else:
                 return target[0], target[1]
-        # if all existing hits are fully surrounded by missed shots,
-        # then try again with a random move
         return self._make_random_move(ai_chart)
 
     @endpoints.method(request_message=MAKE_MOVE_REQUEST,
@@ -547,6 +537,3 @@ class BattleshipAPI(remote.Service):
 
 
 api = endpoints.api_server([BattleshipAPI])
-
-
-# ahFkZXZ-ZnNuZC1nYW1lLWFwaXIRCxIER2FtZRiAgICAgPjlCQw
