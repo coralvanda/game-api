@@ -1,0 +1,49 @@
+What additional properties did you add to your models and why?
+--------------------------------------------------------------
+The game model was extended to include fleets and boards for both
+the user and the computer, as well as a record of the game's moves.
+
+Fleet and Board models were implemented to facilitate keeping track
+of 4 boards and 2 fleets split between 2 players.
+
+The Score model was modified slightly to keep a count of the number of
+moves a player made in that game.
+
+
+
+What were some of the trade-offs or struggles you faced when
+implementing the new game logic?
+------------------------------------------------------------
+The largest, initial struggle was certainly how to model a game of
+battleship using GAE and Python, especially in a way that makes
+effective use of endpoints.  Another important struggle was the
+implementation of some form of logic to guide the computer opponent.
+As it stands, the computer strikes a balance between blind guesses,
+and actual strategy.  The trade off faced here was time and complexity
+versus challenge to the player.
+
+The implementation of computer fleet positions was a challenge that could
+be explored perhaps as deeply as the programming of the comptuer's in-
+game logic.  A random choice between several hard-coded board positions
+proved to be a satisfactory solution, allowing for some variety between
+games, without sinking unnecessary, extra time into creating a system
+that could dynamically create custom, random board positions.
+
+Another trade off was the structure of the model classes compared to ease-
+of-use within the API, as well as the possibility of strong versus
+eventual consistency.  More connected models, using ancestors for
+example, would have allowed for some different appraoches to behaviors
+in the API, such as queries and put commands, and more strong consistency.
+
+The use of logging statements to aid in debugging was itself a struggle
+at one point.  Difficulty changing the level of logging printed out meant
+that the lower-level logging.debug() was not possible, and logging.info()
+was used instead.  Some bugs would have been considerably harder to trace
+and resolve had logging statements not worked at all.
+
+A bug occured upon deploying the app to a live server.  The output from
+the show_board endpoint, while flawless in development, became distorted
+on Google's servers, printing board rows out of order.  The struggle here
+was less a matter of creating a solution, and more a matter of
+understanding what the cause of the problem was in the first place, which
+remains unknown to this API's author.
