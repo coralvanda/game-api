@@ -109,10 +109,15 @@ class BattleshipAPI(remote.Service):
     def get_games_by_player(self, request):
         """Return a list of active games a player is engaged in"""
         user = User.query(User.name == request.user_name).get()
+        if not user:
+            raise endpoints.NotFoundException('No such user found')
         games = Game.query()
         games = games.filter(Game.user == user.key)
         games = games.filter(Game.game_over == False).fetch()
-        return GameForms(games=[game.to_form('') for game in games])
+        msg = ''
+        if not games:
+            msg = 'No saved games for this user'
+        return GameForms(games=[game.to_form(msg) for game in games])
 
     def _valid_placement(self, request):
         """Confirms that a ship has been placed in a legal position
