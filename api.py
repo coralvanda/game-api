@@ -12,10 +12,23 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
 
-from models import User, Game, Score, Board, Fleet, StringMessage
-from models import BoardForm, NewGameForm, GameForm, GameForms
-from models import MakeMoveForm, ScoreForms, PlaceShipForm
-from models import StringMessages, FleetStatusForm, GameHistoryForm
+from models.user import User
+from models.game import Game
+from models.score import Score
+from models.board import Board
+from models.fleet import Fleet
+
+from forms.stringmessage import StringMessage
+from forms.stringmessages import StringMessages
+from forms.boardform import BoardForm
+from forms.newgameform import NewGameForm
+from forms.gameform import GameForm
+from forms.gameforms import GameForms
+from forms.makemoveform import MakeMoveForm
+from forms.scoreforms import ScoreForms
+from forms.placeshipform import PlaceShipForm
+from forms.fleetstatusform import FleetStatusForm
+from forms.gamehistoryform import GameHistoryForm
 
 from utils import get_by_urlsafe, ai_fleet_builder
 from settings import WEB_CLIENT_ID
@@ -386,7 +399,7 @@ class BattleshipAPI(remote.Service):
                       response_message=GameForm,
                       path='game/{urlsafe_game_key}',
                       name='make_move',
-                      http_method='PUT')
+                      http_method='POST')
     def make_move(self, request):
         """Makes a move. Returns a game state with message"""
         msg = ''
