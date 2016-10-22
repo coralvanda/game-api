@@ -199,6 +199,9 @@ class BattleshipAPI(remote.Service):
         """Position a ship on your board"""
         ship_list = ['carrier', 'battleship', 'cruiser',
                     'submarine', 'destroyer']
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        if not game:
+            raise endpoints.NotFoundException('Game not found')
         if request.ship not in ship_list:
             raise endpoints.BadRequestException('Invalid ship type')
         logging.info('place_ship endpoint calls _valid_placement')
@@ -232,6 +235,8 @@ class BattleshipAPI(remote.Service):
     def show_board(self, request):
         """Display a board state"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        if not game:
+            raise endpoints.NotFoundException('Game not found')
         board_key = getattr(game, request.board)
         board = board_key.get()
         board_form = board.to_form()
@@ -250,6 +255,8 @@ class BattleshipAPI(remote.Service):
     def view_fleet_health(self, request):
         """Returns a form displaying the current status of a fleet"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        if not game:
+            raise endpoints.NotFoundException('Game not found')
         fleet_key = getattr(game, request.fleet)
         fleet = fleet_key.get()
         return fleet.fleet_status()
@@ -385,6 +392,8 @@ class BattleshipAPI(remote.Service):
         msg = ''
         move = ''
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        if not game:
+            raise endpoints.NotFoundException('Game not found')
         if game.game_over:
             return game.to_form('Game already over!')
         if self._all_ships_placed(game) == False:
@@ -494,6 +503,8 @@ class BattleshipAPI(remote.Service):
     def cancel_game(self, request):
         """Allows a user to cancel a game in progress"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        if not game:
+            raise endpoints.NotFoundException('Game not found')
         if game.game_over == True:
             raise endpoints.BadRequestException('Cannot cancel completed games')
         keys = [game.user_fleet, game.user_board, game.user_chart,
@@ -538,6 +549,8 @@ class BattleshipAPI(remote.Service):
     def get_game_history(self, request):
         """Returns a play-by-play history of a given game"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        if not game:
+            raise endpoints.NotFoundException('Game not found')
         return game.return_history()
 
 
