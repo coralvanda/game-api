@@ -398,7 +398,7 @@ class BattleshipAPI(remote.Service):
                       response_message=GameForm,
                       path='game/{urlsafe_game_key}',
                       name='make_move',
-                      http_method='POST')
+                      http_method='PUT')
     def make_move(self, request):
         """Makes a move. Returns a game state with message"""
         msg = ''
