@@ -127,10 +127,9 @@ class BattleshipAPI(remote.Service):
         games = Game.query()
         games = games.filter(Game.user == user.key)
         games = games.filter(Game.game_over == False).fetch()
-        msg = ''
         if not games:
-            msg = 'No saved games for this user'
-        return GameForms(games=[game.to_form(msg) for game in games])
+            raise endpoints.NotFoundException('No games for this user')
+        return GameForms(games=[game.to_form('') for game in games])
 
     def _valid_placement(self, request):
         """Confirms that a ship has been placed in a legal position
@@ -408,7 +407,7 @@ class BattleshipAPI(remote.Service):
         if not game:
             raise endpoints.NotFoundException('Game not found')
         if game.game_over:
-            return game.to_form('Game already over!')
+            raise endpoints.ForbiddenException('Game already over')
         if self._all_ships_placed(game) == False:
             raise endpoints.BadRequestException('Must place all ships first')
         if (0 > request.move_row > 9) or (0 > request.move_col > 9):
@@ -533,6 +532,8 @@ class BattleshipAPI(remote.Service):
     def get_user_rankings(self, request):
         """Returns a list of users ranked by win percentage"""
         users = User.query()
+        if not users:
+            raise endpoints.NotFoundException('No users found')
         user_ratings = []
         for user in users:
             user_name = user.name
