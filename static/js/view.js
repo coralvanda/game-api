@@ -18,17 +18,17 @@ var view = {
 		userNameInput.placeholder = 'Enter user name';
 		loginDiv.appendChild(userNameInput);
 
-		var userNameSubmitBtn = document.createElement('BUTTON');
-		userNameSubmitBtn.onclick = function() {
+		var loginSubmitBtn = document.createElement('BUTTON');
+		loginSubmitBtn.onclick = function() {
 			battleshipController.user = userNameInput.value;
 			battleshipController.userWelcome();
 			battleshipController.homeScreen();
 			loginDiv.style.display = 'none';
 		};
 
-		var userNameSubmitBtnText = document.createTextNode('Submit');
-		userNameSubmitBtn.appendChild(userNameSubmitBtnText);
-		loginDiv.appendChild(userNameSubmitBtn);
+		var loginSubmitBtnText = document.createTextNode('Login');
+		loginSubmitBtn.appendChild(loginSubmitBtnText);
+		loginDiv.appendChild(loginSubmitBtn);
 	},
 
 	showUsername: function() {
