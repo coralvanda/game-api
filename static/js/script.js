@@ -2,6 +2,7 @@
 
 var gameKey, board, chart;
 var newGameBtn;
+var requestPath = '/_ah/api/battleship/v1/';
 
 var battleshipController = {
 
@@ -10,6 +11,23 @@ var battleshipController = {
 
 	init: function() {
 		view.showLogin();
+	},
+
+	registerUser: function() {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == XMLHttpRequest.DONE) {
+				if (xhttp.status == 200) {
+					view.loginUser(battleshipController.user);
+				}
+				else {
+					alert(xhttp.responseText);
+				}
+			}
+		};
+		xhttp.open('POST', requestPath + 'user?user_name=' +
+			battleshipController.user, true);
+		xhttp.send();
 	},
 
 	userWelcome: function() {
@@ -30,12 +48,11 @@ var battleshipController = {
 					view.showHomeScreenGamesList();
 				}
 				else {
-					alert('Error: '); // pull error code and message from
-					// response from server
+					view.showHomeScreenGamesList('No games found');
 				}
 			}
 		};
-		xhttp.open('GET', '/_ah/api/games/player?user_name=' +
+		xhttp.open('GET', requestPath + 'player?user_name=' +
 			battleshipController.user, true);
 		xhttp.send();
 	},
