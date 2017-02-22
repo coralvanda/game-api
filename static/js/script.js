@@ -29,15 +29,14 @@ var battleshipController = {
 					battleshipController.playerGamesList = xhttp.responseText;
 					view.showHomeScreenGamesList();
 				}
-				else if (xhttp.status == 400) {
-					alert('400 error on getPlayerGames request');
-				}
 				else {
-					alert('An error occured during getPlayerGames request.');
+					alert('Error: '); // pull error code and message from
+					// response from server
 				}
 			}
 		};
-		xhttp.open('GET', '/_ah/spi/games/' + battleshipController.user, true);
+		xhttp.open('GET', '/_ah/api/games/player?user_name=' +
+			battleshipController.user, true);
 		xhttp.send();
 	},
 
