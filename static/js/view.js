@@ -1,6 +1,20 @@
 'use strict';
 
+var loginDiv;
+var usernameDiv;
+var homescreenDiv;
+
 var view = {
+
+	displayError: function(error) {
+		null;
+	},
+
+	loginUser: function(username) {
+		battleshipController.user = username;
+		battleshipController.userWelcome();
+		battleshipController.homeScreen();
+	},
 
 	showLogin: function() {
 		// display a text input field and submit button
@@ -8,7 +22,7 @@ var view = {
 		// use the get_games_by_player endpoint
 		// to confirm the username before returning
 		// control back to the main script?
-		var loginDiv = document.createElement('DIV');
+		loginDiv = document.createElement('DIV');
 		loginDiv.id = 'login-div';
 		document.body.appendChild(loginDiv);
 
@@ -20,19 +34,28 @@ var view = {
 
 		var loginSubmitBtn = document.createElement('BUTTON');
 		loginSubmitBtn.onclick = function() {
-			battleshipController.user = userNameInput.value;
-			battleshipController.userWelcome();
-			battleshipController.homeScreen();
+			view.loginUser(userNameInput.value);
 			loginDiv.style.display = 'none';
 		};
 
+		var registerSubmitBtn = document.createElement('BUTTON');
+		registerSubmitBtn.onclick = function() {
+			battleshipController.registerUser();
+			loginDiv.style.display = 'none';
+		}
+
 		var loginSubmitBtnText = document.createTextNode('Login');
+		var registerSubmitBtnText = document.createTextNode('Register');
+
 		loginSubmitBtn.appendChild(loginSubmitBtnText);
+		registerSubmitBtn.appendChild(registerSubmitBtnText);
+
 		loginDiv.appendChild(loginSubmitBtn);
+		loginDiv.appendChild(registerSubmitBtn);
 	},
 
 	showUsername: function() {
-		var usernameDiv = document.createElement('DIV');
+		usernameDiv = document.createElement('DIV');
 		usernameDiv.id = 'username-div';
 		document.body.appendChild(usernameDiv);
 
@@ -49,7 +72,7 @@ var view = {
 
 		// each open game listed should have a button to allow the user
 		// to cancel (delete) that game, with a confirmation alert
-		var homescreenDiv = document.createElement('DIV');
+		homescreenDiv = document.createElement('DIV');
 		homescreenDiv.id = 'homescreen-div';
 		document.body.appendChild(homescreenDiv);
 
@@ -66,13 +89,21 @@ var view = {
 		battleshipController.getPlayerGames();
 	},
 
-	showHomeScreenGamesList: function() {
+	showHomeScreenGamesList: function(optionalText=false) {
 		var openGamesList = document.createElement('OL');
-		for (game in battleshipController.playerGamesList) {
-			var gameListItem = document.createElement('LI');
-			gameListItem.textcontent = game;
-			openGamesList.appendChild(gameListItem);
+		if (optionalText) {
+			var noGameFoundItem = document.createElement('LI');
+			noGameFoundItem.textcontent = optionalText;
+			openGamesList.appendChild(noGameFoundItem);
 		}
+		else {
+			for (game in battleshipController.playerGamesList) {
+				var gameListItem = document.createElement('LI');
+				gameListItem.textcontent = game;
+				openGamesList.appendChild(gameListItem);
+			}
+		}
+
 	},
 
 	showBoard: function(board) {
