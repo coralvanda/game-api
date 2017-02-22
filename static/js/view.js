@@ -93,7 +93,8 @@ var view = {
 		var openGamesList = document.createElement('OL');
 		if (optionalText) {
 			var noGameFoundItem = document.createElement('LI');
-			noGameFoundItem.textcontent = optionalText;
+			var noGameFoundItemText = document.createTextNode(optionalText);
+			noGameFoundItem.appendChild(noGameFoundItemText);
 			openGamesList.appendChild(noGameFoundItem);
 		}
 		else {
@@ -103,7 +104,7 @@ var view = {
 				openGamesList.appendChild(gameListItem);
 			}
 		}
-
+		homescreenDiv.appendChild(openGamesList);
 	},
 
 	showBoard: function(board) {
