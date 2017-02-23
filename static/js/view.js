@@ -1,9 +1,11 @@
 'use strict';
 
+var containerDiv = document.getElementById('container');
 var loginDiv;
 var usernameDiv;
 var homescreenDiv;
-var containerDiv = document.getElementById('container');
+var placeShipsDiv;
+
 
 var view = {
 
@@ -101,6 +103,12 @@ var view = {
 			}
 		}
 		homescreenDiv.appendChild(openGamesList);
+	},
+
+	showPlaceShips: function(response) {
+		// need to show user board and ships to place on it
+		// will also need to call battleshipcontroller.placeShip()
+		placeShipsDiv = document.createElement('DIV');
 	},
 
 	showBoard: function(board) {

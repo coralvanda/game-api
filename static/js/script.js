@@ -71,31 +71,24 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
-					// stuff
-				}
-				else if (xhttp.status == 404) {
-					// stuff
+					view.showPlaceShips(xhttp.responseText);
 				}
 				else {
 					view.displayError(xhttp.responseText);
 				}
 			}
 		};
+		var requestOjb = {"user_name": battleshipController.user};
 		xhttp.open('POST', requestPath + 'game', true);
-		xhttp.send({"user_name": battleshipController.user});
+		xhttp.send(JSON.stringify(requestOjb));
 	},
 
-	placeShips: function() {
-		if (newGameBtn) {
-			// call new_game endpoint
-			gameKey = null // urlsafegamekey;
-			// display user board, and ships which can be placed
-			// use show_board endpoint
-			board = null // show_board_AJAX_call;
-			view.showBoard(board);
-			// list of ships available
-			// move on when all ships have been placed
-		}
+	placeShip: function() {
+		gameKey = null // urlsafegamekey;
+		board = null // show_board_AJAX_call;
+		view.showBoard(board);
+		// list of ships available
+		// move on when all ships have been placed
 	},
 
 	playGame: function() {
