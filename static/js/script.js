@@ -21,13 +21,18 @@ var battleshipController = {
 					view.loginUser(battleshipController.user);
 				}
 				else {
-					alert(xhttp.responseText);
+					view.displayError(xhttp.responseText);
 				}
 			}
 		};
 		xhttp.open('POST', requestPath + 'user?user_name=' +
 			battleshipController.user, true);
 		xhttp.send();
+	},
+
+	loginUser: function(username) {
+		battleshipController.userWelcome();
+		battleshipController.homeScreen();
 	},
 
 	userWelcome: function() {
@@ -44,17 +49,40 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
-					battleshipController.playerGamesList = xhttp.responseText;
+					var gamesObj = JSON.parse(xhttp.responseText);
+					battleshipController.playerGamesList = gamesObj.games;
 					view.showHomeScreenGamesList();
 				}
-				else {
+				else if (xhttp.status == 404) {
 					view.showHomeScreenGamesList('No games found');
+				}
+				else {
+					view.displayError(xhttp.responseText);
 				}
 			}
 		};
-		xhttp.open('GET', requestPath + 'player?user_name=' +
+		xhttp.open('GET', requestPath + 'games/player?user_name=' +
 			battleshipController.user, true);
 		xhttp.send();
+	},
+
+	newGame: function() {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == XMLHttpRequest.DONE) {
+				if (xhttp.status == 200) {
+					// stuff
+				}
+				else if (xhttp.status == 404) {
+					// stuff
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		xhttp.open('POST', requestPath + 'game', true);
+		xhttp.send({"user_name": battleshipController.user});
 	},
 
 	placeShips: function() {

@@ -8,21 +8,11 @@ var containerDiv = document.getElementById('container');
 var view = {
 
 	displayError: function(error) {
-		null;
-	},
-
-	loginUser: function(username) {
-		battleshipController.user = username;
-		battleshipController.userWelcome();
-		battleshipController.homeScreen();
+		alert(error);
 	},
 
 	showLogin: function() {
 		// display a text input field and submit button
-		// on submit
-		// use the get_games_by_player endpoint
-		// to confirm the username before returning
-		// control back to the main script?
 		loginDiv = document.createElement('DIV');
 		loginDiv.id = 'login-div';
 		containerDiv.appendChild(loginDiv);
@@ -35,12 +25,14 @@ var view = {
 
 		var loginSubmitBtn = document.createElement('BUTTON');
 		loginSubmitBtn.onclick = function() {
-			view.loginUser(userNameInput.value);
+			battleshipController.user = userNameInput.value;
+			battleshipController.loginUser(userNameInput.value);
 			loginDiv.style.display = 'none';
 		};
 
 		var registerSubmitBtn = document.createElement('BUTTON');
 		registerSubmitBtn.onclick = function() {
+			battleshipController.user = userNameInput.value;
 			battleshipController.registerUser();
 			loginDiv.style.display = 'none';
 		}
@@ -62,7 +54,7 @@ var view = {
 
 		var usernameHeader = document.createElement('H3');
 		var usernameHeaderText = document.createTextNode(
-			'Playing as user: ' + battleshipController.user + '.');
+			'Playing as user: ' + battleshipController.user);
 		usernameHeader.appendChild(usernameHeaderText);
 		usernameDiv.appendChild(usernameHeader);
 	},
@@ -79,7 +71,7 @@ var view = {
 
 		var newGameBtn = document.createElement('BUTTON');
 		newGameBtn.onclick = function() {
-			battleshipController.placeShips();
+			battleshipController.newGame();
 			homescreenDiv.style.display = 'none';
 		};
 
@@ -99,9 +91,12 @@ var view = {
 			openGamesList.appendChild(noGameFoundItem);
 		}
 		else {
-			for (game in battleshipController.playerGamesList) {
+			var games = battleshipController.playerGamesList;
+			for (var i = 0; i < games.length; i++) {
 				var gameListItem = document.createElement('LI');
-				gameListItem.textcontent = game;
+				var gameListItemText = document.createTextNode(
+					games[i].urlsafe_key);
+				gameListItem.appendChild(gameListItemText);
 				openGamesList.appendChild(gameListItem);
 			}
 		}
