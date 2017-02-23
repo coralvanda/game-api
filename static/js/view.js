@@ -3,6 +3,7 @@
 var loginDiv;
 var usernameDiv;
 var homescreenDiv;
+var containerDiv = document.getElementByID('#container');
 
 var view = {
 
@@ -24,7 +25,7 @@ var view = {
 		// control back to the main script?
 		loginDiv = document.createElement('DIV');
 		loginDiv.id = 'login-div';
-		document.body.appendChild(loginDiv);
+		containerDiv.appendChild(loginDiv);
 
 		var userNameInput = document.createElement('INPUT');
 		userNameInput.type = 'text';
@@ -57,7 +58,7 @@ var view = {
 	showUsername: function() {
 		usernameDiv = document.createElement('DIV');
 		usernameDiv.id = 'username-div';
-		document.body.appendChild(usernameDiv);
+		containerDiv.appendChild(usernameDiv);
 
 		var usernameHeader = document.createElement('H3');
 		var usernameHeaderText = document.createTextNode(
@@ -74,7 +75,7 @@ var view = {
 		// to cancel (delete) that game, with a confirmation alert
 		homescreenDiv = document.createElement('DIV');
 		homescreenDiv.id = 'homescreen-div';
-		document.body.appendChild(homescreenDiv);
+		containerDiv.appendChild(homescreenDiv);
 
 		var newGameBtn = document.createElement('BUTTON');
 		newGameBtn.onclick = function() {
