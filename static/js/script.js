@@ -71,7 +71,7 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
-					view.showPlaceShips(xhttp.responseText);
+					view.showPlaceShips(JSON.parse(xhttp.responseText));
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -81,6 +81,23 @@ var battleshipController = {
 		var requestOjb = {"user_name": battleshipController.user};
 		xhttp.open('POST', requestPath + 'game', true);
 		xhttp.send(JSON.stringify(requestOjb));
+	},
+
+	getBoard: function(gameKey, boardType) {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == XMLHttpRequest.DONE) {
+				if (xhttp.status == 200) {
+					view.showBoard(JSON.parse(xhttp.responseText).items);
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		xhttp.open('POST', requestPath + 'game/' + gameKey +
+			'/board?board=' + boardType, true);
+		xhttp.send();
 	},
 
 	placeShip: function() {

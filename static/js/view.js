@@ -10,18 +10,20 @@ var placeShipsDiv;
 var view = {
 
 	displayError: function(error) {
+		// Displays an alert window containing an error
 		alert(error);
 	},
 
 	showLogin: function() {
-		// display a text input field and submit button
+		// display a text input field and buttons to either log in
+		// or register a new user
 		loginDiv = document.createElement('DIV');
 		loginDiv.id = 'login-div';
 		containerDiv.appendChild(loginDiv);
 
 		var userNameInput = document.createElement('INPUT');
 		userNameInput.type = 'text';
-		userNameInput.id = 'user-name';
+		userNameInput.id = 'username-input';
 		userNameInput.placeholder = 'Enter user name';
 		loginDiv.appendChild(userNameInput);
 
@@ -50,6 +52,7 @@ var view = {
 	},
 
 	showUsername: function() {
+		// Shows the active user at the top of the screen
 		usernameDiv = document.createElement('DIV');
 		usernameDiv.id = 'username-div';
 		containerDiv.appendChild(usernameDiv);
@@ -62,8 +65,8 @@ var view = {
 	},
 
 	showHomeScreen: function() {
-		// use the list of games to show what open games the player has
-		// and show a button to create a new game
+		// Displays the user's home screen, which includes a 'new game'
+		// button, and list of active games
 
 		// each open game listed should have a button to allow the user
 		// to cancel (delete) that game, with a confirmation alert
@@ -85,6 +88,7 @@ var view = {
 	},
 
 	showHomeScreenGamesList: function(optionalText=false) {
+		// Builds and displays the list of actives games for the user
 		var openGamesList = document.createElement('OL');
 		if (optionalText) {
 			var noGameFoundItem = document.createElement('LI');
@@ -106,14 +110,27 @@ var view = {
 	},
 
 	showPlaceShips: function(response) {
-		// need to show user board and ships to place on it
-		// will also need to call battleshipcontroller.placeShip()
+		// Displays the user's board and available ships which must be placed
+		homescreenDiv.style.display = 'none';
+
 		placeShipsDiv = document.createElement('DIV');
+		placeShipsDiv.id = 'place-ships-div';
+		containerDiv.appendChild(placeShipsDiv);
+
+		var gameKey = response.urlsafe_key;
+		battleshipController.getBoard(gameKey, 'user_board');
 	},
 
 	showBoard: function(board) {
-		// display the given board or chart
+		// Displays the given board or chart
+
 		// build a div containing 10 row divs stacked vertically
 		// each row div will contain 10 col divs aligned side-by-side
+		for (var i = 0; i < board.length; i++) {
+			var row = document.createElement('DIV');
+			var junk = document.createTextNode(board[i]); // clean up later
+			row.appendChild(junk);
+			placeShipsDiv.appendChild(row);
+		}
 	},
 };
