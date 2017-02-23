@@ -3,7 +3,7 @@
 var loginDiv;
 var usernameDiv;
 var homescreenDiv;
-var containerDiv = document.getElementByID('#container');
+var containerDiv = document.getElementById('container');
 
 var view = {
 
