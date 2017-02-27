@@ -121,6 +121,17 @@ var view = {
 				gameListItem.className = 'game-list-item';
 				openGamesList.appendChild(gameListItem);
 
+				var resumeGameBtn = document.createElement('DIV');
+				resumeGameBtn.className = 'game-resume button';
+				var resumeGameBtnText = document.createTextNode('Resume');
+				resumeGameBtn.addEventListener('click', (function(keyCopy) {
+					return function() {
+						battleshipController.playGame(keyCopy);
+					};
+				})(games[i].urlsafe_key));
+				resumeGameBtn.appendChild(resumeGameBtnText);
+				gameListItem.appendChild(resumeGameBtn);
+
 				var cancelGameBtn = document.createElement('DIV');
 				cancelGameBtn.className = 'game-cancel button';
 				var cancelGameBtnText = document.createTextNode('Cancel');
