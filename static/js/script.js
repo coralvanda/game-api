@@ -54,7 +54,7 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
-					view.loginUser(battleshipController.user);
+					battleshipController.loginUser();
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -80,7 +80,7 @@ var battleshipController = {
 	},
 
 	userWelcome: function() {
-		view.showUsername();
+		view.showUserBanner();
 	},
 
 	homeScreen: function() {

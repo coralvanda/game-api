@@ -57,7 +57,7 @@ var view = {
 		loginDiv.appendChild(registerSubmitBtn);
 	},
 
-	showUsername: function() {
+	showUserBanner: function() {
 		// Shows the active user at the top of the screen
 		usernameDiv = document.createElement('DIV');
 		usernameDiv.id = 'username-div';
@@ -69,6 +69,17 @@ var view = {
 			'Playing as user: ' + battleshipController.user);
 		usernameHeader.appendChild(usernameHeaderText);
 		usernameDiv.appendChild(usernameHeader);
+
+		var homeBtn = document.createElement('DIV');
+		var homeBtnText = document.createTextNode('Home');
+		homeBtn.className = 'button';
+		homeBtn.id = 'home-btn';
+		homeBtn.onclick = function() {
+			view.refreshPage();
+			battleshipController.homeScreen();
+		}
+		homeBtn.appendChild(homeBtnText);
+		usernameDiv.appendChild(homeBtn);
 
 		var logoutBtn = document.createElement('DIV');
 		var logoutBtnText = document.createTextNode('Logout');

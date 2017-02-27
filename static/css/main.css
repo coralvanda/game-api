@@ -56,6 +56,10 @@
 	margin: 0 0 20px 0;
 }
 
+#home-btn {
+	margin-left: auto;
+}
+
 #logout-btn {
 	margin-left: auto;
 }
