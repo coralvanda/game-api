@@ -161,6 +161,25 @@ var battleshipController = {
 		xhttp.send();
 	},
 
+	getShipPlacements: function(gameKey, fleet) {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == XMLHttpRequest.DONE) {
+				if (xhttp.status == 200) {
+					var shipPlacements = JSON.parse(
+						xhttp.responseText).condition.slice(5);
+					view.showShipPlacements(shipPlacements);
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		xhttp.open('GET', requestPath + 'game/' + gameKey +
+			'/fleet?fleet=' + fleet, true);
+		xhttp.send();;
+	},
+
 	placeShip: function() {
 		gameKey = null // urlsafegamekey;
 		board = null // show_board_AJAX_call;

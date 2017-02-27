@@ -72,3 +72,8 @@
 #homescreen-div {
 	background-color: lightyellow;
 }
+
+#place-ships-div {
+	display: flex;
+	flex-wrap: wrap;
+}

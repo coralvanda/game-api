@@ -5,6 +5,7 @@ var loginDiv;
 var usernameDiv;
 var homescreenDiv;
 var placeShipsDiv;
+var shipPlacementsDiv;
 
 
 var view = {
@@ -168,6 +169,9 @@ var view = {
 
 		var gameKey = response.urlsafe_key;
 		battleshipController.getBoard(gameKey, 'user_board');
+
+		var shipPlacements = battleshipController.getShipPlacements(gameKey,
+			'user_fleet');
 	},
 
 	showBoard: function(board) {
@@ -176,8 +180,8 @@ var view = {
 		// must have a way to distinguish charts from boards
 		// and clearly show the user which is which
 
-		// build a div containing 10 row divs stacked vertically
-		// each row div will contain 10 col divs aligned side-by-side
+		var boardDiv = document.createElement('DIV');
+		boardDiv.id = 'board-div';
 		for (var row = 0; row < board.length; row++) {
 			var rowDiv = document.createElement('DIV');
 			rowDiv.className = 'row-div';
@@ -192,7 +196,20 @@ var view = {
 				}
 				rowDiv.appendChild(colDiv);
 			}
-			placeShipsDiv.appendChild(rowDiv);
+			boardDiv.appendChild(rowDiv);
 		}
+		placeShipsDiv.insertBefore(boardDiv, shipPlacementsDiv);
+	},
+
+	showShipPlacements: function(ships) {
+		shipPlacementsDiv = document.createElement('DIV');
+		shipPlacementsDiv.id = 'ship-placements-div';
+		for (var i = 0; i < ships.length; i++) {
+			var placementsDiv = document.createElement('DIV');
+			var placementText = document.createTextNode(ships[i]);
+			placementsDiv.append(placementText);
+			shipPlacementsDiv.appendChild(placementsDiv);
+		}
+		placeShipsDiv.append(shipPlacementsDiv);
 	},
 };
