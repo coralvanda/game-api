@@ -68,6 +68,15 @@ var view = {
 			'Playing as user: ' + battleshipController.user);
 		usernameHeader.appendChild(usernameHeaderText);
 		usernameDiv.appendChild(usernameHeader);
+
+		var logoutBtn = document.createElement('DIV');
+		var logoutBtnText = document.createTextNode('Logout');
+		logoutBtn.className = 'button';
+		logoutBtn.onclick = function() {
+			battleshipController.logoutUser();
+		}
+		logoutBtn.appendChild(logoutBtnText);
+		usernameDiv.appendChild(logoutBtn);
 	},
 
 	showHomeScreen: function() {
