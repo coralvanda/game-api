@@ -14,6 +14,10 @@ var view = {
 		alert(error);
 	},
 
+	refreshPage: function() {
+		location.reload();
+	},
+
 	showLogin: function() {
 		// display a text input field and buttons to either log in
 		// or register a new user
@@ -31,7 +35,7 @@ var view = {
 		loginSubmitBtn.className = 'button';
 		loginSubmitBtn.onclick = function() {
 			battleshipController.user = userNameInput.value;
-			battleshipController.loginUser(userNameInput.value);
+			battleshipController.loginUser();
 			loginDiv.style.display = 'none';
 		};
 

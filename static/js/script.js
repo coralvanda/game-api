@@ -10,7 +10,43 @@ var battleshipController = {
 	playerGamesList: [],
 
 	init: function() {
-		view.showLogin();
+		var cookie = battleshipController.getCookie('activeUser');
+		if (cookie) {
+			battleshipController.user = cookie;
+			battleshipController.userWelcome();
+			battleshipController.homeScreen();
+		}
+		else {
+			view.showLogin();
+		}
+	},
+
+	setCookie: function(name, value, expiration) {
+		var expires = '';
+		if (expiration) {
+			var date = new Date();
+			date.setTime(date.getTime() + (expiration*24*60*60*1000));
+			expires = '; expires=' + date.toUTCString();
+		}
+		document.cookie = name + '=' + value + expires + '; path=/';
+	},
+
+	getCookie: function(name) {
+		var nameEquals = name + '=';
+		var attributes = document.cookie.split(';');
+		for (var i = 0; i < attributes.length(); i++) {
+			var crumb = attributes[i];
+			while (crumb.charAt(0) == ' ') {
+				crumb = crumb.substring(1, crumb.length());
+			}
+			if (crumb.indexOf(nameEquals) == 0) {
+				return crumb.substring(nameEquals.length, crumb.length);
+			}
+		}
+	},
+
+	clearCookie: function() {
+		null;
 	},
 
 	registerUser: function() {
@@ -30,7 +66,8 @@ var battleshipController = {
 		xhttp.send();
 	},
 
-	loginUser: function(username) {
+	loginUser: function() {
+		battleshipController.setCookie('activeUser');
 		battleshipController.userWelcome();
 		battleshipController.homeScreen();
 	},
@@ -88,6 +125,7 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
+					view.refreshPage();
 					view.showHomeScreenGamesList();
 				}
 				else {
