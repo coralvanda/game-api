@@ -21,11 +21,11 @@ var battleshipController = {
 		}
 	},
 
-	setCookie: function(name, value, expiration) {
+	setCookie: function(name, value, days) {
 		var expires = '';
-		if (expiration) {
+		if (days) {
 			var date = new Date();
-			date.setTime(date.getTime() + (expiration*24*60*60*1000));
+			date.setTime(date.getTime() + (days*24*60*60*1000));
 			expires = '; expires=' + date.toUTCString();
 		}
 		document.cookie = name + '=' + value + expires + '; path=/';
@@ -67,9 +67,16 @@ var battleshipController = {
 	},
 
 	loginUser: function() {
-		battleshipController.setCookie('activeUser');
+		battleshipController.setCookie('activeUser',
+			battleshipController.user, 10);
 		battleshipController.userWelcome();
 		battleshipController.homeScreen();
+	},
+
+	logoutUser: function() {
+		battleshipController.clearCookie('activeUser');
+		battleshipController.user = '';
+		view.refreshPage();
 	},
 
 	userWelcome: function() {
