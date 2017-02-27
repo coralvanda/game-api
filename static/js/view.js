@@ -167,11 +167,16 @@ var view = {
 
 		// build a div containing 10 row divs stacked vertically
 		// each row div will contain 10 col divs aligned side-by-side
-		for (var i = 0; i < board.length; i++) {
-			var row = document.createElement('DIV');
-			var junk = document.createTextNode(board[i]); // clean up later
-			row.appendChild(junk);
-			placeShipsDiv.appendChild(row);
+		for (var row = 0; row < board.length; row++) {
+			var rowDiv = document.createElement('DIV');
+			rowDiv.className = 'row-div';
+			for (var col = 3; col < board[row].length; col++) {
+				var colDiv = document.createElement('DIV');
+				var junk = document.createTextNode(board[row][col]);
+				colDiv.appendChild(junk);
+				rowDiv.appendChild(colDiv);
+			}
+			placeShipsDiv.appendChild(rowDiv);
 		}
 	},
 };

@@ -23,6 +23,11 @@
 	display: inline;
 }
 
+.row-div {
+	display: flex;
+	flex-wrap: wrap;
+}
+
 #container {
 	width: 800px;
 	margin: auto;
