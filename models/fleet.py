@@ -9,15 +9,15 @@ class Fleet(ndb.Model):
     on the board.  Then its status will show as either 'placed'
     or as 'sunk'."""
     carrier_hp          = ndb.IntegerProperty(default=5)
-    carrier_status      = ndb.StringProperty(default='')
+    carrier_status      = ndb.StringProperty(default='Not placed')
     battleship_hp       = ndb.IntegerProperty(default=4)
-    battleship_status   = ndb.StringProperty(default='')
+    battleship_status   = ndb.StringProperty(default='Not placed')
     cruiser_hp          = ndb.IntegerProperty(default=3)
-    cruiser_status      = ndb.StringProperty(default='')
+    cruiser_status      = ndb.StringProperty(default='Not placed')
     submarine_hp        = ndb.IntegerProperty(default=3)
-    submarine_status    = ndb.StringProperty(default='')
+    submarine_status    = ndb.StringProperty(default='Not placed')
     destroyer_hp        = ndb.IntegerProperty(default=2)
-    destroyer_status    = ndb.StringProperty(default='')
+    destroyer_status    = ndb.StringProperty(default='Not placed')
 
     def return_size(self, ship):
         """Returns an integer indicating the size of the ship"""
@@ -46,11 +46,26 @@ class Fleet(ndb.Model):
             form.condition = ['Fleet destroyed']
             return form
         else:
-            carrier_condition = 'Carrier HP ' + str(self.carrier_hp)
-            battleship_condition = 'Battleship HP ' + str(self.battleship_hp)
-            cruiser_condition = 'Cruiser HP: ' + str(self.cruiser_hp)
-            submarine_condition = 'Submarine HP ' + str(self.submarine_hp)
-            destroyer_condition = 'Destroyer HP ' + str(self.destroyer_hp)
-            form.condition = [carrier_condition, battleship_condition,
-                cruiser_condition, submarine_condition, destroyer_condition]
+            carrier_condition       = 'Carrier HP ' + str(self.carrier_hp)
+            battleship_condition    = 'Battleship HP ' + str(self.battleship_hp)
+            cruiser_condition       = 'Cruiser HP: ' + str(self.cruiser_hp)
+            submarine_condition     = 'Submarine HP ' + str(self.submarine_hp)
+            destroyer_condition     = 'Destroyer HP ' + str(self.destroyer_hp)
+
+            carrier_placed     = 'Carrier: ' + str(self.carrier_status)
+            battleship_placed  = 'Battleship: ' + str(self.battleship_status)
+            cruiser_placed     = 'Cruiser: ' + str(self.cruiser_status)
+            submarine_placed   = 'Submarine: ' + str(self.submarine_status)
+            destroyer_placed   = 'Destroyer: ' + str(self.destroyer_status)
+
+            form.condition = [carrier_condition,
+                            battleship_condition,
+                            cruiser_condition,
+                            submarine_condition,
+                            destroyer_condition,
+                            carrier_placed,
+                            battleship_placed,
+                            cruiser_placed,
+                            submarine_placed,
+                            destroyer_placed]
             return form
