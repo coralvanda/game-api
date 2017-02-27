@@ -27,14 +27,16 @@ var view = {
 		userNameInput.placeholder = 'Enter user name';
 		loginDiv.appendChild(userNameInput);
 
-		var loginSubmitBtn = document.createElement('BUTTON');
+		var loginSubmitBtn = document.createElement('DIV');
+		loginSubmitBtn.className = 'button';
 		loginSubmitBtn.onclick = function() {
 			battleshipController.user = userNameInput.value;
 			battleshipController.loginUser(userNameInput.value);
 			loginDiv.style.display = 'none';
 		};
 
-		var registerSubmitBtn = document.createElement('BUTTON');
+		var registerSubmitBtn = document.createElement('DIV');
+		registerSubmitBtn.className = 'button';
 		registerSubmitBtn.onclick = function() {
 			battleshipController.user = userNameInput.value;
 			battleshipController.registerUser();
