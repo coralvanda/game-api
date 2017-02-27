@@ -34,7 +34,7 @@ var battleshipController = {
 	getCookie: function(name) {
 		var nameEquals = name + '=';
 		var attributes = document.cookie.split(';');
-		for (var i = 0; i < attributes.length(); i++) {
+		for (var i = 0; i < attributes.length; i++) {
 			var crumb = attributes[i];
 			while (crumb.charAt(0) == ' ') {
 				crumb = crumb.substring(1, crumb.length());
