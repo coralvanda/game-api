@@ -83,6 +83,22 @@ var battleshipController = {
 		xhttp.send(JSON.stringify(requestOjb));
 	},
 
+	cancelGame: function(gameKey) {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == XMLHttpRequest.DONE) {
+				if (xhttp.status == 200) {
+					null;
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		xhttp.open('POST', requestPath + 'game' + gameKey + '/cancel', true);
+		xhttp.send();
+	},
+
 	getBoard: function(gameKey, boardType) {
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
