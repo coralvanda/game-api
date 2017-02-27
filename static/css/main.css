@@ -4,6 +4,7 @@
 	margin: 0 2px 0 2px;
 	border: 1px solid black;
 	width: 85px;
+	height: 20px;
 }
 
 .button:hover {
@@ -21,6 +22,19 @@
 #container {
 	width: 800px;
 	margin: auto;
+}
+
+#username-div {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#username-header {
+	margin: 0 0 20px 0;
+}
+
+#logout-btn {
+	margin-left: auto;
 }
 
 #login-div {

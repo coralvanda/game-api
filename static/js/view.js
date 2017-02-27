@@ -64,6 +64,7 @@ var view = {
 		containerDiv.appendChild(usernameDiv);
 
 		var usernameHeader = document.createElement('H3');
+		usernameHeader.id = 'username-header';
 		var usernameHeaderText = document.createTextNode(
 			'Playing as user: ' + battleshipController.user);
 		usernameHeader.appendChild(usernameHeaderText);
@@ -72,6 +73,7 @@ var view = {
 		var logoutBtn = document.createElement('DIV');
 		var logoutBtnText = document.createTextNode('Logout');
 		logoutBtn.className = 'button';
+		logoutBtn.id = 'logout-btn';
 		logoutBtn.onclick = function() {
 			battleshipController.logoutUser();
 		}
