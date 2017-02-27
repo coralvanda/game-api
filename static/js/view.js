@@ -162,6 +162,9 @@ var view = {
 	showBoard: function(board) {
 		// Displays the given board or chart
 
+		// must have a way to distinguish charts from boards
+		// and clearly show the user which is which
+
 		// build a div containing 10 row divs stacked vertically
 		// each row div will contain 10 col divs aligned side-by-side
 		for (var i = 0; i < board.length; i++) {

@@ -169,17 +169,18 @@ var battleshipController = {
 		// move on when all ships have been placed
 	},
 
-	playGame: function() {
-		while (gameKey !== '') {
-			chart = null // show_board_AJAX_call;
-			board = null // show_board_AJAX_call;
-			view.showBoard(chart);
-			view.showBoard(board);
-			// place a link to return the player to their home screen
-			// when player clicks on the chart, call the make_move endpoint
-			// if game ends after a move, exit the loop
-			// else run the loop again
-		}
+	playGame: function(gameKey) {
+		// first need to check state of game
+		// then must direct to proper display based on state
+
+		chart = null; // show_board_AJAX_call;
+		board = null; // show_board_AJAX_call;
+		view.showBoard(chart);
+		view.showBoard(board);
+		// place a link to return the player to their home screen
+		// when player clicks on the chart, call the make_move endpoint
+		// if game ends after a move, exit the loop
+		// else run the loop again
 	},
 };
 
