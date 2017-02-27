@@ -103,17 +103,23 @@ var view = {
 			var games = battleshipController.playerGamesList;
 			for (var i = 0; i < games.length; i++) {
 				var gameListItem = document.createElement('LI');
-				gameListItem.className = 'game-item';
+				gameListItem.className = 'game-list-item';
+				var gameItemDiv = document.createElement('DIV');
+				gameItemDiv.className = 'game-item-div';
+				var gameItemP = document.createElement('P');
+				gameItemP.className = 'game-item-p';
 				var gameListItemText = document.createTextNode(
 					games[i].urlsafe_key);
-				gameListItem.appendChild(gameListItemText);
+				gameItemP.appendChild(gameListItemText);
+				gameItemDiv.appendChild(gameItemP);
+				gameListItem.appendChild(gameItemDiv);
 				openGamesList.appendChild(gameListItem);
 
 				var cancelGameBtn = document.createElement('DIV');
-				cancelGameBtn.className = 'button';
+				cancelGameBtn.className = 'game-cancel button';
 				var cancelGameBtnText = document.createTextNode('Cancel');
 				cancelGameBtn.appendChild(cancelGameBtnText);
-				gameListItem.appendChild(cancelGameBtn);
+				gameItemDiv.appendChild(cancelGameBtn);
 			}
 		}
 		homescreenDiv.appendChild(openGamesList);

@@ -10,10 +10,12 @@
 	cursor: pointer;
 }
 
-.game-item {
-	display: flex;
-	flex-wrap: wrap;
+.game-list-item {
 	margin: 2px 0 2px 0;
+}
+
+.game-item-p {
+	margin: 0 0 0 0;
 }
 
 #container {
