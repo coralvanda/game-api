@@ -104,22 +104,18 @@ var view = {
 			for (var i = 0; i < games.length; i++) {
 				var gameListItem = document.createElement('LI');
 				gameListItem.className = 'game-list-item';
-				var gameItemDiv = document.createElement('DIV');
-				gameItemDiv.className = 'game-item-div';
-				var gameItemP = document.createElement('P');
-				gameItemP.className = 'game-item-p';
-				var gameListItemText = document.createTextNode(
-					games[i].urlsafe_key);
-				gameItemP.appendChild(gameListItemText);
-				gameItemDiv.appendChild(gameItemP);
-				gameListItem.appendChild(gameItemDiv);
 				openGamesList.appendChild(gameListItem);
 
 				var cancelGameBtn = document.createElement('DIV');
 				cancelGameBtn.className = 'game-cancel button';
 				var cancelGameBtnText = document.createTextNode('Cancel');
+				cancelGameBtn.addEventListener('click', (function(keyCopy) {
+					return function() {
+						battleshipController.cancelGame(keyCopy);
+					};
+				})(games[i]));
 				cancelGameBtn.appendChild(cancelGameBtnText);
-				gameItemDiv.appendChild(cancelGameBtn);
+				gameListItem.appendChild(cancelGameBtn);
 			}
 		}
 		homescreenDiv.appendChild(openGamesList);
