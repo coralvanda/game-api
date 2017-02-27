@@ -45,8 +45,8 @@ var battleshipController = {
 		}
 	},
 
-	clearCookie: function() {
-		null;
+	clearCookie: function(name) {
+		battleshipController.setCookie(name, '', -1);
 	},
 
 	registerUser: function() {
