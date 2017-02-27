@@ -172,8 +172,13 @@ var view = {
 			rowDiv.className = 'row-div';
 			for (var col = 3; col < board[row].length; col++) {
 				var colDiv = document.createElement('DIV');
-				var junk = document.createTextNode(board[row][col]);
-				colDiv.appendChild(junk);
+				colDiv.className = 'col-div';
+				if (board[row][col] === '0') {
+					colDiv.className += ' blue';
+				}
+				else {
+					colDiv.className += ' red';
+				}
 				rowDiv.appendChild(colDiv);
 			}
 			placeShipsDiv.appendChild(rowDiv);

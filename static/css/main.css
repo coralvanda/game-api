@@ -28,6 +28,20 @@
 	flex-wrap: wrap;
 }
 
+.col-div {
+	width: 20px;
+	height: 20px;
+	margin: 1px 1px 1px 1px;
+}
+
+.blue {
+	background-color: blue;
+}
+
+.red {
+	background-color: red;
+}
+
 #container {
 	width: 800px;
 	margin: auto;
