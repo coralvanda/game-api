@@ -122,7 +122,7 @@ var view = {
 				openGamesList.appendChild(gameListItem);
 
 				var resumeGameBtn = document.createElement('DIV');
-				resumeGameBtn.className = 'game-resume button';
+				resumeGameBtn.className = 'resume-game button';
 				var resumeGameBtnText = document.createTextNode('Resume');
 				resumeGameBtn.addEventListener('click', (function(keyCopy) {
 					return function() {
@@ -133,7 +133,7 @@ var view = {
 				gameListItem.appendChild(resumeGameBtn);
 
 				var cancelGameBtn = document.createElement('DIV');
-				cancelGameBtn.className = 'game-cancel button';
+				cancelGameBtn.className = 'cancel-game button';
 				var cancelGameBtnText = document.createTextNode('Cancel');
 				cancelGameBtn.addEventListener('click', (function(keyCopy) {
 					return function() {

@@ -15,8 +15,12 @@
 	margin: 2px 0 2px 0;
 }
 
-.game-item-p {
-	margin: 0 0 0 0;
+.resume-game {
+	display: inline;
+}
+
+.cancel-game {
+	display: inline;
 }
 
 #container {
