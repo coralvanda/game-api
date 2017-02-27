@@ -103,10 +103,17 @@ var view = {
 			var games = battleshipController.playerGamesList;
 			for (var i = 0; i < games.length; i++) {
 				var gameListItem = document.createElement('LI');
+				gameListItem.className = 'game-item';
 				var gameListItemText = document.createTextNode(
 					games[i].urlsafe_key);
 				gameListItem.appendChild(gameListItemText);
 				openGamesList.appendChild(gameListItem);
+
+				var cancelGameBtn = document.createElement('DIV');
+				cancelGameBtn.className = 'button';
+				var cancelGameBtnText = document.createTextNode('Cancel');
+				cancelGameBtn.appendChild(cancelGameBtnText);
+				gameListItem.appendChild(cancelGameBtn);
 			}
 		}
 		homescreenDiv.appendChild(openGamesList);
