@@ -74,7 +74,8 @@ var view = {
 		homescreenDiv.id = 'homescreen-div';
 		containerDiv.appendChild(homescreenDiv);
 
-		var newGameBtn = document.createElement('BUTTON');
+		var newGameBtn = document.createElement('DIV');
+		newGameBtn.className = 'button';
 		newGameBtn.onclick = function() {
 			battleshipController.newGame();
 			homescreenDiv.style.display = 'none';
