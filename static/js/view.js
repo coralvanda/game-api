@@ -113,7 +113,7 @@ var view = {
 					return function() {
 						battleshipController.cancelGame(keyCopy);
 					};
-				})(games[i]));
+				})(games[i].urlsafe_key));
 				cancelGameBtn.appendChild(cancelGameBtnText);
 				gameListItem.appendChild(cancelGameBtn);
 			}

@@ -88,14 +88,14 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
-					null;
+					view.showHomeScreenGamesList();
 				}
 				else {
 					view.displayError(xhttp.responseText);
 				}
 			}
 		};
-		xhttp.open('POST', requestPath + 'game' + gameKey + '/cancel', true);
+		xhttp.open('POST', requestPath + 'game/' + gameKey + '/cancel', true);
 		xhttp.send();
 	},
 
