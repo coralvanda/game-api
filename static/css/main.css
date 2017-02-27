@@ -1,7 +1,25 @@
-header {
-	margin: auto;
+.button {
+	background: linear-gradient(white, gray);
+	padding: 2px;
+	margin: 0 2px 0 2px;
+	border: 1px solid black;
+	width: 85px;
+}
+
+.button:hover {
+	cursor: pointer;
 }
 
 #container {
 	width: 800px;
+	margin: auto;
+}
+
+#login-div {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#homescreen-div {
+	background-color: lightyellow;
 }
