@@ -18,6 +18,7 @@ var view = {
 	},
 
 	refreshPage: function() {
+		// Refreshes the page
 		location.reload();
 	},
 
