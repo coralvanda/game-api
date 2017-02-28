@@ -7,12 +7,19 @@ var requestPath = '/_ah/api/battleship/v1/';
 var battleshipController = {
 
 	user: '',
+	activeGame: '',
 	playerGamesList: [],
 
 	init: function() {
-		var cookie = battleshipController.getCookie('activeUser');
-		if (cookie) {
-			battleshipController.user = cookie;
+		var userCookie = battleshipController.getCookie('activeUser');
+		var gameCookie = battleshipController.getCookie('activeGame');
+		if (gameCookie && userCookie) {
+			battleshipController.user = userCookie;
+			battleshipController.activeGame = gameCookie;
+			// go to active game
+		}
+		else if (userCookie) {
+			battleshipController.user = userCookie;
 			battleshipController.userWelcome();
 			battleshipController.homeScreen();
 		}
@@ -115,6 +122,7 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
+					// set game cookie here
 					view.showPlaceShips(JSON.parse(xhttp.responseText));
 				}
 				else {
@@ -161,14 +169,14 @@ var battleshipController = {
 		xhttp.send();
 	},
 
-	getShipPlacements: function(gameKey, fleet) {
+	getShipPlacementStatus: function(gameKey, fleet) {
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
 					var shipPlacements = JSON.parse(
 						xhttp.responseText).condition.slice(5);
-					view.showShipPlacements(shipPlacements);
+					view.showShipPlacementStatus(shipPlacements);
 				}
 				else {
 					view.displayError(xhttp.responseText);

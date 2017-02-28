@@ -170,8 +170,8 @@ var view = {
 		var gameKey = response.urlsafe_key;
 		battleshipController.getBoard(gameKey, 'user_board');
 
-		var shipPlacements = battleshipController.getShipPlacements(gameKey,
-			'user_fleet');
+		var shipPlacements = battleshipController.getShipPlacementStatus(
+			gameKey, 'user_fleet');
 	},
 
 	showBoard: function(board) {
@@ -201,7 +201,7 @@ var view = {
 		placeShipsDiv.insertBefore(boardDiv, shipPlacementsDiv);
 	},
 
-	showShipPlacements: function(ships) {
+	showShipPlacementStatus: function(ships) {
 		shipPlacementsDiv = document.createElement('DIV');
 		shipPlacementsDiv.id = 'ship-placements-div';
 		for (var i = 0; i < ships.length; i++) {
