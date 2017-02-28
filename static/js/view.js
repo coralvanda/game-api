@@ -6,6 +6,7 @@ var usernameDiv;
 var homescreenDiv;
 var placeShipsDiv;
 var shipPlacementsDiv;
+var shipsDropdownDiv;
 
 
 var view = {
@@ -178,6 +179,32 @@ var view = {
 		containerDiv.appendChild(placeShipsDiv);
 		battleshipController.getBoard(gameKey, 'user_board');
 		battleshipController.getShipPlacementStatus(gameKey, 'user_fleet');
+
+		var shipList = ['Carrier', 'Battleship',
+			'Cruiser', 'Submarine', 'Destroyer'];
+
+		shipsDropdownDiv = document.createElement('DIV');
+		var shipsDrowndown = document.createElement('SELECT');
+		var dropdownDefault = document.createElement('OPTION');
+		dropdownDefault.selected = 'selected';
+		dropdownDefault.innerHTML = 'Select a ship';
+		shipsDrowndown.appendChild(dropdownDefault);
+		for (var i = 0; i < shipList.length; i++) {
+			var option = document.createElement('OPTION');
+			option.value = shipList[i].toLowerCase();
+			option.innerHTML = shipList[i];
+			shipsDrowndown.appendChild(option);
+		}
+		shipsDropdownDiv.appendChild(shipsDrowndown);
+		placeShipsDiv.appendChild(shipsDropdownDiv);
+
+		shipsDrowndown.onchange = function() {
+			var selectedShip = shipsDrowndown.options[
+				shipsDrowndown.selectedIndex].value;
+			// check that it's a ship and not the default option
+			// check placement status of that ship
+			// create visualization for ship placement on board
+		};
 	},
 
 	showBoard: function(board) {
