@@ -178,33 +178,6 @@ var battleshipController = {
 		xhttp.send();
 	},
 
-	 checkShipPlacement: function(gameKey) {
-	 	// Calls API and returns false if not all ships have been placed
-	 	var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == XMLHttpRequest.DONE) {
-				if (xhttp.status == 200) {
-					var shipPlacements = JSON.parse(
-						xhttp.responseText).condition.slice(5);
-					for (var i = 0; i < shipPlacements.length; i++) {
-						if (shipPlacements[i].indexOf('Not placed') > -1) {
-							view.showPlaceShips(gameKey);
-							break;
-						}
-					}
-					console.log(shipPlacements[0].indexOf('Not placed'));
-					// battleshipController.playGame(gameKey);
-				}
-				else {
-					view.displayError(xhttp.responseText);
-				}
-			}
-		};
-		xhttp.open('GET', requestPath + 'game/' + gameKey +
-			'/fleet?fleet=user_fleet', true);
-		xhttp.send();
-	 },
-
 	getShipPlacementStatus: function(gameKey, fleet) {
 		// Calls API and sends the view the ships' statuses
 		var xhttp = new XMLHttpRequest();
@@ -237,7 +210,29 @@ var battleshipController = {
 		// Checks the state of the game, and picks up where things left off
 		battleshipController.activeGame = gameKey;
 		battleshipController.setCookie('activeGame', gameKey, 10);
-		battleshipController.checkShipPlacement(gameKey);
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == XMLHttpRequest.DONE) {
+				if (xhttp.status == 200) {
+					var shipPlacements = JSON.parse(
+						xhttp.responseText).condition.slice(5);
+					for (var i = 0; i < shipPlacements.length; i++) {
+						if (shipPlacements[i].indexOf('Not placed') > -1) {
+							view.showPlaceShips(gameKey);
+							break;
+						}
+					}
+					battleshipController.playGame(gameKey);
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		xhttp.open('GET', requestPath + 'game/' + gameKey +
+			'/fleet?fleet=user_fleet', true);
+		xhttp.send();
 	},
 
 	playGame: function(gameKey) {
