@@ -158,7 +158,10 @@ var view = {
 				var cancelGameBtnText = document.createTextNode('Cancel');
 				cancelGameBtn.addEventListener('click', (function(keyCopy) {
 					return function() {
-						battleshipController.cancelGame(keyCopy);
+						var confirmation = confirm('Delete game?');
+						if (confirmation) {
+							battleshipController.cancelGame(keyCopy);
+						}
 					};
 				})(games[i].urlsafe_key));
 				cancelGameBtn.appendChild(cancelGameBtnText);
