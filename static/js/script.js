@@ -4,25 +4,26 @@ var gameKey, board, chart;
 var newGameBtn;
 var requestPath = '/_ah/api/battleship/v1/';
 
-var battleshipController = {
+var battleshipCtrl = {
 
 	user: '',
 	activeGame: '',
 	playerGamesList: [],
+	shipStatuses: [],
 
 	init: function() {
 		// Determins initial UI state to display upon new page load
-		var userCookie = battleshipController.getCookie('activeUser');
-		var gameCookie = battleshipController.getCookie('activeGame');
+		var userCookie = battleshipCtrl.getCookie('activeUser');
+		var gameCookie = battleshipCtrl.getCookie('activeGame');
 		if (gameCookie && userCookie) {
-			battleshipController.user = userCookie;
+			battleshipCtrl.user = userCookie;
 			view.showUserBanner();
-			battleshipController.resumeGame(gameCookie);
+			battleshipCtrl.resumeGame(gameCookie);
 		}
 		else if (userCookie) {
-			battleshipController.user = userCookie;
+			battleshipCtrl.user = userCookie;
 			view.showUserBanner();
-			battleshipController.homeScreen();
+			battleshipCtrl.homeScreen();
 		}
 		else {
 			view.showLogin();
@@ -56,7 +57,7 @@ var battleshipController = {
 	},
 
 	clearCookie: function(name) {
-		battleshipController.setCookie(name, '', -1);
+		battleshipCtrl.setCookie(name, '', -1);
 	},
 
 	registerUser: function() {
@@ -65,7 +66,7 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
-					battleshipController.loginUser();
+					battleshipCtrl.loginUser();
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -73,22 +74,22 @@ var battleshipController = {
 			}
 		};
 		xhttp.open('POST', requestPath + 'user?user_name=' +
-			battleshipController.user, true);
+			battleshipCtrl.user, true);
 		xhttp.send();
 	},
 
 	loginUser: function() {
 		// Sets an active user
-		battleshipController.setCookie('activeUser',
-			battleshipController.user, 10);
+		battleshipCtrl.setCookie('activeUser',
+			battleshipCtrl.user, 10);
 		view.showUserBanner();
-		battleshipController.homeScreen();
+		battleshipCtrl.homeScreen();
 	},
 
 	logoutUser: function() {
 		// Clears the active user
-		battleshipController.clearCookie('activeUser');
-		battleshipController.user = '';
+		battleshipCtrl.clearCookie('activeUser');
+		battleshipCtrl.user = '';
 		view.refreshPage();
 	},
 
@@ -104,7 +105,7 @@ var battleshipController = {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
 					var gamesObj = JSON.parse(xhttp.responseText);
-					battleshipController.playerGamesList = gamesObj.games;
+					battleshipCtrl.playerGamesList = gamesObj.games;
 					view.showHomeScreenGamesList();
 				}
 				else if (xhttp.status == 404) {
@@ -116,7 +117,7 @@ var battleshipController = {
 			}
 		};
 		xhttp.open('GET', requestPath + 'games/player?user_name=' +
-			battleshipController.user, true);
+			battleshipCtrl.user, true);
 		xhttp.send();
 	},
 
@@ -127,9 +128,9 @@ var battleshipController = {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
 					var gameKey = JSON.parse(xhttp.responseText).urlsafe_key;
-					battleshipController.setCookie('activeGame',
+					battleshipCtrl.setCookie('activeGame',
 						gameKey, 10);
-					battleshipController.activeGame = gameKey;
+					battleshipCtrl.activeGame = gameKey;
 					view.showPlaceShips(gameKey);
 				}
 				else {
@@ -137,7 +138,7 @@ var battleshipController = {
 				}
 			}
 		};
-		var requestOjb = {"user_name": battleshipController.user};
+		var requestOjb = {"user_name": battleshipCtrl.user};
 		xhttp.open('POST', requestPath + 'game', true);
 		xhttp.send(JSON.stringify(requestOjb));
 	},
@@ -186,6 +187,7 @@ var battleshipController = {
 				if (xhttp.status == 200) {
 					var shipPlacements = JSON.parse(
 						xhttp.responseText).condition.slice(5);
+					battleshipCtrl.shipStatuses = shipPlacements;
 					view.showShipPlacementStatus(shipPlacements);
 				}
 				else {
@@ -208,8 +210,8 @@ var battleshipController = {
 
 	resumeGame: function(gameKey) {
 		// Checks the state of the game, and picks up where things left off
-		battleshipController.activeGame = gameKey;
-		battleshipController.setCookie('activeGame', gameKey, 10);
+		battleshipCtrl.activeGame = gameKey;
+		battleshipCtrl.setCookie('activeGame', gameKey, 10);
 
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -223,7 +225,7 @@ var battleshipController = {
 							return null;
 						}
 					}
-					battleshipController.playGame(gameKey);
+					battleshipCtrl.playGame(gameKey);
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -237,8 +239,8 @@ var battleshipController = {
 
 	playGame: function(gameKey) {
 		// play game
-		chart = battleshipController.getBoard(gameKey, 'user_chart');
-		board = battleshipController.getBoard(gameKey, 'user_board');
+		chart = battleshipCtrl.getBoard(gameKey, 'user_chart');
+		board = battleshipCtrl.getBoard(gameKey, 'user_board');
 		view.showBoard(chart);
 		view.showBoard(board);
 		// place a link to return the player to their home screen
@@ -248,4 +250,4 @@ var battleshipController = {
 	},
 };
 
-battleshipController.init();
+battleshipCtrl.init();

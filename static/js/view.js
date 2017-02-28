@@ -39,16 +39,16 @@ var view = {
 		var loginSubmitBtn = document.createElement('DIV');
 		loginSubmitBtn.className = 'button';
 		loginSubmitBtn.onclick = function() {
-			battleshipController.user = userNameInput.value;
-			battleshipController.loginUser();
+			battleshipCtrl.user = userNameInput.value;
+			battleshipCtrl.loginUser();
 			loginDiv.parentElement.removeChild(loginDiv);
 		};
 
 		var registerSubmitBtn = document.createElement('DIV');
 		registerSubmitBtn.className = 'button';
 		registerSubmitBtn.onclick = function() {
-			battleshipController.user = userNameInput.value;
-			battleshipController.registerUser();
+			battleshipCtrl.user = userNameInput.value;
+			battleshipCtrl.registerUser();
 			loginDiv.parentElement.removeChild(loginDiv);
 		}
 
@@ -71,7 +71,7 @@ var view = {
 		var usernameHeader = document.createElement('H3');
 		usernameHeader.id = 'username-header';
 		var usernameHeaderText = document.createTextNode(
-			'Playing as user: ' + battleshipController.user);
+			'Playing as user: ' + battleshipCtrl.user);
 		usernameHeader.appendChild(usernameHeaderText);
 		usernameDiv.appendChild(usernameHeader);
 
@@ -80,9 +80,9 @@ var view = {
 		homeBtn.className = 'button';
 		homeBtn.id = 'home-btn';
 		homeBtn.onclick = function() {
-			battleshipController.clearCookie('activeGame');
+			battleshipCtrl.clearCookie('activeGame');
 			view.refreshPage();
-			battleshipController.homeScreen();
+			battleshipCtrl.homeScreen();
 		}
 		homeBtn.appendChild(homeBtnText);
 		usernameDiv.appendChild(homeBtn);
@@ -92,7 +92,7 @@ var view = {
 		logoutBtn.className = 'button';
 		logoutBtn.id = 'logout-btn';
 		logoutBtn.onclick = function() {
-			battleshipController.logoutUser();
+			battleshipCtrl.logoutUser();
 		}
 		logoutBtn.appendChild(logoutBtnText);
 		usernameDiv.appendChild(logoutBtn);
@@ -110,7 +110,7 @@ var view = {
 		var newGameBtn = document.createElement('DIV');
 		newGameBtn.className = 'button';
 		newGameBtn.onclick = function() {
-			battleshipController.newGame();
+			battleshipCtrl.newGame();
 			homescreenDiv.parentElement.removeChild(homescreenDiv);
 		};
 
@@ -118,7 +118,7 @@ var view = {
 		newGameBtn.appendChild(newGameBtnText);
 		homescreenDiv.appendChild(newGameBtn);
 
-		battleshipController.getPlayerGames();
+		battleshipCtrl.getPlayerGames();
 	},
 
 	showHomeScreenGamesList: function(optionalText=false) {
@@ -136,7 +136,7 @@ var view = {
 			openGamesList.appendChild(noGameFoundItem);
 		}
 		else {
-			var games = battleshipController.playerGamesList;
+			var games = battleshipCtrl.playerGamesList;
 			for (var i = 0; i < games.length; i++) {
 				var gameListItem = document.createElement('LI');
 				gameListItem.className = 'game-list-item';
@@ -148,7 +148,7 @@ var view = {
 				resumeGameBtn.addEventListener('click', (function(keyCopy) {
 					return function() {
 						homescreenDiv.parentElement.removeChild(homescreenDiv);
-						battleshipController.resumeGame(keyCopy);
+						battleshipCtrl.resumeGame(keyCopy);
 					};
 				})(games[i].urlsafe_key));
 				resumeGameBtn.appendChild(resumeGameBtnText);
@@ -161,7 +161,7 @@ var view = {
 					return function() {
 						var confirmation = confirm('Delete game?');
 						if (confirmation) {
-							battleshipController.cancelGame(keyCopy);
+							battleshipCtrl.cancelGame(keyCopy);
 						}
 					};
 				})(games[i].urlsafe_key));
@@ -177,18 +177,19 @@ var view = {
 		placeShipsDiv = document.createElement('DIV');
 		placeShipsDiv.id = 'place-ships-div';
 		containerDiv.appendChild(placeShipsDiv);
-		battleshipController.getBoard(gameKey, 'user_board');
-		battleshipController.getShipPlacementStatus(gameKey, 'user_fleet');
+		battleshipCtrl.getBoard(gameKey, 'user_board');
+		battleshipCtrl.getShipPlacementStatus(gameKey, 'user_fleet');
 
 		var shipList = ['Carrier', 'Battleship',
 			'Cruiser', 'Submarine', 'Destroyer'];
-
 		shipsDropdownDiv = document.createElement('DIV');
 		var shipsDrowndown = document.createElement('SELECT');
+
 		var dropdownDefault = document.createElement('OPTION');
 		dropdownDefault.selected = 'selected';
 		dropdownDefault.innerHTML = 'Select a ship';
 		shipsDrowndown.appendChild(dropdownDefault);
+
 		for (var i = 0; i < shipList.length; i++) {
 			var option = document.createElement('OPTION');
 			option.value = shipList[i].toLowerCase();
@@ -201,8 +202,12 @@ var view = {
 		shipsDrowndown.onchange = function() {
 			var selectedShip = shipsDrowndown.options[
 				shipsDrowndown.selectedIndex].value;
-			// check that it's a ship and not the default option
-			// check placement status of that ship
+			if (selectedShip == 'Select a ship') {
+				return null;
+			}
+			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
+				Ctrl;
+			}
 			// create visualization for ship placement on board
 		};
 	},
