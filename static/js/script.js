@@ -44,7 +44,7 @@ var battleshipController = {
 		for (var i = 0; i < attributes.length; i++) {
 			var crumb = attributes[i];
 			while (crumb.charAt(0) == ' ') {
-				crumb = crumb.substring(1, crumb.length());
+				crumb = crumb.substring(1, crumb.length);
 			}
 			if (crumb.indexOf(nameEquals) == 0) {
 				return crumb.substring(nameEquals.length, crumb.length);
@@ -125,7 +125,7 @@ var battleshipController = {
 					battleshipController.setCookie('activeGame',
 						response.urlsafe_key, 10);
 					battleshipController.activeGame = response.urlsafe_key;
-					view.showPlaceShips();
+					view.showPlaceShips(response);
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -201,6 +201,8 @@ var battleshipController = {
 	playGame: function(gameKey) {
 		// first need to check state of game
 		// then must direct to proper display based on state
+		battleshipController.activeGame = gameKey;
+		battleshipController.setCookie('activeGame', gameKey, 10);
 
 		chart = null; // show_board_AJAX_call;
 		board = null; // show_board_AJAX_call;
