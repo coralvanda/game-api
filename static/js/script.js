@@ -14,6 +14,7 @@ var battleshipController = {
 	playerGamesList: [],
 
 	init: function() {
+		// Determins initial UI state to display upon new page load
 		var userCookie = battleshipController.getCookie('activeUser');
 		var gameCookie = battleshipController.getCookie('activeGame');
 		if (gameCookie && userCookie) {
@@ -32,6 +33,7 @@ var battleshipController = {
 	},
 
 	setCookie: function(name, value, days) {
+		// Sets a cookie with the given name, value, and days before expiration
 		var expires = '';
 		if (days) {
 			var date = new Date();
@@ -42,6 +44,7 @@ var battleshipController = {
 	},
 
 	getCookie: function(name) {
+		// Returns a cookie based on provided name, if it exists
 		var nameEquals = name + '=';
 		var attributes = document.cookie.split(';');
 		for (var i = 0; i < attributes.length; i++) {
@@ -60,6 +63,7 @@ var battleshipController = {
 	},
 
 	registerUser: function() {
+		// Calls API to register a new user in the database
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
@@ -77,6 +81,7 @@ var battleshipController = {
 	},
 
 	loginUser: function() {
+		// Sets an active user
 		battleshipController.setCookie('activeUser',
 			battleshipController.user, 10);
 		battleshipController.userWelcome();
@@ -84,20 +89,24 @@ var battleshipController = {
 	},
 
 	logoutUser: function() {
+		// Clears the active user
 		battleshipController.clearCookie('activeUser');
 		battleshipController.user = '';
 		view.refreshPage();
 	},
 
 	userWelcome: function() {
+		// Tells view to display the user banner
 		view.showUserBanner();
 	},
 
 	homeScreen: function() {
+		// Tells view to show the home screen
 		view.showHomeScreen();
 	},
 
 	getPlayerGames: function() {
+		// Calls API to get all active player games, tells view to show them
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
@@ -120,6 +129,7 @@ var battleshipController = {
 	},
 
 	newGame: function() {
+		// Calls API to begin a new game, tells view to show placements
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
@@ -141,6 +151,7 @@ var battleshipController = {
 	},
 
 	cancelGame: function(gameKey) {
+		// Calls API to cancel a game based on given key
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
@@ -158,6 +169,7 @@ var battleshipController = {
 	},
 
 	getBoard: function(gameKey, boardType) {
+		// Calls API and sends the view a board object
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
@@ -175,6 +187,7 @@ var battleshipController = {
 	},
 
 	 checkShipPlacement: function(gameKey) {
+	 	// Calls API and returns false if not all ships have been placed
 	 	var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
@@ -199,6 +212,7 @@ var battleshipController = {
 	 },
 
 	getShipPlacementStatus: function(gameKey, fleet) {
+		// Calls API and sends the view the ships' statuses
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
@@ -226,18 +240,15 @@ var battleshipController = {
 	},
 
 	playGame: function(gameKey) {
-		// first need to check state of game
-		// then must direct to proper display based on state
+		// Checks the state of the game, and picks up where things left off
 		battleshipController.activeGame.key = gameKey;
 		battleshipController.setCookie('activeGame', gameKey, 10);
 		if (battleshipController.checkShipPlacement) {
 			// play game
 		}
 		else {
-			view.showPlaceShips()
+			view.showPlaceShips(gameKey)
 		}
-
-
 
 		chart = null; // show_board_AJAX_call;
 		board = null; // show_board_AJAX_call;

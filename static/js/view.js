@@ -22,7 +22,7 @@ var view = {
 	},
 
 	showLogin: function() {
-		// display a text input field and buttons to either log in
+		// Display a text input field and buttons to either log in
 		// or register a new user
 		loginDiv = document.createElement('DIV');
 		loginDiv.id = 'login-div';
@@ -61,7 +61,7 @@ var view = {
 	},
 
 	showUserBanner: function() {
-		// Shows the active user at the top of the screen
+		// Displays the active user at the top of the screen
 		usernameDiv = document.createElement('DIV');
 		usernameDiv.id = 'username-div';
 		containerDiv.appendChild(usernameDiv);
@@ -96,8 +96,7 @@ var view = {
 	},
 
 	showHomeScreen: function() {
-		// Displays the user's home screen, which includes a 'new game'
-		// button, and list of active games
+		// Displays the user's home screen
 
 		// each open game listed should have a button to allow the user
 		// to cancel (delete) that game, with a confirmation alert
@@ -120,7 +119,7 @@ var view = {
 	},
 
 	showHomeScreenGamesList: function(optionalText=false) {
-		// Builds and displays the list of actives games for the user
+		// Displays the list of actives games for the user
 		var gamesListTitle = document.createElement('H3');
 		var gamesListTitleText = document.createTextNode('Active Games');
 		gamesListTitle.appendChild(gamesListTitleText);
@@ -204,6 +203,7 @@ var view = {
 	},
 
 	showShipPlacementStatus: function(ships) {
+		// Displays current placement status for all user ships
 		shipPlacementsDiv = document.createElement('DIV');
 		shipPlacementsDiv.id = 'ship-placements-div';
 		for (var i = 0; i < ships.length; i++) {
