@@ -220,7 +220,7 @@ var battleshipController = {
 					for (var i = 0; i < shipPlacements.length; i++) {
 						if (shipPlacements[i].indexOf('Not placed') > -1) {
 							view.showPlaceShips(gameKey);
-							break;
+							return null;
 						}
 					}
 					battleshipController.playGame(gameKey);
