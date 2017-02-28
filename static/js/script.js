@@ -19,11 +19,12 @@ var battleshipController = {
 		var gameCookie = battleshipController.getCookie('activeGame');
 		if (gameCookie && userCookie) {
 			battleshipController.user = userCookie;
+			view.showUserBanner();
 			battleshipController.resumeGame(gameCookie);
 		}
 		else if (userCookie) {
 			battleshipController.user = userCookie;
-			battleshipController.userWelcome();
+			view.showUserBanner();
 			battleshipController.homeScreen();
 		}
 		else {
@@ -83,7 +84,7 @@ var battleshipController = {
 		// Sets an active user
 		battleshipController.setCookie('activeUser',
 			battleshipController.user, 10);
-		battleshipController.userWelcome();
+		view.showUserBanner();
 		battleshipController.homeScreen();
 	},
 
@@ -92,11 +93,6 @@ var battleshipController = {
 		battleshipController.clearCookie('activeUser');
 		battleshipController.user = '';
 		view.refreshPage();
-	},
-
-	userWelcome: function() {
-		// Tells view to display the user banner
-		view.showUserBanner();
 	},
 
 	homeScreen: function() {
@@ -194,11 +190,13 @@ var battleshipController = {
 					var shipPlacements = JSON.parse(
 						xhttp.responseText).condition.slice(5);
 					for (var i = 0; i < shipPlacements.length; i++) {
-						if (shipPlacements[i].indexOf('Not placed') > -1){
+						if (shipPlacements[i].indexOf('Not placed') > -1) {
 							view.showPlaceShips(gameKey);
+							break;
 						}
 					}
-					battleshipController.playGame(gameKey);
+					console.log(shipPlacements[0].indexOf('Not placed'));
+					// battleshipController.playGame(gameKey);
 				}
 				else {
 					view.displayError(xhttp.responseText);

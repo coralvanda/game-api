@@ -40,7 +40,7 @@ var view = {
 		loginSubmitBtn.onclick = function() {
 			battleshipController.user = userNameInput.value;
 			battleshipController.loginUser();
-			loginDiv.style.display = 'none';
+			loginDiv.parentElement.removeChild(loginDiv);
 		};
 
 		var registerSubmitBtn = document.createElement('DIV');
@@ -48,7 +48,7 @@ var view = {
 		registerSubmitBtn.onclick = function() {
 			battleshipController.user = userNameInput.value;
 			battleshipController.registerUser();
-			loginDiv.style.display = 'none';
+			loginDiv.parentElement.removeChild(loginDiv);
 		}
 
 		var loginSubmitBtnText = document.createTextNode('Login');
@@ -109,7 +109,7 @@ var view = {
 		newGameBtn.className = 'button';
 		newGameBtn.onclick = function() {
 			battleshipController.newGame();
-			homescreenDiv.style.display = 'none';
+			homescreenDiv.parentElement.removeChild(homescreenDiv);
 		};
 
 		var newGameBtnText = document.createTextNode('New Game');
