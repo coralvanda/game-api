@@ -146,6 +146,7 @@ var view = {
 				var resumeGameBtnText = document.createTextNode('Resume');
 				resumeGameBtn.addEventListener('click', (function(keyCopy) {
 					return function() {
+						homescreenDiv.parentElement.removeChild(homescreenDiv);
 						battleshipController.resumeGame(keyCopy);
 					};
 				})(games[i].urlsafe_key));
