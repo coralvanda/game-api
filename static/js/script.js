@@ -19,8 +19,7 @@ var battleshipController = {
 		var gameCookie = battleshipController.getCookie('activeGame');
 		if (gameCookie && userCookie) {
 			battleshipController.user = userCookie;
-			battleshipController.activeGame.key = gameCookie;
-			battleshipController.playGame(gameCookie);
+			battleshipController.resumeGame(gameCookie);
 		}
 		else if (userCookie) {
 			battleshipController.user = userCookie;
@@ -196,10 +195,10 @@ var battleshipController = {
 						xhttp.responseText).condition.slice(5);
 					for (var i = 0; i < shipPlacements.length; i++) {
 						if (shipPlacements[i].indexOf('Not placed') > -1){
-							return false;
+							view.showPlaceShips(gameKey);
 						}
 					}
-					return true;
+					battleshipController.playGame(gameKey);
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -207,7 +206,7 @@ var battleshipController = {
 			}
 		};
 		xhttp.open('GET', requestPath + 'game/' + gameKey +
-			'/fleet?fleet=user_fleet', false);
+			'/fleet?fleet=user_fleet', true);
 		xhttp.send();
 	 },
 
@@ -239,19 +238,17 @@ var battleshipController = {
 		// move on when all ships have been placed
 	},
 
-	playGame: function(gameKey) {
+	resumeGame: function(gameKey) {
 		// Checks the state of the game, and picks up where things left off
 		battleshipController.activeGame.key = gameKey;
 		battleshipController.setCookie('activeGame', gameKey, 10);
-		if (battleshipController.checkShipPlacement) {
-			// play game
-		}
-		else {
-			view.showPlaceShips(gameKey)
-		}
+		battleshipController.checkShipPlacement(gameKey);
+	},
 
-		chart = null; // show_board_AJAX_call;
-		board = null; // show_board_AJAX_call;
+	playGame: function(gameKey) {
+		// play game
+		chart = battleshipController.getBoard(gameKey, 'user_chart');
+		board = battleshipController.getBoard(gameKey, 'user_board');
 		view.showBoard(chart);
 		view.showBoard(board);
 		// place a link to return the player to their home screen
