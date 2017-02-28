@@ -166,19 +166,14 @@ var view = {
 		homescreenDiv.appendChild(openGamesList);
 	},
 
-	showPlaceShips: function(response) {
+	showPlaceShips: function(gameKey) {
 		// Displays the user's board and available ships which must be placed
 		homescreenDiv.style.display = 'none';
-
 		placeShipsDiv = document.createElement('DIV');
 		placeShipsDiv.id = 'place-ships-div';
 		containerDiv.appendChild(placeShipsDiv);
-
-		var gameKey = response.urlsafe_key;
 		battleshipController.getBoard(gameKey, 'user_board');
-
-		var shipPlacements = battleshipController.getShipPlacementStatus(
-			gameKey, 'user_fleet');
+		battleshipController.getShipPlacementStatus(gameKey, 'user_fleet');
 	},
 
 	showBoard: function(board) {

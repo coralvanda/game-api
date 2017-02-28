@@ -7,7 +7,10 @@ var requestPath = '/_ah/api/battleship/v1/';
 var battleshipController = {
 
 	user: '',
-	activeGame: '',
+	activeGame: {
+		key: '',
+		allShipsPlaced: false
+	},
 	playerGamesList: [],
 
 	init: function() {
@@ -15,8 +18,8 @@ var battleshipController = {
 		var gameCookie = battleshipController.getCookie('activeGame');
 		if (gameCookie && userCookie) {
 			battleshipController.user = userCookie;
-			battleshipController.activeGame = gameCookie;
-			// go to active game
+			battleshipController.activeGame.key = gameCookie;
+			battleshipController.playGame(gameCookie);
 		}
 		else if (userCookie) {
 			battleshipController.user = userCookie;
@@ -121,11 +124,11 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
-					var response = JSON.parse(xhttp.responseText);
+					var gameKey = JSON.parse(xhttp.responseText).urlsafe_key;
 					battleshipController.setCookie('activeGame',
-						response.urlsafe_key, 10);
-					battleshipController.activeGame = response.urlsafe_key;
-					view.showPlaceShips(response);
+						gameKey, 10);
+					battleshipController.activeGame.key = gameKey;
+					view.showPlaceShips(gameKey);
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -171,6 +174,30 @@ var battleshipController = {
 		xhttp.send();
 	},
 
+	 checkShipPlacement: function(gameKey) {
+	 	var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == XMLHttpRequest.DONE) {
+				if (xhttp.status == 200) {
+					var shipPlacements = JSON.parse(
+						xhttp.responseText).condition.slice(5);
+					for (var i = 0; i < shipPlacements.length; i++) {
+						if (shipPlacements[i].indexOf('Not placed') > -1){
+							return false;
+						}
+					}
+					return true;
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		xhttp.open('GET', requestPath + 'game/' + gameKey +
+			'/fleet?fleet=user_fleet', false);
+		xhttp.send();
+	 },
+
 	getShipPlacementStatus: function(gameKey, fleet) {
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -187,7 +214,7 @@ var battleshipController = {
 		};
 		xhttp.open('GET', requestPath + 'game/' + gameKey +
 			'/fleet?fleet=' + fleet, true);
-		xhttp.send();;
+		xhttp.send();
 	},
 
 	placeShip: function() {
@@ -201,8 +228,16 @@ var battleshipController = {
 	playGame: function(gameKey) {
 		// first need to check state of game
 		// then must direct to proper display based on state
-		battleshipController.activeGame = gameKey;
+		battleshipController.activeGame.key = gameKey;
 		battleshipController.setCookie('activeGame', gameKey, 10);
+		if (battleshipController.checkShipPlacement) {
+			// play game
+		}
+		else {
+			view.showPlaceShips()
+		}
+
+
 
 		chart = null; // show_board_AJAX_call;
 		board = null; // show_board_AJAX_call;
