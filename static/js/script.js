@@ -91,7 +91,6 @@ var battleshipController = {
 	},
 
 	homeScreen: function() {
-		// with data from get_games_by_player, show the home screen
 		view.showHomeScreen();
 	},
 

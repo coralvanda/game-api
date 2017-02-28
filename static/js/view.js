@@ -12,7 +12,9 @@ var view = {
 
 	displayError: function(error) {
 		// Displays an alert window containing an error
-		alert(error);
+		if (error) {
+			alert(error);
+		}
 	},
 
 	refreshPage: function() {
@@ -119,6 +121,11 @@ var view = {
 
 	showHomeScreenGamesList: function(optionalText=false) {
 		// Builds and displays the list of actives games for the user
+		var gamesListTitle = document.createElement('H3');
+		var gamesListTitleText = document.createTextNode('Active Games');
+		gamesListTitle.appendChild(gamesListTitleText);
+		homescreenDiv.appendChild(gamesListTitle);
+
 		var openGamesList = document.createElement('OL');
 		if (optionalText) {
 			var noGameFoundItem = document.createElement('LI');
