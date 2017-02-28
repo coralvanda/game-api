@@ -7,10 +7,7 @@ var requestPath = '/_ah/api/battleship/v1/';
 var battleshipController = {
 
 	user: '',
-	activeGame: {
-		key: '',
-		allShipsPlaced: false
-	},
+	activeGame: '',
 	playerGamesList: [],
 
 	init: function() {
@@ -132,7 +129,7 @@ var battleshipController = {
 					var gameKey = JSON.parse(xhttp.responseText).urlsafe_key;
 					battleshipController.setCookie('activeGame',
 						gameKey, 10);
-					battleshipController.activeGame.key = gameKey;
+					battleshipController.activeGame = gameKey;
 					view.showPlaceShips(gameKey);
 				}
 				else {
@@ -238,7 +235,7 @@ var battleshipController = {
 
 	resumeGame: function(gameKey) {
 		// Checks the state of the game, and picks up where things left off
-		battleshipController.activeGame.key = gameKey;
+		battleshipController.activeGame = gameKey;
 		battleshipController.setCookie('activeGame', gameKey, 10);
 		battleshipController.checkShipPlacement(gameKey);
 	},

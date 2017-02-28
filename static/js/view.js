@@ -79,6 +79,7 @@ var view = {
 		homeBtn.className = 'button';
 		homeBtn.id = 'home-btn';
 		homeBtn.onclick = function() {
+			battleshipController.clearCookie('activeGame');
 			view.refreshPage();
 			battleshipController.homeScreen();
 		}
