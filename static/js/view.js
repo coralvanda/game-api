@@ -145,7 +145,7 @@ var view = {
 				var resumeGameBtnText = document.createTextNode('Resume');
 				resumeGameBtn.addEventListener('click', (function(keyCopy) {
 					return function() {
-						battleshipController.playGame(keyCopy);
+						battleshipController.resumeGame(keyCopy);
 					};
 				})(games[i].urlsafe_key));
 				resumeGameBtn.appendChild(resumeGameBtnText);
@@ -168,7 +168,6 @@ var view = {
 
 	showPlaceShips: function(gameKey) {
 		// Displays the user's board and available ships which must be placed
-		homescreenDiv.style.display = 'none';
 		placeShipsDiv = document.createElement('DIV');
 		placeShipsDiv.id = 'place-ships-div';
 		containerDiv.appendChild(placeShipsDiv);
