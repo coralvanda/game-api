@@ -122,8 +122,11 @@ var battleshipController = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
-					// set game cookie here
-					view.showPlaceShips(JSON.parse(xhttp.responseText));
+					var response = JSON.parse(xhttp.responseText);
+					battleshipController.setCookie('activeGame',
+						response.urlsafe_key, 10);
+					battleshipController.activeGame = response.urlsafe_key;
+					view.showPlaceShips();
 				}
 				else {
 					view.displayError(xhttp.responseText);
