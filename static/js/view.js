@@ -206,9 +206,14 @@ var view = {
 				return null;
 			}
 			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
-				Ctrl;
+				if (battleshipCtrl.shipStatuses[i].indexOf(selectedShip > -1)) {
+					if (battleshipCtrl.shipStatuses[i].indexOf('Not') === -1) {
+						// allow ship to be manipulated
+						// create visualization for ship placement on board
+						// break out of function
+					}
+				}
 			}
-			// create visualization for ship placement on board
 		};
 	},
 
