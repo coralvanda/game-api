@@ -86,13 +86,19 @@ h1, h3 {
 	flex-wrap: wrap;
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 350px) {
+	#container {
+		width: 300px;
+	}
+}
+
+@media only screen and (min-width: 351px) and (max-width: 400px) {
 	#container {
 		width: 350px;
 	}
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (min-width: 401px) and (max-width: 600px) {
 	#container {
 		width: 400px;
 		margin: auto;
