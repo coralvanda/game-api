@@ -50,6 +50,17 @@ h1, h3 {
 	background-color: red;
 }
 
+.ship {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.hull-section {
+	width: 20px;
+	height: 20px;
+	background-color: gray;
+}
+
 #container {
 	width: 800px;
 	margin: auto;

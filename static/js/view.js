@@ -183,31 +183,55 @@ var view = {
 		var shipList = ['Carrier', 'Battleship',
 			'Cruiser', 'Submarine', 'Destroyer'];
 		shipsDropdownDiv = document.createElement('DIV');
-		var shipsDrowndown = document.createElement('SELECT');
+		var shipsDropdown = document.createElement('SELECT');
+		shipsDropdownDiv.id = 'ship-dropdown';
 
 		var dropdownDefault = document.createElement('OPTION');
 		dropdownDefault.selected = 'selected';
 		dropdownDefault.innerHTML = 'Select a ship';
-		shipsDrowndown.appendChild(dropdownDefault);
+		shipsDropdown.appendChild(dropdownDefault);
 
 		for (var i = 0; i < shipList.length; i++) {
 			var option = document.createElement('OPTION');
 			option.value = shipList[i].toLowerCase();
 			option.innerHTML = shipList[i];
-			shipsDrowndown.appendChild(option);
+			shipsDropdown.appendChild(option);
 		}
-		shipsDropdownDiv.appendChild(shipsDrowndown);
+		shipsDropdownDiv.appendChild(shipsDropdown);
 		placeShipsDiv.appendChild(shipsDropdownDiv);
 
-		shipsDrowndown.onchange = function() {
-			var selectedShip = shipsDrowndown.options[
-				shipsDrowndown.selectedIndex].value;
+		shipsDropdown.onchange = function() {
+			var selectedShip = shipsDropdown.options[
+				shipsDropdown.selectedIndex].value;
 			if (selectedShip == 'Select a ship') {
 				return null;
 			}
 			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
 				if (battleshipCtrl.shipStatuses[i].indexOf(selectedShip > -1)) {
+					// this confirms that this is the right ship
 					if (battleshipCtrl.shipStatuses[i].indexOf('Not') === -1) {
+						// this confirms that the ship has not been placed
+						var ship = document.createElement('DIV');
+						ship.className = 'ship';
+						var shipLength;
+						if (selectedShip === 'Destroyer') {
+							shipLength = 2;
+						}
+						else if (selectedShip === 'Battleship') {
+							shipLength = 4;
+						}
+						else if (selectedShip === 'Carrier') {
+							shipLength = 5;
+						}
+						else {
+							shipLength = 3;
+						}
+						for (var s = 0; s < shipLength; s++) {
+							var hullSection = document.createElement('DIV');
+							hullSection.className = 'hull-section';
+							ship.appendChild(hullSection);
+						}
+						placeShipsDiv.appendChild(ship);
 						// allow ship to be manipulated
 						// create visualization for ship placement on board
 						// break out of function
@@ -225,6 +249,8 @@ var view = {
 
 		var boardDiv = document.createElement('DIV');
 		boardDiv.id = 'board-div';
+		var gameBoard = document.createElement('DIV');
+		gameBoard.className = 'board';
 		for (var row = 0; row < board.length; row++) {
 			var rowDiv = document.createElement('DIV');
 			rowDiv.className = 'row-div';
@@ -239,8 +265,9 @@ var view = {
 				}
 				rowDiv.appendChild(colDiv);
 			}
-			boardDiv.appendChild(rowDiv);
+			gameBoard.appendChild(rowDiv);
 		}
+		boardDiv.appendChild(gameBoard);
 		placeShipsDiv.insertBefore(boardDiv, shipPlacementsDiv);
 	},
 
