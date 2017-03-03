@@ -7,6 +7,7 @@ var homescreenDiv;
 var placeShipsDiv;
 var shipPlacementsDiv;
 var shipsDropdownDiv;
+var ship;
 
 
 var view = {
@@ -201,6 +202,10 @@ var view = {
 		placeShipsDiv.appendChild(shipsDropdownDiv);
 
 		shipsDropdown.addEventListener('change', function() {
+			if (ship) {
+				ship.parentElement.removeChild(ship);
+				ship = null;
+			}
 			var selectedShip = shipsDropdown.options[
 				shipsDropdown.selectedIndex].value;
 			if (selectedShip == 'Select a ship') {
@@ -211,22 +216,16 @@ var view = {
 					// this confirms that this is the right ship
 					if (battleshipCtrl.shipStatuses[i].indexOf('Not') > 0) {
 						// this confirms that the ship has not been placed
-						var ship = document.createElement('DIV');
+						ship = document.createElement('DIV');
 						ship.className = 'ship';
-						var shipLength;
-						if (selectedShip === 'destroyer') {
-							shipLength = 2;
-						}
-						else if (selectedShip === 'battleship') {
-							shipLength = 4;
-						}
-						else if (selectedShip === 'carrier') {
-							shipLength = 5;
-						}
-						else {
-							shipLength = 3;
-						}
-						for (var s = 0; s < shipLength; s++) {
+						var shipLength = {
+							'destroyer': 2,
+							'battleship': 4,
+							'carrier': 5,
+							'cruiser': 3,
+							'submarine': 3
+						};
+						for (var s = 0; s < shipLength[selectedShip]; s++) {
 							var hullSection = document.createElement('DIV');
 							hullSection.className = 'hull-section';
 							ship.appendChild(hullSection);
