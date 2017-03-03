@@ -214,7 +214,9 @@ var view = {
 
 		changeOrientationBtn.addEventListener('click', function() {
 			var orientation = battleshipCtrl.changeShipOrientation();
-			ship.style.flexDirection = orientation;
+			if (ship) {
+				ship.style.flexDirection = orientation;
+			}
 		});
 
 		shipsDropdown.addEventListener('change', function() {
