@@ -10,7 +10,7 @@ var battleshipCtrl = {
 	activeGame: '',
 	playerGamesList: [],
 	shipStatuses: [],
-	placeShipOrientation: 'vertical',
+	placeShipOrientation: 'horizontal',
 
 	init: function() {
 		// Determins initial UI state to display upon new page load

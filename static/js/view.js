@@ -200,7 +200,7 @@ var view = {
 		shipsDropdownDiv.appendChild(shipsDropdown);
 		placeShipsDiv.appendChild(shipsDropdownDiv);
 
-		shipsDropdown.onchange = function() {
+		shipsDropdown.addEventListener('change', function() {
 			var selectedShip = shipsDropdown.options[
 				shipsDropdown.selectedIndex].value;
 			if (selectedShip == 'Select a ship') {
@@ -209,18 +209,18 @@ var view = {
 			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
 				if (battleshipCtrl.shipStatuses[i].indexOf(selectedShip > -1)) {
 					// this confirms that this is the right ship
-					if (battleshipCtrl.shipStatuses[i].indexOf('Not') === -1) {
+					if (battleshipCtrl.shipStatuses[i].indexOf('Not') > 0) {
 						// this confirms that the ship has not been placed
 						var ship = document.createElement('DIV');
 						ship.className = 'ship';
 						var shipLength;
-						if (selectedShip === 'Destroyer') {
+						if (selectedShip === 'destroyer') {
 							shipLength = 2;
 						}
-						else if (selectedShip === 'Battleship') {
+						else if (selectedShip === 'battleship') {
 							shipLength = 4;
 						}
-						else if (selectedShip === 'Carrier') {
+						else if (selectedShip === 'carrier') {
 							shipLength = 5;
 						}
 						else {
@@ -235,10 +235,11 @@ var view = {
 						// allow ship to be manipulated
 						// create visualization for ship placement on board
 						// break out of function
+						return null;
 					}
 				}
 			}
-		};
+		});
 	},
 
 	showBoard: function(board) {
