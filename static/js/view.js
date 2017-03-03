@@ -201,6 +201,22 @@ var view = {
 		shipsDropdownDiv.appendChild(shipsDropdown);
 		placeShipsDiv.appendChild(shipsDropdownDiv);
 
+		var changeOrientationDiv = document.createElement('DIV');
+		changeOrientationDiv.id = 'orientation-div';
+		var changeorientationP = document.createElement('P');
+		changeorientationP.innerHTML = 'Change orientation';
+		var changeOrientationBtn = document.createElement('DIV');
+		changeOrientationBtn.innerHTML = '&#10150;'
+		changeOrientationBtn.id = 'orientation-btn';
+		changeOrientationDiv.appendChild(changeorientationP);
+		changeOrientationDiv.appendChild(changeOrientationBtn);
+		placeShipsDiv.appendChild(changeOrientationDiv);
+
+		changeOrientationBtn.addEventListener('click', function() {
+			var orientation = battleshipCtrl.changeShipOrientation();
+			ship.style.flexDirection = orientation;
+		});
+
 		shipsDropdown.addEventListener('change', function() {
 			if (ship) {
 				ship.parentElement.removeChild(ship);

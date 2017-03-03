@@ -201,6 +201,18 @@ var battleshipCtrl = {
 		xhttp.send();
 	},
 
+	changeShipOrientation: function() {
+		if (battleshipCtrl.placeShipOrientation === 'vertical') {
+			battleshipCtrl.placeShipOrientation = 'horizontal';
+			return 'row';
+		}
+		else {
+			battleshipCtrl.placeShipOrientation = 'vertical';
+			return 'column';
+		}
+
+	},
+
 	placeShip: function() {
 		gameKey = null // urlsafegamekey;
 		board = null // show_board_AJAX_call;

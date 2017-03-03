@@ -52,7 +52,7 @@ h1, h3 {
 
 .ship {
 	display: flex;
-	flex-wrap: wrap;
+	flex-direction: row;
 }
 
 .hull-section {
@@ -96,6 +96,19 @@ h1, h3 {
 #place-ships-div {
 	display: flex;
 	flex-wrap: wrap;
+}
+
+#orientation-div p {
+	margin: auto;
+}
+
+#orientation-btn {
+	font-size: 4em;
+	text-align: center;
+}
+
+#orientation-btn:hover {
+	cursor: pointer;
 }
 
 @media only screen and (max-width: 350px) {
