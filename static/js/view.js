@@ -1,13 +1,23 @@
 'use strict';
 
-var containerDiv = document.getElementById('container');
-var loginDiv;
-var usernameDiv;
-var homescreenDiv;
-var placeShipsDiv;
-var shipPlacementsDiv;
-var shipsDropdownDiv;
-var ship;
+var containerDiv 		= document.getElementById('container');
+var loginDiv 			= document.createElement('DIV');
+loginDiv.id 			= 'login-div';
+var usernameDiv 		= document.createElement('DIV');
+usernameDiv.id 			= 'username-div';
+var homescreenDiv 		= document.createElement('DIV');
+homescreenDiv.id 		= 'homescreen-div';
+var placeShipsDiv 		= document.createElement('DIV');
+placeShipsDiv.id 		= 'place-ships-div';
+var placeShipsUpper 	= document.createElement('DIV');
+placeShipsUpper.id 		= 'place-ships-upper';
+var placeShipsLower 	= document.createElement('DIV');
+placeShipsLower.id 		= 'place-ships-lower';
+var shipPlacementsDiv 	= document.createElement('DIV');
+shipPlacementsDiv.id 	= 'ship-placements-div';
+var shipsDropdownDiv 	= document.createElement('DIV');
+shipsDropdownDiv.id 	= 'ship-dropdown';
+var ship 				= null;
 
 
 var view = {
@@ -27,8 +37,6 @@ var view = {
 	showLogin: function() {
 		// Display a text input field and buttons to either log in
 		// or register a new user
-		loginDiv = document.createElement('DIV');
-		loginDiv.id = 'login-div';
 		containerDiv.appendChild(loginDiv);
 
 		var userNameInput = document.createElement('INPUT');
@@ -65,8 +73,6 @@ var view = {
 
 	showUserBanner: function() {
 		// Displays the active user at the top of the screen
-		usernameDiv = document.createElement('DIV');
-		usernameDiv.id = 'username-div';
 		containerDiv.appendChild(usernameDiv);
 
 		var usernameHeader = document.createElement('H3');
@@ -104,8 +110,6 @@ var view = {
 
 		// each open game listed should have a button to allow the user
 		// to cancel (delete) that game, with a confirmation alert
-		homescreenDiv = document.createElement('DIV');
-		homescreenDiv.id = 'homescreen-div';
 		containerDiv.appendChild(homescreenDiv);
 
 		var newGameBtn = document.createElement('DIV');
@@ -175,17 +179,15 @@ var view = {
 
 	showPlaceShips: function(gameKey) {
 		// Displays the user's board and available ships which must be placed
-		placeShipsDiv = document.createElement('DIV');
-		placeShipsDiv.id = 'place-ships-div';
 		containerDiv.appendChild(placeShipsDiv);
+		placeShipsDiv.appendChild(placeShipsUpper);
+		placeShipsDiv.appendChild(placeShipsLower);
 		battleshipCtrl.getBoard(gameKey, 'user_board');
 		battleshipCtrl.getShipPlacementStatus(gameKey, 'user_fleet');
 
 		var shipList = ['Carrier', 'Battleship',
 			'Cruiser', 'Submarine', 'Destroyer'];
-		shipsDropdownDiv = document.createElement('DIV');
 		var shipsDropdown = document.createElement('SELECT');
-		shipsDropdownDiv.id = 'ship-dropdown';
 
 		var dropdownDefault = document.createElement('OPTION');
 		dropdownDefault.selected = 'selected';
@@ -199,7 +201,7 @@ var view = {
 			shipsDropdown.appendChild(option);
 		}
 		shipsDropdownDiv.appendChild(shipsDropdown);
-		placeShipsDiv.appendChild(shipsDropdownDiv);
+		placeShipsLower.appendChild(shipsDropdownDiv);
 
 		var changeOrientationDiv = document.createElement('DIV');
 		changeOrientationDiv.id = 'orientation-div';
@@ -210,7 +212,7 @@ var view = {
 		changeOrientationBtn.id = 'orientation-btn';
 		changeOrientationDiv.appendChild(changeorientationP);
 		changeOrientationDiv.appendChild(changeOrientationBtn);
-		placeShipsDiv.appendChild(changeOrientationDiv);
+		placeShipsLower.appendChild(changeOrientationDiv);
 
 		changeOrientationBtn.addEventListener('click', function() {
 			var orientation = battleshipCtrl.changeShipOrientation();
@@ -229,13 +231,13 @@ var view = {
 			if (selectedShip == 'Select a ship') {
 				return null;
 			}
+			ship = document.createElement('DIV');
+			ship.className = 'ship';
 			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
 				if (battleshipCtrl.shipStatuses[i].indexOf(selectedShip > -1)) {
 					// this confirms that this is the right ship
 					if (battleshipCtrl.shipStatuses[i].indexOf('Not') > 0) {
 						// this confirms that the ship has not been placed
-						ship = document.createElement('DIV');
-						ship.className = 'ship';
 						var shipLength = {
 							'destroyer': 2,
 							'battleship': 4,
@@ -248,7 +250,7 @@ var view = {
 							hullSection.className = 'hull-section';
 							ship.appendChild(hullSection);
 						}
-						placeShipsDiv.appendChild(ship);
+						placeShipsLower.appendChild(ship);
 						// allow ship to be manipulated
 						// create visualization for ship placement on board
 						// break out of function
@@ -286,19 +288,17 @@ var view = {
 			gameBoard.appendChild(rowDiv);
 		}
 		boardDiv.appendChild(gameBoard);
-		placeShipsDiv.insertBefore(boardDiv, shipPlacementsDiv);
+		placeShipsUpper.insertBefore(boardDiv, shipPlacementsDiv);
 	},
 
 	showShipPlacementStatus: function(ships) {
 		// Displays current placement status for all user ships
-		shipPlacementsDiv = document.createElement('DIV');
-		shipPlacementsDiv.id = 'ship-placements-div';
 		for (var i = 0; i < ships.length; i++) {
 			var placementsDiv = document.createElement('DIV');
 			var placementText = document.createTextNode(ships[i]);
 			placementsDiv.append(placementText);
 			shipPlacementsDiv.appendChild(placementsDiv);
 		}
-		placeShipsDiv.append(shipPlacementsDiv);
+		placeShipsUpper.append(shipPlacementsDiv);
 	},
 };
