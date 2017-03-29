@@ -19,6 +19,13 @@ var shipsDropdownDiv 	= document.createElement('DIV');
 shipsDropdownDiv.id 	= 'ship-dropdown';
 var ship 				= null;
 
+var startX = 0;
+var starty = 0;
+var offsetX = 0;
+var offsetY = 0;
+var dragElement;
+var oldZIndex = 0;
+
 
 var view = {
 
@@ -45,6 +52,7 @@ var view = {
 		userNameInput.placeholder = 'Enter user name';
 		loginDiv.appendChild(userNameInput);
 
+		// Login
 		var loginSubmitBtn = document.createElement('DIV');
 		loginSubmitBtn.className = 'button';
 		loginSubmitBtn.onclick = function() {
@@ -52,7 +60,11 @@ var view = {
 			battleshipCtrl.loginUser();
 			loginDiv.parentElement.removeChild(loginDiv);
 		};
+		var loginSubmitBtnText = document.createTextNode('Login');
+		loginSubmitBtn.appendChild(loginSubmitBtnText);
+		loginDiv.appendChild(loginSubmitBtn);
 
+		// Register
 		var registerSubmitBtn = document.createElement('DIV');
 		registerSubmitBtn.className = 'button';
 		registerSubmitBtn.onclick = function() {
@@ -60,14 +72,8 @@ var view = {
 			battleshipCtrl.registerUser();
 			loginDiv.parentElement.removeChild(loginDiv);
 		}
-
-		var loginSubmitBtnText = document.createTextNode('Login');
 		var registerSubmitBtnText = document.createTextNode('Register');
-
-		loginSubmitBtn.appendChild(loginSubmitBtnText);
 		registerSubmitBtn.appendChild(registerSubmitBtnText);
-
-		loginDiv.appendChild(loginSubmitBtn);
 		loginDiv.appendChild(registerSubmitBtn);
 	},
 

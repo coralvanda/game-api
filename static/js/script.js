@@ -94,6 +94,59 @@ var battleshipCtrl = {
 		view.refreshPage();
 	},
 
+	/*
+	validUsername: function(username) {
+		// Confirms that a given username conforms to my requirements
+		var userRegex = /[a-zA-Z0-9_-]{3,20}$/;
+		return userRegex.test(username);
+	},
+
+	validPassword: function(password) {
+		// Confirms that a given password conforms to my requirements
+		var pwRegex = /^.{3,20}$/;
+		return pwRegex.test(password);
+	},
+
+	validEmail: function(email) {
+		// Confirms that a given email is probably valid
+		var emailRegex = /^[\S]+@[\S]+.[\S]+$/;
+		return emailRegex.test(email);
+	},
+
+	hashStr: function(s) {  HOW TO CONVERT HMAC AND HEXDIGEST???
+		// Returns an hmac-hashed version of the input string
+		return hmac.new(SECRET, s).hexdigest()
+	},
+
+	makeSecureVal: function(s) {
+		// Returns the given string and its hashed version as a single string
+		return "%1|%2".replace('%1, s).replace('%2, hash_str(s));
+	},
+
+	checkSecureVal: function(h) {
+		// Confirms that a given string/hash pair is valid
+		var val = h.split("|")[0];
+		if (h === battleshipCtrl.makeSecureVal(val)) {
+			return val;
+		}
+	},
+
+	checkLogin: function(cookie) {
+		// Checks for a logged-in user based on the stored cookie,
+		// and returns the username if logged in
+		if (cookie) {
+			return battleshipCtrl.checkSecureVal(cookie);
+		}
+		else {
+			return false;
+		}
+	},
+
+
+	*/
+
+
+
 	homeScreen: function() {
 		// Tells view to show the home screen
 		view.showHomeScreen();
