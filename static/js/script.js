@@ -27,7 +27,7 @@ var battleshipCtrl = {
 			battleshipCtrl.homeScreen();
 		}
 		else {
-			view.showLogin();
+			view.showWelcome();
 		}
 	},
 

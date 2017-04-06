@@ -1,6 +1,8 @@
 'use strict';
 
 var containerDiv 		= document.getElementById('container');
+var welcomeDiv 			= document.createElement('DIV');
+welcomeDiv.id 			= 'welcome-div';
 var loginDiv 			= document.createElement('DIV');
 loginDiv.id 			= 'login-div';
 var usernameDiv 		= document.createElement('DIV');
@@ -41,7 +43,35 @@ var view = {
 		location.reload();
 	},
 
-	showLogin: function() {
+	showWelcome: function() {
+		containerDiv.appendChild(welcomeDiv);
+		var welcomeText = document.createTextNode('Welcome to Battleship! ');
+		welcomeDiv.appendChild(welcomeText);
+		var loginOrRegisterText = document.createTextNode('Login or register.');
+		welcomeDiv.appendChild(loginOrRegisterText);
+
+		var showLoginBtn = document.createElement('DIV');
+		showLoginBtn.className = 'button';
+		showLoginBtn.onclick = function() {
+			welcomeDiv.parentElement.removeChild(welcomeDiv);
+			view.showLogin();
+		};
+		var showLoginBtnText = document.createTextNode('Login');
+		showLoginBtn.appendChild(showLoginBtnText);
+		welcomeDiv.appendChild(showLoginBtn);
+
+		var showRegisterBtn = document.createElement('DIV');
+		showRegisterBtn.className = 'button';
+		showRegisterBtn.onclick = function() {
+			welcomeDiv.parentElement.removeChild(welcomeDiv);
+			view.showRegister();
+		}
+		var showRegisterBtnText = document.createTextNode('Register');
+		showRegisterBtn.appendChild(showRegisterBtnText);
+		welcomeDiv.appendChild(showRegisterBtn);
+	},
+
+	showRegister: function() {
 		// Display a text input field and buttons to either log in
 		// or register a new user
 		containerDiv.appendChild(loginDiv);
@@ -71,18 +101,6 @@ var view = {
 		emailInput.placeholder = 'Enter your email (optional)';
 		loginDiv.appendChild(emailInput);
 
-		// Login
-		var loginSubmitBtn = document.createElement('DIV');
-		loginSubmitBtn.className = 'button';
-		loginSubmitBtn.onclick = function() {
-			battleshipCtrl.user = userNameInput.value;
-			battleshipCtrl.loginUser();
-			loginDiv.parentElement.removeChild(loginDiv);
-		};
-		var loginSubmitBtnText = document.createTextNode('Login');
-		loginSubmitBtn.appendChild(loginSubmitBtnText);
-		loginDiv.appendChild(loginSubmitBtn);
-
 		// Register
 		var registerSubmitBtn = document.createElement('DIV');
 		registerSubmitBtn.className = 'button';
@@ -94,6 +112,37 @@ var view = {
 		var registerSubmitBtnText = document.createTextNode('Register');
 		registerSubmitBtn.appendChild(registerSubmitBtnText);
 		loginDiv.appendChild(registerSubmitBtn);
+	},
+
+	showLogin: function() {
+		// Display a text input field and buttons to either log in
+		// or register a new user
+		containerDiv.appendChild(loginDiv);
+
+		// Text fields
+		var userNameInput = document.createElement('INPUT');
+		userNameInput.type = 'text';
+		userNameInput.id = 'username-input';
+		userNameInput.placeholder = 'Enter user name';
+		loginDiv.appendChild(userNameInput);
+
+		var passwordInput = document.createElement('INPUT');
+		passwordInput.type = 'password';
+		passwordInput.id = 'password-input';
+		passwordInput.placeholder = 'Enter your password';
+		loginDiv.appendChild(passwordInput);
+
+		// Login
+		var loginSubmitBtn = document.createElement('DIV');
+		loginSubmitBtn.className = 'button';
+		loginSubmitBtn.onclick = function() {
+			battleshipCtrl.user = userNameInput.value;
+			battleshipCtrl.loginUser();
+			loginDiv.parentElement.removeChild(loginDiv);
+		};
+		var loginSubmitBtnText = document.createTextNode('Login');
+		loginSubmitBtn.appendChild(loginSubmitBtnText);
+		loginDiv.appendChild(loginSubmitBtn);
 	},
 
 	showUserBanner: function() {
