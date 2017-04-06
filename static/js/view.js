@@ -108,22 +108,39 @@ var view = {
 		passwordInput.addEventListener('keydown', function() {
 			if (battleshipCtrl.validUsername(passwordInput.value)) {
 				validPW = true;
-				// set indicator to green
+				passwordLight.className = 'green-light';
+			}
+			else {
+				validPW = false;
+				passwordLight.className = 'red-light';
 			}
 		});
 		loginDiv.appendChild(passwordInput);
+
+		var passwordLight = document.createElement('DIV');
+		passwordLight.className = 'red-light';
+		loginDiv.appendChild(passwordLight);
 
 		var confirmPassword = document.createElement('INPUT');
 		confirmPassword.type = 'password';
 		confirmPassword.id = 'confirm-password';
 		confirmPassword.placeholder = 'Confirm your password';
 		confirmPassword.addEventListener('keydown', function() {
-			if (battleshipCtrl.validUsername(confirmPassword.value)) {
+			if (battleshipCtrl.validUsername(confirmPassword.value) &&
+				confirmPassword.value === passwordInput.value) {
 				validPWConfirm = true;
-				// set indicator to green
+				confirmPWLight.className = 'green-light';
+			}
+			else {
+				validPW = false;
+				confirmPWLight.className = 'red-light';
 			}
 		});
 		loginDiv.appendChild(confirmPassword);
+
+		var confirmPWLight = document.createElement('DIV');
+		confirmPWLight.className = 'red-light';
+		loginDiv.appendChild(confirmPWLight);
 
 		var emailInput = document.createElement('INPUT');
 		emailInput.type = 'text';
@@ -132,18 +149,31 @@ var view = {
 		emailInput.addEventListener('keydown', function() {
 			if (battleshipCtrl.validUsername(emailInput.value)) {
 				validEmail = true;
-				// set indicator to green
+				emailLight.className = 'green-light';
+			}
+			else {
+				validPW = false;
+				emailLight.className = 'red-light';
 			}
 		});
 		loginDiv.appendChild(emailInput);
 
-		// Register
+		var emailLight = document.createElement('DIV');
+		emailLight.className = 'red-light';
+		loginDiv.appendChild(emailLight);
+
+		// Register button
 		var registerSubmitBtn = document.createElement('DIV');
 		registerSubmitBtn.className = 'button';
 		registerSubmitBtn.onclick = function() {
-			battleshipCtrl.user = userNameInput.value;
-			battleshipCtrl.registerUser();
-			loginDiv.parentElement.removeChild(loginDiv);
+			if (validName && validPW && validPWConfirm && validEmail) {
+				battleshipCtrl.user = userNameInput.value;
+				battleshipCtrl.registerUser();
+				loginDiv.parentElement.removeChild(loginDiv);
+			}
+			else {
+				alert('Please ensure that all fields are marked green');
+			}
 		}
 		var registerSubmitBtnText = document.createTextNode('Register');
 		registerSubmitBtn.appendChild(registerSubmitBtnText);
