@@ -75,30 +75,66 @@ var view = {
 		// Display a text input field and buttons to either log in
 		// or register a new user
 		containerDiv.appendChild(loginDiv);
+		var validName 		= false;
+		var validPW 		= false;
+		var validPWConfirm 	= false;
+		var validEmail 		= false;
 
 		// Text fields
 		var userNameInput = document.createElement('INPUT');
 		userNameInput.type = 'text';
 		userNameInput.id = 'username-input';
 		userNameInput.placeholder = 'Enter user name';
+		userNameInput.addEventListener('keyup', function() {
+			if (battleshipCtrl.validUsername(userNameInput.value)) {
+				validName = true;
+				usernameLight.className = 'green-light';
+			}
+			else {
+				validName = false;
+				usernameLight.className = 'red-light';
+			}
+		});
 		loginDiv.appendChild(userNameInput);
+
+		var usernameLight = document.createElement('DIV');
+		usernameLight.className = 'red-light';
+		loginDiv.appendChild(usernameLight);
 
 		var passwordInput = document.createElement('INPUT');
 		passwordInput.type = 'password';
 		passwordInput.id = 'password-input';
 		passwordInput.placeholder = 'Enter your password';
+		passwordInput.addEventListener('keydown', function() {
+			if (battleshipCtrl.validUsername(passwordInput.value)) {
+				validPW = true;
+				// set indicator to green
+			}
+		});
 		loginDiv.appendChild(passwordInput);
 
 		var confirmPassword = document.createElement('INPUT');
 		confirmPassword.type = 'password';
 		confirmPassword.id = 'confirm-password';
 		confirmPassword.placeholder = 'Confirm your password';
+		confirmPassword.addEventListener('keydown', function() {
+			if (battleshipCtrl.validUsername(confirmPassword.value)) {
+				validPWConfirm = true;
+				// set indicator to green
+			}
+		});
 		loginDiv.appendChild(confirmPassword);
 
 		var emailInput = document.createElement('INPUT');
 		emailInput.type = 'text';
 		emailInput.id = 'email-input';
 		emailInput.placeholder = 'Enter your email (optional)';
+		emailInput.addEventListener('keydown', function() {
+			if (battleshipCtrl.validUsername(emailInput.value)) {
+				validEmail = true;
+				// set indicator to green
+			}
+		});
 		loginDiv.appendChild(emailInput);
 
 		// Register

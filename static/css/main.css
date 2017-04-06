@@ -50,6 +50,24 @@ h1, h3 {
 	background-color: red;
 }
 
+.red-light {
+	background-color: red;
+	width: 10px;
+	height: 10px;
+	margin: 2px 2px 2px 2px;
+	align-self: center;
+	border-radius: 20px;
+}
+
+.green-light {
+	background-color: green;
+	width: 10px;
+	height: 10px;
+	margin: 2px 2px 2px 2px;
+	align-self: center;
+	border-radius: 20px;
+}
+
 .ship {
 	display: flex;
 	flex-direction: row;
@@ -85,10 +103,8 @@ h1, h3 {
 }
 
 #login-div {
-	/*
 	display: flex;
 	flex-wrap: wrap;
-	*/
 	width: 200px;
 }
 
