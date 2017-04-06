@@ -52,7 +52,7 @@ var battleshipCtrl = {
 	hashStr: function(s) {
 		// Returns a hashed version of the input string
 		var hash = CryptoJS.SHA256(s);
-		return hash
+		return hash.toString(CryptoJS.enc.Hex);
 	},
 
 	makeSecureVal: function(s) {
