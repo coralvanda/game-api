@@ -67,6 +67,8 @@ var battleshipCtrl = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
+					cookie_val = make_secure_val(battleshipCtrl.user)
+        			battleshipCtrl.setCookie('name', cookie_val, 10)
 					battleshipCtrl.loginUser();
 				}
 				else {

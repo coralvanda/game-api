@@ -70,7 +70,6 @@ class BattleshipAPI(remote.Service):
                     'A User with that name already exists!')
         u = User._register(request.user_name, request.password, request.email)
         u.put()
-
         return StringMessage(message='User {} created!'.format(
                 request.user_name))
 
