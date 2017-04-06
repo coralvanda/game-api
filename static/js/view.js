@@ -46,11 +46,30 @@ var view = {
 		// or register a new user
 		containerDiv.appendChild(loginDiv);
 
+		// Text fields
 		var userNameInput = document.createElement('INPUT');
 		userNameInput.type = 'text';
 		userNameInput.id = 'username-input';
 		userNameInput.placeholder = 'Enter user name';
 		loginDiv.appendChild(userNameInput);
+
+		var passwordInput = document.createElement('INPUT');
+		passwordInput.type = 'password';
+		passwordInput.id = 'password-input';
+		passwordInput.placeholder = 'Enter your password';
+		loginDiv.appendChild(passwordInput);
+
+		var confirmPassword = document.createElement('INPUT');
+		confirmPassword.type = 'password';
+		confirmPassword.id = 'confirm-password';
+		confirmPassword.placeholder = 'Confirm your password';
+		loginDiv.appendChild(confirmPassword);
+
+		var emailInput = document.createElement('INPUT');
+		emailInput.type = 'text';
+		emailInput.id = 'email-input';
+		emailInput.placeholder = 'Enter your email (optional)';
+		loginDiv.appendChild(emailInput);
 
 		// Login
 		var loginSubmitBtn = document.createElement('DIV');
