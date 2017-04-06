@@ -85,8 +85,11 @@ h1, h3 {
 }
 
 #login-div {
+	/*
 	display: flex;
 	flex-wrap: wrap;
+	*/
+	width: 200px;
 }
 
 #homescreen-div {
