@@ -68,8 +68,9 @@ class BattleshipAPI(remote.Service):
         if User.query(User.name == request.user_name).get():
             raise endpoints.ConflictException(
                     'A User with that name already exists!')
-        user = User(name=request.user_name, email=request.email)
-        user.put()
+        u = User._register(request.user_name, request.password, request.email)
+        u.put()
+
         return StringMessage(message='User {} created!'.format(
                 request.user_name))
 

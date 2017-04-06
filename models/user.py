@@ -60,14 +60,3 @@ class User(ndb.Model):
 		u = cls._by_name(name)
 		if u and valid_pw(name, pw, u.pw_hash):
 			return u
-
-'''
-
-u = User._register(user_name, password, email)
-u.put()
-cookie_val = make_secure_val(user_name)
-self.response.set_cookie('name', cookie_val)
-self.redirect('/welcome')
-
-
-'''
