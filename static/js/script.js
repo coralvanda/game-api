@@ -45,7 +45,7 @@ var battleshipCtrl = {
 
 	validEmail: function(email) {
 		// Confirms that a given email is probably valid
-		var emailRegex = /^[\S]+@[\S]+.[\S]+$/;
+		var emailRegex = /^[\S]+@[\S]+\.[\S]+$/;
 		return emailRegex.test(email);
 	},
 
