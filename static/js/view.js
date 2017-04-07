@@ -132,7 +132,7 @@ var view = {
 				confirmPWLight.className = 'green-light';
 			}
 			else {
-				validPW = false;
+				validPWConfirm = false;
 				confirmPWLight.className = 'red-light';
 			}
 		});
@@ -152,7 +152,7 @@ var view = {
 				emailLight.className = 'green-light';
 			}
 			else {
-				validPW = false;
+				validEmail = false;
 				emailLight.className = 'red-light';
 			}
 		});
