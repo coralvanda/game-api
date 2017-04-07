@@ -57,7 +57,7 @@ var battleshipCtrl = {
 
 	makeSecureVal: function(s) {
 		// Returns the given string and its hashed version as a single string
-		return "%1|%2".replace('%1', s).replace('%2', hash_str(s));
+		return "%1|%2".replace('%1', s).replace('%2', battleshipCtrl.hashStr(s));
 	},
 
 	checkSecureVal: function(h) {
@@ -116,8 +116,8 @@ var battleshipCtrl = {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
 					battleshipCtrl.user = name
-					cookie_val = makeSecureVal(name)
-        			battleshipCtrl.setCookie('name', cookie_val, 10)
+					var cookieVal = battleshipCtrl.makeSecureVal(name)
+        			battleshipCtrl.setCookie('name', cookieVal, 10)
 					battleshipCtrl.loginUser();
 				}
 				else {
