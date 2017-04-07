@@ -33,9 +33,9 @@ class User(ndb.Model):
     email   = ndb.StringProperty()
 
     @classmethod
-	def _by_id(cls, uid):
-		"""Takes in a user ID, returns that user if present"""
-		return User.get_by_id(uid, parent = user_key())
+    def _by_id(cls, uid):
+    	"""Takes in a user ID, returns that user if present"""
+    	return User.get_by_id(uid, parent = user_key())
 
 	@classmethod
 	def _by_name(cls, name):
