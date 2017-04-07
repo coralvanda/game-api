@@ -108,9 +108,14 @@ class BattleshipAPI(remote.Service):
         """Logs in a user provided the name and password are correct"""
         user = User.query(User.name == request.user_name).get():
         if user:
-            # proceed with login, check PW
+            if valid_pw(request.user_name, request.user_pw, user.pw_hash):
+                return StringMessage(message='User {} logged in'.format(
+                    request.user_name))
+            else:
+                raise endpoints.BadRequestException('Incorrect login info')
         else:
-            # user not found
+            raise endpoints.NotFoundException(
+                'A user with that name does not exist!')
 
     @endpoints.method(request_message=NEW_GAME_REQUEST,
                       response_message=GameForm,
