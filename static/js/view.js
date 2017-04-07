@@ -186,17 +186,45 @@ var view = {
 		containerDiv.appendChild(loginDiv);
 
 		// Text fields
-		var userNameInput = document.createElement('INPUT');
-		userNameInput.type = 'text';
-		userNameInput.id = 'username-input';
-		userNameInput.placeholder = 'Enter user name';
-		loginDiv.appendChild(userNameInput);
+		var loginUserNameInput = document.createElement('INPUT');
+		loginUserNameInput.type = 'text';
+		loginUserNameInput.id = 'login-username-input';
+		loginUserNameInput.placeholder = 'Enter user name';
+		loginUserNameInput.addEventListener('keyup', function() {
+			if (battleshipCtrl.validUsername(loginUserNameInput.value)) {
+				validName = true;
+				usernameLight.className = 'green-light';
+			}
+			else {
+				validName = false;
+				usernameLight.className = 'red-light';
+			}
+		});
+		loginDiv.appendChild(loginUserNameInput);
 
-		var passwordInput = document.createElement('INPUT');
-		passwordInput.type = 'password';
-		passwordInput.id = 'password-input';
-		passwordInput.placeholder = 'Enter your password';
-		loginDiv.appendChild(passwordInput);
+		var loginUsernameLight = document.createElement('DIV');
+		loginUsernameLight.className = 'red-light';
+		loginDiv.appendChild(loginUsernameLight);
+
+		var loginPasswordInput = document.createElement('INPUT');
+		loginPasswordInput.type = 'password';
+		loginPasswordInput.id = 'login-password-input';
+		loginPasswordInput.placeholder = 'Enter your password';
+		loginPasswordInput.addEventListener('keyup', function() {
+			if (battleshipCtrl.validUsername(loginPasswordInput.value)) {
+				validPW = true;
+				passwordLight.className = 'green-light';
+			}
+			else {
+				validPW = false;
+				passwordLight.className = 'red-light';
+			}
+		});
+		loginDiv.appendChild(loginPasswordInput);
+
+		var loginPasswordLight = document.createElement('DIV');
+		loginPasswordLight.className = 'red-light';
+		loginDiv.appendChild(loginPasswordLight);
 
 		// Login
 		var loginSubmitBtn = document.createElement('DIV');
