@@ -183,6 +183,8 @@ var view = {
 	showLogin: function() {
 		// Display a text input field and buttons to either log in
 		// or register a new user
+		var validLoginName 		= false;
+		var validLoginPW 		= false;
 		containerDiv.appendChild(loginDiv);
 
 		// Text fields
@@ -192,12 +194,12 @@ var view = {
 		loginUserNameInput.placeholder = 'Enter user name';
 		loginUserNameInput.addEventListener('keyup', function() {
 			if (battleshipCtrl.validUsername(loginUserNameInput.value)) {
-				validName = true;
-				usernameLight.className = 'green-light';
+				validLoginName = true;
+				loginUsernameLight.className = 'green-light';
 			}
 			else {
-				validName = false;
-				usernameLight.className = 'red-light';
+				validLoginName = false;
+				loginUsernameLight.className = 'red-light';
 			}
 		});
 		loginDiv.appendChild(loginUserNameInput);
@@ -212,12 +214,12 @@ var view = {
 		loginPasswordInput.placeholder = 'Enter your password';
 		loginPasswordInput.addEventListener('keyup', function() {
 			if (battleshipCtrl.validUsername(loginPasswordInput.value)) {
-				validPW = true;
-				passwordLight.className = 'green-light';
+				validLoginPW = true;
+				loginPasswordLight.className = 'green-light';
 			}
 			else {
-				validPW = false;
-				passwordLight.className = 'red-light';
+				validLoginPW = false;
+				loginPasswordLight.className = 'red-light';
 			}
 		});
 		loginDiv.appendChild(loginPasswordInput);
@@ -230,7 +232,7 @@ var view = {
 		var loginSubmitBtn = document.createElement('DIV');
 		loginSubmitBtn.className = 'button';
 		loginSubmitBtn.onclick = function() {
-			battleshipCtrl.user = userNameInput.value;
+			battleshipCtrl.user = loginUserNameInput.value;
 			battleshipCtrl.loginUser();
 			loginDiv.parentElement.removeChild(loginDiv);
 		};
