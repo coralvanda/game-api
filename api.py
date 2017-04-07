@@ -106,7 +106,7 @@ class BattleshipAPI(remote.Service):
                     http_method='POST')
     def login_user(self, request):
         """Logs in a user provided the name and password are correct"""
-        user = User.query(User.name == request.user_name).get():
+        user = User.query(User.name == request.user_name).get()
         if user:
             if valid_pw(request.user_name, request.user_pw, user.pw_hash):
                 return StringMessage(message='User {} logged in'.format(
