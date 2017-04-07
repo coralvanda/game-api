@@ -147,7 +147,8 @@ var battleshipCtrl = {
 				}
 			}
 		};
-		xhttp.open()
+		xhttp.open('POST', requestPath + 'login?user_name' + name +
+			'&user_pw=' + pw, true);
 		xhttp.send();
 	},
 
