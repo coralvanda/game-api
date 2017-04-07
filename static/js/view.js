@@ -167,8 +167,8 @@ var view = {
 		registerSubmitBtn.className = 'button';
 		registerSubmitBtn.onclick = function() {
 			if (validName && validPW && validPWConfirm && validEmail) {
-				battleshipCtrl.user = userNameInput.value;
-				battleshipCtrl.registerUser();
+				battleshipCtrl.registerUser(userNameInput.value,
+					passwordInput.value);
 				loginDiv.parentElement.removeChild(loginDiv);
 			}
 			else {

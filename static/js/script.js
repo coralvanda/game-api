@@ -109,13 +109,14 @@ var battleshipCtrl = {
 		battleshipCtrl.setCookie(name, '', -1);
 	},
 
-	registerUser: function() {
+	registerUser: function(name, pw) {
 		// Calls API to register a new user in the database
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == XMLHttpRequest.DONE) {
 				if (xhttp.status == 200) {
-					cookie_val = makeSecureVal(battleshipCtrl.user)
+					battleshipCtrl.user = name
+					cookie_val = makeSecureVal(name)
         			battleshipCtrl.setCookie('name', cookie_val, 10)
 					battleshipCtrl.loginUser();
 				}
@@ -124,8 +125,8 @@ var battleshipCtrl = {
 				}
 			}
 		};
-		xhttp.open('POST', requestPath + 'user?user_name=' +
-			battleshipCtrl.user, true);
+		xhttp.open('POST', requestPath + 'user?user_name=' + name +
+			'&user_pw=' + pw, true);
 		xhttp.send();
 	},
 
