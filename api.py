@@ -53,9 +53,13 @@ FLEET_REQUEST = endpoints.ResourceContainer(
 MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
     MakeMoveForm,
     urlsafe_game_key=messages.StringField(1),)
-USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
-                                        user_pw=messages.StringField(2),
-                                        email=messages.StringField(3))
+USER_REQUEST = endpoints.ResourceContainer(
+    user_name=messages.StringField(1),
+    user_pw=messages.StringField(2),
+    email=messages.StringField(3))
+LOGIN_REQUEST = endpoints.ResourceContainer(
+    user_name=messages.StringField(1),
+    user_pw=messages.StringField(2))
 
 def make_salt(length=5):
     """Creates/returns a string of random letters, 5 by default"""
@@ -94,6 +98,19 @@ class BattleshipAPI(remote.Service):
         user.put()
         return StringMessage(message='User {} created!'.format(
                 request.user_name))
+
+    @endpoints.method(request_message=LOGIN_REQUEST,
+                    response_message=StringMessage,
+                    path='login',
+                    name='login_user',
+                    http_method='POST')
+    def login_user(self, request):
+        """Logs in a user provided the name and password are correct"""
+        user = User.query(User.name == request.user_name).get():
+        if user:
+            # proceed with login, check PW
+        else:
+            # user not found
 
     @endpoints.method(request_message=NEW_GAME_REQUEST,
                       response_message=GameForm,
