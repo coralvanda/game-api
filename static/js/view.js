@@ -166,13 +166,13 @@ var view = {
 		var registerSubmitBtn = document.createElement('DIV');
 		registerSubmitBtn.className = 'button';
 		registerSubmitBtn.onclick = function() {
-			if (validName && validPW && validPWConfirm && validEmail) {
+			if (validName && validPW && validPWConfirm) {
 				battleshipCtrl.registerUser(userNameInput.value,
 					passwordInput.value);
 				loginDiv.parentElement.removeChild(loginDiv);
 			}
 			else {
-				alert('Please ensure that all fields are marked green');
+				alert('Please ensure that name and password fields are green');
 			}
 		}
 		var registerSubmitBtnText = document.createTextNode('Register');
