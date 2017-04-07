@@ -14,7 +14,7 @@ var battleshipCtrl = {
 
 	init: function() {
 		// Determins initial UI state to display upon new page load
-		var userCookie = battleshipCtrl.getCookie('activeUser');
+		var userCookie = battleshipCtrl.getCookie('name');
 		var gameCookie = battleshipCtrl.getCookie('activeGame');
 		if (gameCookie && userCookie) {
 			battleshipCtrl.user = userCookie;
@@ -147,14 +147,14 @@ var battleshipCtrl = {
 				}
 			}
 		};
-		xhttp.open('POST', requestPath + 'login?user_name' + name +
+		xhttp.open('POST', requestPath + 'login?user_name=' + name +
 			'&user_pw=' + pw, true);
 		xhttp.send();
 	},
 
 	logoutUser: function() {
 		// Clears the active user
-		battleshipCtrl.clearCookie('activeUser');
+		battleshipCtrl.clearCookie('name');
 		battleshipCtrl.user = '';
 		view.refreshPage();
 	},

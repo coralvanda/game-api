@@ -106,7 +106,7 @@ var view = {
 		passwordInput.id = 'password-input';
 		passwordInput.placeholder = 'Enter your password';
 		passwordInput.addEventListener('keyup', function() {
-			if (battleshipCtrl.validUsername(passwordInput.value)) {
+			if (battleshipCtrl.validPassword(passwordInput.value)) {
 				validPW = true;
 				passwordLight.className = 'green-light';
 			}
@@ -126,7 +126,7 @@ var view = {
 		confirmPassword.id = 'confirm-password';
 		confirmPassword.placeholder = 'Confirm your password';
 		confirmPassword.addEventListener('keyup', function() {
-			if (battleshipCtrl.validUsername(confirmPassword.value) &&
+			if (battleshipCtrl.validPassword(confirmPassword.value) &&
 				(confirmPassword.value === passwordInput.value)) {
 				validPWConfirm = true;
 				confirmPWLight.className = 'green-light';
@@ -213,7 +213,7 @@ var view = {
 		loginPasswordInput.id = 'login-password-input';
 		loginPasswordInput.placeholder = 'Enter your password';
 		loginPasswordInput.addEventListener('keyup', function() {
-			if (battleshipCtrl.validUsername(loginPasswordInput.value)) {
+			if (battleshipCtrl.validPassword(loginPasswordInput.value)) {
 				validLoginPW = true;
 				loginPasswordLight.className = 'green-light';
 			}
