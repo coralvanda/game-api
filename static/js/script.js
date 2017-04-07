@@ -24,7 +24,7 @@ var battleshipCtrl = {
 		else if (userCookie) {
 			battleshipCtrl.user = userCookie;
 			view.showUserBanner();
-			battleshipCtrl.homeScreen();
+			view.showHomeScreen();
 		}
 		else {
 			view.showWelcome();
@@ -96,10 +96,10 @@ var battleshipCtrl = {
 		var attributes = document.cookie.split(';');
 		for (var i = 0; i < attributes.length; i++) {
 			var crumb = attributes[i];
-			while (crumb.charAt(0) == ' ') {
+			while (crumb.charAt(0) === ' ') {
 				crumb = crumb.substring(1, crumb.length);
 			}
-			if (crumb.indexOf(nameEquals) == 0) {
+			if (crumb.indexOf(nameEquals) === 0) {
 				return crumb.substring(nameEquals.length, crumb.length);
 			}
 		}
@@ -113,11 +113,11 @@ var battleshipCtrl = {
 		// Calls API to register a new user in the database
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == XMLHttpRequest.DONE) {
-				if (xhttp.status == 200) {
-					battleshipCtrl.user = name
-					var cookieVal = battleshipCtrl.makeSecureVal(name)
-        			battleshipCtrl.setCookie('name', cookieVal, 10)
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
+					battleshipCtrl.user = name;
+					var cookieVal = battleshipCtrl.makeSecureVal(name);
+        			battleshipCtrl.setCookie('name', cookieVal, 10);
 					battleshipCtrl.loginUser();
 				}
 				else {
@@ -130,12 +130,25 @@ var battleshipCtrl = {
 		xhttp.send();
 	},
 
-	loginUser: function() {
+	loginUser: function(name, pw) {
 		// Sets an active user
-		battleshipCtrl.setCookie('activeUser',
-			battleshipCtrl.user, 10);
-		view.showUserBanner();
-		battleshipCtrl.homeScreen();
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp === 200) {
+					battleshipCtrl.user = name;
+					var loginCookie = battleshipCtrl.makeSecureVal(name);
+					battleshipCtrl.setCookie('name', loginCookie, 10);
+					view.showUserBanner();
+					view.showHomeScreen();
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		xhttp.open()
+		xhttp.send();
 	},
 
 	logoutUser: function() {
@@ -145,22 +158,17 @@ var battleshipCtrl = {
 		view.refreshPage();
 	},
 
-	homeScreen: function() {
-		// Tells view to show the home screen
-		view.showHomeScreen();
-	},
-
 	getPlayerGames: function() {
 		// Calls API to get all active player games, tells view to show them
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == XMLHttpRequest.DONE) {
-				if (xhttp.status == 200) {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
 					var gamesObj = JSON.parse(xhttp.responseText);
 					battleshipCtrl.playerGamesList = gamesObj.games;
 					view.showHomeScreenGamesList();
 				}
-				else if (xhttp.status == 404) {
+				else if (xhttp.status === 404) {
 					view.showHomeScreenGamesList('No games found');
 				}
 				else {
@@ -177,8 +185,8 @@ var battleshipCtrl = {
 		// Calls API to begin a new game, tells view to show placements
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == XMLHttpRequest.DONE) {
-				if (xhttp.status == 200) {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
 					var gameKey = JSON.parse(xhttp.responseText).urlsafe_key;
 					battleshipCtrl.setCookie('activeGame',
 						gameKey, 10);
@@ -199,8 +207,8 @@ var battleshipCtrl = {
 		// Calls API to cancel a game based on given key
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == XMLHttpRequest.DONE) {
-				if (xhttp.status == 200) {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
 					view.refreshPage();
 					view.showHomeScreenGamesList();
 				}
@@ -217,8 +225,8 @@ var battleshipCtrl = {
 		// Calls API and sends the view a board object
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == XMLHttpRequest.DONE) {
-				if (xhttp.status == 200) {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
 					view.showBoard(JSON.parse(xhttp.responseText).items);
 				}
 				else {
@@ -235,8 +243,8 @@ var battleshipCtrl = {
 		// Calls API and sends the view the ships' statuses
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == XMLHttpRequest.DONE) {
-				if (xhttp.status == 200) {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
 					var shipPlacements = JSON.parse(
 						xhttp.responseText).condition.slice(5);
 					battleshipCtrl.shipStatuses = shipPlacements;
@@ -279,8 +287,8 @@ var battleshipCtrl = {
 
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == XMLHttpRequest.DONE) {
-				if (xhttp.status == 200) {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
 					var shipPlacements = JSON.parse(
 						xhttp.responseText).condition.slice(5);
 					for (var i = 0; i < shipPlacements.length; i++) {

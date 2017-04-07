@@ -232,8 +232,8 @@ var view = {
 		var loginSubmitBtn = document.createElement('DIV');
 		loginSubmitBtn.className = 'button';
 		loginSubmitBtn.onclick = function() {
-			battleshipCtrl.user = loginUserNameInput.value;
-			battleshipCtrl.loginUser();
+			battleshipCtrl.loginUser(loginUserNameInput.value,
+				loginPasswordInput.value);
 			loginDiv.parentElement.removeChild(loginDiv);
 		};
 		var loginSubmitBtnText = document.createTextNode('Login');
