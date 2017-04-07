@@ -7,6 +7,10 @@ primarily with communication to/from the API's users."""
 import random
 import logging
 import endpoints
+import random
+import string
+import hashlib
+
 from protorpc import remote, messages
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
@@ -53,6 +57,22 @@ USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
                                         user_pw=messages.StringField(2),
                                         email=messages.StringField(3))
 
+def make_salt(length=5):
+    """Creates/returns a string of random letters, 5 by default"""
+    return "".join(random.choice(string.letters) for x in range(length))
+
+def make_pw_hash(name, pw, salt=None):
+    """Uses salt to make a more secure password hash"""
+    if not salt:
+        salt = make_salt()
+    h = hashlib.sha256(name + pw + salt).hexdigest()
+    return '%s,%s' % (salt, h)
+
+def valid_pw(name, password, h):
+    """Verifies that a password is valid using the hash"""
+    salt = h.split(',')[0]
+    return h == make_pw_hash(name, password, salt)
+
 
 @endpoints.api( name='battleship',
                 version='v1',
@@ -69,8 +89,9 @@ class BattleshipAPI(remote.Service):
         if User.query(User.name == request.user_name).get():
             raise endpoints.ConflictException(
                     'A User with that name already exists!')
-        u = User._register(request.user_name, request.password, request.email)
-        u.put()
+        hashed_pw = make_pw_hash(request.user_name, request.user_pw)
+        user = User(name=request.user_name, pw_hash=hashed_pw, email=request.email)
+        user.put()
         return StringMessage(message='User {} created!'.format(
                 request.user_name))
 
