@@ -22,11 +22,45 @@ shipsDropdownDiv.id 	= 'ship-dropdown';
 var ship 				= null;
 
 var startX = 0;
-var starty = 0;
+var startY = 0;
 var offsetX = 0;
 var offsetY = 0;
 var dragElement;
 var oldZIndex = 0;
+
+function InitDragDrop() {
+	document.onmousedown = OnMouseDown;
+	document.onmouseup = OnMouseUp;
+}
+
+function OnMouseDown(event) {
+	if (event === null) {
+		event = window.event;
+	}
+
+	var target = event.target !== null ? event.target : event.srcElement;
+
+	if ((event.button === 1 && window.event !== null ||
+		event.button === 0) && target.className === 'drag') {
+
+		startX = event.clientX;
+		startY = event.clientY;
+
+		offsetX = ExtractNumber(target.style.left);
+		offsetY = ExtractNumber(target.style.top);
+
+		oldZIndex = target.style.zIndex;
+		target.style.zIndex = 10000;
+		dragElement = target;
+
+		document.onmousemove = OnMouseMove;
+		document.body.focus();
+
+		document.onselectstart = function () {return false;};
+		target.ondragstart = function() {return false;};
+		return false;
+	}
+}
 
 
 var view = {
@@ -349,6 +383,8 @@ var view = {
 
 	showPlaceShips: function(gameKey) {
 		// Displays the user's board and available ships which must be placed
+		InitDragDrop();
+
 		containerDiv.appendChild(placeShipsDiv);
 		placeShipsDiv.appendChild(placeShipsUpper);
 		placeShipsDiv.appendChild(placeShipsLower);
@@ -402,7 +438,7 @@ var view = {
 				return null;
 			}
 			ship = document.createElement('DIV');
-			ship.className = 'ship';
+			ship.className = 'ship drag';
 			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
 				if (battleshipCtrl.shipStatuses[i].indexOf(selectedShip > -1)) {
 					// this confirms that this is the right ship
