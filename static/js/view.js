@@ -33,25 +33,25 @@ function InitDragDrop() {
 	document.onmouseup = OnMouseUp;
 }
 
-function OnMouseDown(event) {
-	if (event === null) {
-		event = window.event;
+function OnMouseDown(e) {
+	if (e === null) {
+		e = window.event;
 	}
 
-	var target = event.target !== null ? event.target : event.srcElement;
+	var target = e.target !== null ? e.target : e.srcElement;
 
-	if ((event.button === 1 && window.event !== null ||
-		event.button === 0) && target.className === 'drag') {
+	if ((e.button === 1 && window.e !== null ||
+		e.button === 0) && target.className.indexOf('drag') !== -1) {
 
-		startX = event.clientX;
-		startY = event.clientY;
+		startX = e.clientX;
+		startY = e.clientY;
 
 		offsetX = ExtractNumber(target.style.left);
 		offsetY = ExtractNumber(target.style.top);
 
 		oldZIndex = target.style.zIndex;
 		target.style.zIndex = 10000;
-		dragElement = target;
+		dragElement = target.parentElement;
 
 		document.onmousemove = OnMouseMove;
 		document.body.focus();
@@ -60,6 +60,29 @@ function OnMouseDown(event) {
 		target.ondragstart = function() {return false;};
 		return false;
 	}
+}
+
+function OnMouseMove(e) {
+	if (e === null) {
+		var e = window.event;
+	}
+	dragElement.style.left = (offsetX + e.clientX - startX) + 'px';
+	dragElement.style.top = (offsetY + e.clientY - startY) + 'px';
+}
+
+function OnMouseUp(e) {
+	if (dragElement !== null) {
+		dragElement.style.zIndex = oldZIndex;
+		document.onmousemove = null;
+		document.onselectstart = null;
+		dragElement.ondragstart = null;
+		dragElement = null;
+	}
+}
+
+function ExtractNumber(value) {
+	var n = parseInt(value);
+	return n === null || isNaN(n) ? 0 : n;
 }
 
 
@@ -438,7 +461,7 @@ var view = {
 				return null;
 			}
 			ship = document.createElement('DIV');
-			ship.className = 'ship drag';
+			ship.className = 'ship';
 			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
 				if (battleshipCtrl.shipStatuses[i].indexOf(selectedShip > -1)) {
 					// this confirms that this is the right ship
@@ -453,7 +476,7 @@ var view = {
 						};
 						for (var s = 0; s < shipLength[selectedShip]; s++) {
 							var hullSection = document.createElement('DIV');
-							hullSection.className = 'hull-section';
+							hullSection.className = 'hull-section drag';
 							ship.appendChild(hullSection);
 						}
 						placeShipsLower.appendChild(ship);
