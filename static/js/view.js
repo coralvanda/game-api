@@ -51,7 +51,7 @@ function OnMouseDown(e) {
 
 		oldZIndex = target.style.zIndex;
 		target.style.zIndex = 10000;
-		dragElement = target.parentElement;
+		dragElement = target.parentNode;
 
 		document.onmousemove = OnMouseMove;
 		document.body.focus();
