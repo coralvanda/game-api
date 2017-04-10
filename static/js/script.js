@@ -17,12 +17,12 @@ var battleshipCtrl = {
 		var userCookie = battleshipCtrl.getCookie('name');
 		var gameCookie = battleshipCtrl.getCookie('activeGame');
 		if (gameCookie && userCookie) {
-			battleshipCtrl.user = userCookie;
+			battleshipCtrl.user = userCookie.split('|')[0];
 			view.showUserBanner();
 			battleshipCtrl.resumeGame(gameCookie);
 		}
 		else if (userCookie) {
-			battleshipCtrl.user = userCookie;
+			battleshipCtrl.user = userCookie.split('|')[0];
 			view.showUserBanner();
 			view.showHomeScreen();
 		}
