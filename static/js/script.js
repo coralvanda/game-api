@@ -122,6 +122,7 @@ var battleshipCtrl = {
 				}
 				else {
 					view.displayError(xhttp.responseText);
+					view.refreshPage();
 				}
 			}
 		};
@@ -144,6 +145,7 @@ var battleshipCtrl = {
 				}
 				else {
 					view.displayError(xhttp.responseText);
+					view.refreshPage();
 				}
 			}
 		};
