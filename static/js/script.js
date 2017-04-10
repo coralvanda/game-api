@@ -136,7 +136,7 @@ var battleshipCtrl = {
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
-				if (xhttp === 200) {
+				if (xhttp.status === 200) {
 					battleshipCtrl.user = name;
 					var loginCookie = battleshipCtrl.makeSecureVal(name);
 					battleshipCtrl.setCookie('name', loginCookie, 10);
