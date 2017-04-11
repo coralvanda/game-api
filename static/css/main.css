@@ -20,7 +20,7 @@ h1, h3 {
 }
 
 .drag {
-	position: relative;
+	position: fixed;
 }
 
 .game-list-item {

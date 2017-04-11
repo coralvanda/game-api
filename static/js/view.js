@@ -71,7 +71,7 @@ function OnMouseMove(e) {
 }
 
 function OnMouseUp(e) {
-	if (dragElement !== null) {
+	if (dragElement) {
 		dragElement.style.zIndex = oldZIndex;
 		document.onmousemove = null;
 		document.onselectstart = null;
@@ -461,7 +461,7 @@ var view = {
 				return null;
 			}
 			ship = document.createElement('DIV');
-			ship.className = 'ship';
+			ship.className = 'ship drag';
 			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
 				if (battleshipCtrl.shipStatuses[i].indexOf(selectedShip > -1)) {
 					// this confirms that this is the right ship
@@ -476,7 +476,7 @@ var view = {
 						};
 						for (var s = 0; s < shipLength[selectedShip]; s++) {
 							var hullSection = document.createElement('DIV');
-							hullSection.className = 'hull-section drag';
+							hullSection.className = 'hull-section';
 							ship.appendChild(hullSection);
 						}
 						placeShipsLower.appendChild(ship);
