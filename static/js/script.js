@@ -276,8 +276,8 @@ var battleshipCtrl = {
 	},
 
 	placeShip: function() {
-		gameKey = null // urlsafegamekey;
-		board = null // show_board_AJAX_call;
+		var gameKey = battleshipCtrl.getCookie('activeGame');
+		var board = 'user_board';
 		view.showBoard(board);
 		// list of ships available
 		// move on when all ships have been placed
