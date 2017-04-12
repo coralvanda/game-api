@@ -153,7 +153,10 @@ var dragDrop = {
 	returnCursorPos: function(e) {
 		var left = e.clientX;
 		var top = e.clientY;
-		// call some function with both of these variables
+		var element = document.elementFromPoint(left, top);
+		if (element.className.indexOf('col-div') !== -1) {
+			// call place ship with coordinates from element.ID
+		}
 	}
 };
 
