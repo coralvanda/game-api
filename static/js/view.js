@@ -72,6 +72,7 @@ var dragDrop = {
 		dragDrop.initialMouseY = evt.clientY;
 		addEventSimple(document,'mousemove',dragDrop.dragMouse);
 		addEventSimple(document,'mouseup',dragDrop.releaseElement);
+		addEventSimple(document,'mouseup',dragDrop.returnCursorPos);
 		return false;
 	},
 	startDragKeys: function () {
@@ -147,6 +148,12 @@ var dragDrop = {
 		removeEventSimple(document,'keydown',dragDrop.dragKeys);
 		dragDrop.draggedObject.className = dragDrop.draggedObject.className.replace(/dragged/,'');
 		dragDrop.draggedObject = null;
+	},
+
+	returnCursorPos: function(e) {
+		var left = e.clientX;
+		var top = e.clientY;
+		// call some function with both of these variables
 	}
 };
 
@@ -579,6 +586,7 @@ var view = {
 				else {
 					colDiv.className += ' red';
 				}
+				colDiv.id = row + '-' + (col - 3);
 				rowDiv.appendChild(colDiv);
 			}
 			gameBoard.appendChild(rowDiv);
