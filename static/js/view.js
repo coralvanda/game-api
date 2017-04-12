@@ -40,13 +40,9 @@ function setInitialPosition(e) {
 	var target = document.getElementById('place-ships-lower');
 	var targetTop = target.offsetTop;
 	var targetLeft = target.offsetLeft;
-	var targetWidth = target.offsetWidth;
 	e.style.position = 'absolute';
-	e.style.top = targetTop + 'px';
-	// the following line was meant to be targetLeft + targetWidth + 'px'
-	// but it did not give me the output I desired, and I couldn't figure
-	// out why, so I just hardcoded 100 into the equation
-	e.style.left = targetLeft + 100 + 'px';
+	e.style.top = targetTop + 25 + 'px';
+	e.style.left = targetLeft + 'px';
 }
 
 var dragDrop = {
