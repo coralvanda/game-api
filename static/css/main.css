@@ -19,8 +19,9 @@ h1, h3 {
 	cursor: pointer;
 }
 
-.drag {
-	position: absolute;
+.dragged {
+	cursor: all-scroll;
+	z-index: 300;
 }
 
 .game-list-item {

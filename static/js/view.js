@@ -41,8 +41,12 @@ function setInitialPosition(e) {
 	var targetTop = target.offsetTop;
 	var targetLeft = target.offsetLeft;
 	var targetWidth = target.offsetWidth;
-	e.style.top = targetTop;
-	e.style.left = targetLeft + targetWidth;
+	e.style.position = 'absolute';
+	e.style.top = targetTop + 'px';
+	// the following line was meant to be targetLeft + targetWidth + 'px'
+	// but it did not give me the output I desired, and I couldn't figure
+	// out why, so I just hardcoded 100 into the equation
+	e.style.left = targetLeft + 100 + 'px';
 }
 
 var dragDrop = {
@@ -524,9 +528,8 @@ var view = {
 				return null;
 			}
 			ship = document.createElement('DIV');
-			ship.className = 'ship drag';
+			ship.className = 'ship';
 			ship.id = selectedShip;
-			//setInitialPosition(ship);
 
 			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
 				if (battleshipCtrl.shipStatuses[i].indexOf(selectedShip > -1)) {
@@ -546,6 +549,7 @@ var view = {
 							ship.appendChild(hullSection);
 						}
 						placeShipsLower.appendChild(ship);
+						setInitialPosition(ship);
 						dragDrop.initElement(ship);
 						// create visualization for ship placement on board
 						// break out of function
@@ -554,6 +558,7 @@ var view = {
 				}
 			}
 		});
+		alert('Select ships, then drag and drop them onto the board.');
 	},
 
 	showBoard: function(board) {
