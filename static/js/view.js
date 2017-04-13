@@ -20,6 +20,13 @@ shipPlacementsDiv.id 	= 'ship-placements-div';
 var shipsDropdownDiv 	= document.createElement('DIV');
 shipsDropdownDiv.id 	= 'ship-dropdown';
 var ship 				= null;
+var shipLengths 		= {
+							'destroyer': 2,
+							'battleship': 4,
+							'carrier': 5,
+							'cruiser': 3,
+							'submarine': 3
+						};
 
 
 function addEventSimple(obj,evt,fn) {
@@ -527,31 +534,19 @@ var view = {
 			ship.className = 'ship';
 			ship.id = selectedShip;
 
-			for (var i = 0; i < battleshipCtrl.shipStatuses.length; i++) {
-				if (battleshipCtrl.shipStatuses[i].indexOf(selectedShip > -1)) {
-					// this confirms that this is the right ship
-					if (battleshipCtrl.shipStatuses[i].indexOf('Not') > 0) {
-						// this confirms that the ship has not been placed
-						var shipLength = {
-							'destroyer': 2,
-							'battleship': 4,
-							'carrier': 5,
-							'cruiser': 3,
-							'submarine': 3
-						};
-						for (var s = 0; s < shipLength[selectedShip]; s++) {
-							var hullSection = document.createElement('DIV');
-							hullSection.className = 'hull-section';
-							ship.appendChild(hullSection);
-						}
-						placeShipsLower.appendChild(ship);
-						setInitialPosition(ship);
-						dragDrop.initElement(ship);
-						// create visualization for ship placement on board
-						// break out of function
-						return null;
-					}
+			var selectedShipCap = selectedShip[0].toUpperCase() + selectedShip.slice(1);
+			if (battleshipCtrl.shipStatuses[selectedShipCap] === 'Not Placed') {
+				for (var s = 0; s < shipLengths[selectedShip]; s++) {
+					var hullSection = document.createElement('DIV');
+					hullSection.className = 'hull-section';
+					ship.appendChild(hullSection);
 				}
+				placeShipsLower.appendChild(ship);
+				setInitialPosition(ship);
+				dragDrop.initElement(ship);
+				// create visualization for ship placement on board
+				// break out of function
+				return null;
 			}
 		});
 		alert('Select ships, then drag and drop them onto the board. ' +
