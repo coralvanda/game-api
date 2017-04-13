@@ -154,6 +154,7 @@ var dragDrop = {
 		var left = e.clientX;
 		var top = e.clientY;
 		var element = document.elementFromPoint(left, top);
+		console.log(element);
 		if (element.className.indexOf('col-div') !== -1) {
 			// call place ship with coordinates from element.ID
 		}
@@ -590,6 +591,20 @@ var view = {
 					colDiv.className += ' red';
 				}
 				colDiv.id = row + '-' + (col - 3);
+				colDiv.addEventListener('mouseup', function() {
+					return function() {
+						// check for dragged element
+						// call battleshipCtrl.placeShip with args:
+						// gameKey, boardX, boardY, orientation, ship
+						var gameKey = battleshipCtrl.getCookie('activeGame');
+						battleshipCtrl.placeShip(gameKey,
+							col - 3,
+							row,
+							battleshipCtrl.placeShipOrientation,
+							draggedShip);
+						// need to get gameKey and ship somehow
+					};
+				})
 				rowDiv.appendChild(colDiv);
 			}
 			gameBoard.appendChild(rowDiv);
