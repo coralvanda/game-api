@@ -275,12 +275,12 @@ var battleshipCtrl = {
 
 	},
 
-	placeShip: function() {
+	placeShip: function(gameKey, boardX, boardY, orientation, ship) {
 		var gameKey = battleshipCtrl.getCookie('activeGame');
 		var board = 'user_board';
-		view.showBoard(board);
-		// list of ships available
-		// move on when all ships have been placed
+		// need to take args and make an AJAX call with them
+
+		battleshipCtrl.resumeGame(gameKey);
 	},
 
 	resumeGame: function(gameKey) {
