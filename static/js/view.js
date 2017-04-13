@@ -582,14 +582,16 @@ var view = {
 				colDiv.id = row + '-' + (col - 3);
 				colDiv.addEventListener('mouseup', function() {
 					return function() {
-						// check for dragged element
-						var gameKey = battleshipCtrl.getCookie('activeGame');
-						battleshipCtrl.placeShip(gameKey,
-							col - 3,
-							row,
-							battleshipCtrl.placeShipOrientation,
-							draggedShip);
-						// need to get ship somehow
+						if (dragDrop.draggedObject) {
+							var key = battleshipCtrl.getCookie('activeGame');
+							var ship = dragDrop.draggedObject.id;
+							battleshipCtrl.placeShip(key,
+								col - 3, // because of leading text
+								row,
+								battleshipCtrl.placeShipOrientation,
+								ship);
+							// need to get ship somehow
+						}
 					};
 				})
 				rowDiv.appendChild(colDiv);
