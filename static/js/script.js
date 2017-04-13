@@ -279,8 +279,26 @@ var battleshipCtrl = {
 		var gameKey = battleshipCtrl.getCookie('activeGame');
 		var board = 'user_board';
 		// need to take args and make an AJAX call with them
-
-		battleshipCtrl.resumeGame(gameKey);
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
+					battleshipCtrl.resumeGame(gameKey);
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		var requestOjb = {
+			'bow_position': boardX,
+			'bow_row': boardY,
+			'orientation': orientation,
+			'ship': ship
+		};
+		xhttp.open('POST', requestPath + 'game/' + gameKey +
+			'place_ship', true);
+		xhttp.send(JSON.stringify(requestOjb));
 	},
 
 	resumeGame: function(gameKey) {
