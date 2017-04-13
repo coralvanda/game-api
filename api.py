@@ -57,6 +57,8 @@ USER_REQUEST = endpoints.ResourceContainer(
     user_name=messages.StringField(1),
     user_pw=messages.StringField(2),
     email=messages.StringField(3))
+USERNAME_REQUSET = endpoints.ResourceContainer(
+    user_name=messages.StringField(1))
 LOGIN_REQUEST = endpoints.ResourceContainer(
     user_name=messages.StringField(1),
     user_pw=messages.StringField(2))
@@ -158,7 +160,7 @@ class BattleshipAPI(remote.Service):
         else:
             raise endpoints.NotFoundException('Game not found!')
 
-    @endpoints.method(request_message=USER_REQUEST,
+    @endpoints.method(request_message=USERNAME_REQUSET,
                     response_message=GameForms,
                     path='games/player',
                     name='get_games_by_player',
@@ -527,7 +529,7 @@ class BattleshipAPI(remote.Service):
         """Return all scores"""
         return ScoreForms(items=[score.to_form() for score in Score.query()])
 
-    @endpoints.method(request_message=USER_REQUEST,
+    @endpoints.method(request_message=USERNAME_REQUSET,
                       response_message=ScoreForms,
                       path='scores/user/{user_name}',
                       name='get_user_scores',
