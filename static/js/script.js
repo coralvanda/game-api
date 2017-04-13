@@ -9,7 +9,7 @@ var battleshipCtrl = {
 	user: '',
 	activeGame: '',
 	playerGamesList: [],
-	shipStatuses: [],
+	shipStatuses: {},
 	placeShipOrientation: 'horizontal',
 
 	init: function() {
@@ -250,7 +250,10 @@ var battleshipCtrl = {
 				if (xhttp.status === 200) {
 					var shipPlacements = JSON.parse(
 						xhttp.responseText).condition.slice(5);
-					battleshipCtrl.shipStatuses = shipPlacements;
+					for (var i = 0; i < shipPlacements.length; i++) {
+						var items = shipPlacements[i].split(': ');
+						battleshipCtrl.shipStatuses[items[0]] = items[1];
+					}
 					view.showShipPlacementStatus(shipPlacements);
 				}
 				else {
