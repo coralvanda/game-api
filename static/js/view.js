@@ -608,6 +608,9 @@ var view = {
 		for (var i = 0; i < ships.length; i++) {
 			var placementsDiv = document.createElement('DIV');
 			var placementText = document.createTextNode(ships[i]);
+			if (ships[i].indexOf('Not') === -1) {
+				placementsDiv.className = 'placed';
+			}
 			placementsDiv.append(placementText);
 			shipPlacementsDiv.appendChild(placementsDiv);
 		}
