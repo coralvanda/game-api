@@ -20,6 +20,7 @@ shipPlacementsDiv.id 	= 'ship-placements-div';
 var shipsDropdownDiv 	= document.createElement('DIV');
 shipsDropdownDiv.id 	= 'ship-dropdown';
 var ship 				= null;
+var selectedShip 		= null;
 var shipList 			= [
 							'Carrier',
 							'Battleship',
@@ -405,9 +406,10 @@ var view = {
 				ship.outerHTML = '';
 				ship = null;
 			}
-			var selectedShip = shipsDropdown.options[
+			selectedShip = shipsDropdown.options[
 				shipsDropdown.selectedIndex].value;
 			if (selectedShip === 'Select a ship') {
+				selectedShip = null;
 				return null;
 			}
 			ship = document.createElement('DIV');
@@ -456,9 +458,9 @@ var view = {
 				colDiv.id = row + '-' + (col - 3);
 				colDiv.addEventListener('mouseup', function() {
 					return function() {
-						if (dragDrop.draggedObject) {
+						if (selectedShip) {
 							var key = battleshipCtrl.getCookie('activeGame');
-							var ship = dragDrop.draggedObject.id;
+							var ship = selectedShip;
 							battleshipCtrl.placeShip(key,
 								col - 3, // because of leading text
 								row,
