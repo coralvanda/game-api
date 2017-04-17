@@ -10,6 +10,7 @@ var battleshipCtrl = {
 	activeGame: '',
 	playerGamesList: [],
 	shipStatuses: {},
+	gamePhase: '',
 	placeShipOrientation: 'horizontal',
 
 	init: function() {
@@ -194,6 +195,7 @@ var battleshipCtrl = {
 					battleshipCtrl.setCookie('activeGame',
 						gameKey, 10);
 					battleshipCtrl.activeGame = gameKey;
+					battleshipCtrl.gamePhase = 'placement';
 					view.showPlaceShips(gameKey);
 				}
 				else {
@@ -230,7 +232,8 @@ var battleshipCtrl = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					view.showBoard(JSON.parse(xhttp.responseText).items);
+					view.showBoard(JSON.parse(
+						xhttp.responseText).items, boardType);
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -318,10 +321,12 @@ var battleshipCtrl = {
 						xhttp.responseText).condition.slice(5);
 					for (var i = 0; i < shipPlacements.length; i++) {
 						if (shipPlacements[i].indexOf('Not placed') > -1) {
+							battleshipCtrl.gamePhase = 'placement';
 							view.showPlaceShips(gameKey);
 							return null;
 						}
 					}
+					battleshipCtrl.gamePhase = 'attack';
 					battleshipCtrl.playGame(gameKey);
 				}
 				else {
@@ -336,14 +341,8 @@ var battleshipCtrl = {
 
 	playGame: function(gameKey) {
 		// play game
-		chart = battleshipCtrl.getBoard(gameKey, 'user_chart');
-		board = battleshipCtrl.getBoard(gameKey, 'user_board');
-		view.showBoard(chart);
-		view.showBoard(board);
-		// place a link to return the player to their home screen
-		// when player clicks on the chart, call the make_move endpoint
-		// if game ends after a move, exit the loop
-		// else run the loop again
+		battleshipCtrl.getBoard(gameKey, 'user_chart');
+		battleshipCtrl.getBoard(gameKey, 'user_board');
 	},
 };
 

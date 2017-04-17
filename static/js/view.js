@@ -19,6 +19,8 @@ var shipPlacementsDiv 	= document.createElement('DIV');
 shipPlacementsDiv.id 	= 'ship-placements-div';
 var shipsDropdownDiv 	= document.createElement('DIV');
 shipsDropdownDiv.id 	= 'ship-dropdown';
+var gameBoardsDiv 		= document.createElement('DIV');
+gameBoardsDiv.id 		= 'game-boards';
 var ship 				= null;
 var selectedShip 		= null;
 var shipList 			= [
@@ -433,7 +435,7 @@ var view = {
 			'you want to place the bow of the ship.');
 	},
 
-	showBoard: function(board) {
+	showBoard: function(board, boardType) {
 		// Displays the given board or chart
 
 		// must have a way to distinguish charts from boards
@@ -467,8 +469,8 @@ var view = {
 								coordsCopy[0],
 								battleshipCtrl.placeShipOrientation,
 								ship);
-							// need to get ship somehow
 						}
+						// else if board is chart and user is attacking
 					};
 				})(coordinates));
 				rowDiv.appendChild(colDiv);
@@ -476,7 +478,28 @@ var view = {
 			gameBoard.appendChild(rowDiv);
 		}
 		boardDiv.appendChild(gameBoard);
-		placeShipsUpper.insertBefore(boardDiv, shipPlacementsDiv);
+		if (battleshipCtrl.gamePhase === 'placement') {
+			gameBoard.id = 'placement-board';
+			placeShipsUpper.insertBefore(boardDiv, shipPlacementsDiv);
+		}
+		else {
+			var boardTitle = document.createElement('DIV');
+			boardTitle.className = 'board-title';
+			if (boardType === 'user_chart') {
+				gameBoard.id = 'chart';
+				var titleText = document.createTextNode('Chart your hits ' +
+					'and misses.');
+			}
+			else {
+				gameBoard.id = 'board';
+				var titleText = document.createTextNode('Keep track of ' +
+					'the condition of your fleet.');
+			}
+			boardTitle.append(titleText);
+			boardDiv.insertBefore(boardTitle, gameBoard);
+			gameBoardsDiv.appendChild(boardDiv);
+			containerDiv.appendChild(gameBoardsDiv);
+		}
 	},
 
 	showShipPlacementStatus: function(ships) {

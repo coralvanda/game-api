@@ -19,6 +19,10 @@ h1, h3 {
 	cursor: pointer;
 }
 
+.board-title {
+	font-size: 1.5em;
+}
+
 .game-list-item {
 	margin: 10px 0 10px 0;
 }
