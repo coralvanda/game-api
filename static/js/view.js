@@ -455,21 +455,22 @@ var view = {
 				else {
 					colDiv.className += ' red';
 				}
-				colDiv.id = row + '-' + (col - 3);
-				colDiv.addEventListener('mouseup', function() {
+				var coordinates = row + '-' + (col - 3)
+				colDiv.id = coordinates;
+				colDiv.addEventListener('mouseup', (function(coordsCopy) {
 					return function() {
 						if (selectedShip) {
 							var key = battleshipCtrl.getCookie('activeGame');
 							var ship = selectedShip;
 							battleshipCtrl.placeShip(key,
-								col - 3, // because of leading text
-								row,
+								coordsCopy[2],
+								coordsCopy[0],
 								battleshipCtrl.placeShipOrientation,
 								ship);
 							// need to get ship somehow
 						}
 					};
-				})
+				})(coordinates));
 				rowDiv.appendChild(colDiv);
 			}
 			gameBoard.appendChild(rowDiv);
