@@ -287,7 +287,7 @@ var battleshipCtrl = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					battleshipCtrl.resumeGame(gameKey);
+					view.refreshPage();
 				}
 				else {
 					view.displayError(xhttp.responseText);
