@@ -19,11 +19,6 @@ h1, h3 {
 	cursor: pointer;
 }
 
-.dragged {
-	cursor: all-scroll;
-	z-index: 300;
-}
-
 .game-list-item {
 	margin: 10px 0 10px 0;
 }
