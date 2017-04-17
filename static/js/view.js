@@ -20,6 +20,13 @@ shipPlacementsDiv.id 	= 'ship-placements-div';
 var shipsDropdownDiv 	= document.createElement('DIV');
 shipsDropdownDiv.id 	= 'ship-dropdown';
 var ship 				= null;
+var shipList 			= [
+							'Carrier',
+							'Battleship',
+							'Cruiser',
+							'Submarine',
+							'Destroyer'
+						];
 var shipLengths 		= {
 							'destroyer': 2,
 							'battleship': 4,
@@ -484,8 +491,6 @@ var view = {
 		battleshipCtrl.getBoard(gameKey, 'user_board');
 		battleshipCtrl.getShipPlacementStatus(gameKey, 'user_fleet');
 
-		var shipList = ['Carrier', 'Battleship',
-			'Cruiser', 'Submarine', 'Destroyer'];
 		var shipsDropdown = document.createElement('SELECT');
 
 		var dropdownDefault = document.createElement('OPTION');
@@ -494,10 +499,12 @@ var view = {
 		shipsDropdown.appendChild(dropdownDefault);
 
 		for (var i = 0; i < shipList.length; i++) {
-			var option = document.createElement('OPTION');
-			option.value = shipList[i].toLowerCase();
-			option.innerHTML = shipList[i];
-			shipsDropdown.appendChild(option);
+			if (battleshipCtrl.shipStatuses[shipList[i]] === 'Not placed') {
+				var option = document.createElement('OPTION');
+				option.value = shipList[i].toLowerCase();
+				option.innerHTML = shipList[i];
+				shipsDropdown.appendChild(option);
+			}
 		}
 		shipsDropdownDiv.appendChild(shipsDropdown);
 		placeShipsLower.appendChild(shipsDropdownDiv);
@@ -535,7 +542,7 @@ var view = {
 			ship.id = selectedShip;
 
 			var selectedShipCap = selectedShip[0].toUpperCase() + selectedShip.slice(1);
-			if (battleshipCtrl.shipStatuses[selectedShipCap] === 'Not Placed') {
+			if (battleshipCtrl.shipStatuses[selectedShipCap] === 'Not placed') {
 				for (var s = 0; s < shipLengths[selectedShip]; s++) {
 					var hullSection = document.createElement('DIV');
 					hullSection.className = 'hull-section';
