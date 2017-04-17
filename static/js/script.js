@@ -301,7 +301,7 @@ var battleshipCtrl = {
 			'ship': ship
 		};
 		xhttp.open('POST', requestPath + 'game/' + gameKey +
-			'place_ship', true);
+			'/place_ship', true);
 		xhttp.send(JSON.stringify(requestOjb));
 	},
 
