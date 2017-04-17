@@ -427,8 +427,8 @@ var view = {
 				return null;
 			}
 		});
-		alert('Select ships, then drag and drop them onto the board. ' +
-			"Take note that the ship's bow will be positioned at the cursor.");
+		alert('Select ships, then click on the board position where ' +
+			'you want to place the bow of the ship.');
 	},
 
 	showBoard: function(board) {
