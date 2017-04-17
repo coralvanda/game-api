@@ -490,7 +490,9 @@ var view = {
 		placeShipsDiv.appendChild(placeShipsLower);
 		battleshipCtrl.getBoard(gameKey, 'user_board');
 		battleshipCtrl.getShipPlacementStatus(gameKey, 'user_fleet');
+	},
 
+	showDropDown: function() {
 		var shipsDropdown = document.createElement('SELECT');
 
 		var dropdownDefault = document.createElement('OPTION');

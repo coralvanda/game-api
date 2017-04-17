@@ -255,6 +255,7 @@ var battleshipCtrl = {
 						battleshipCtrl.shipStatuses[items[0]] = items[1];
 					}
 					view.showShipPlacementStatus(shipPlacements);
+					view.showDropDown();
 				}
 				else {
 					view.displayError(xhttp.responseText);
