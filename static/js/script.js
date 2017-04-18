@@ -258,7 +258,6 @@ var battleshipCtrl = {
 						battleshipCtrl.shipStatuses[items[0]] = items[1];
 					}
 					view.showShipPlacementStatus(shipPlacements);
-					view.showDropDown();
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -342,6 +341,7 @@ var battleshipCtrl = {
 		// play game
 		battleshipCtrl.getBoard(gameKey, 'user_chart');
 		battleshipCtrl.getBoard(gameKey, 'user_board');
+
 	},
 
 	makeMove: function(gameKey, boardX, boardY) {

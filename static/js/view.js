@@ -368,6 +368,7 @@ var view = {
 		placeShipsDiv.appendChild(placeShipsLower);
 		battleshipCtrl.getBoard(gameKey, 'user_board');
 		battleshipCtrl.getShipPlacementStatus(gameKey, 'user_fleet');
+		view.showDropDown();
 	},
 
 	showDropDown: function() {
@@ -481,7 +482,7 @@ var view = {
 					colDiv.className += ' red';
 				}
 				else {
-					colDiv.className += ' darkgrey';
+					colDiv.className += ' miss';
 				}
 				var coordinates = row + '-' + (col - 3)
 				colDiv.id = coordinates;
