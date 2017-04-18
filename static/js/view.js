@@ -372,7 +372,6 @@ var view = {
 		placeShipsDiv.appendChild(placeShipsLower);
 		battleshipCtrl.getBoard(gameKey, 'user_board');
 		battleshipCtrl.getShipStatuses(gameKey, 'user_fleet');
-		view.showDropDown();
 	},
 
 	showDropDown: function() {
