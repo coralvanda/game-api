@@ -245,19 +245,30 @@ var battleshipCtrl = {
 		xhttp.send();
 	},
 
-	getShipPlacementStatus: function(gameKey, fleet) {
+	getShipStatuses: function(gameKey, fleet) {
 		// Calls API and sends the view the ships' statuses
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					var shipPlacements = JSON.parse(
-						xhttp.responseText).condition.slice(5);
-					for (var i = 0; i < shipPlacements.length; i++) {
-						var items = shipPlacements[i].split(': ');
-						battleshipCtrl.shipStatuses[items[0]] = items[1];
+					if (battleshipCtrl.gamePhase === 'placement') {
+						var shipPlacements = JSON.parse(
+							xhttp.responseText).condition.slice(5);
+						for (var i = 0; i < shipPlacements.length; i++) {
+							var items = shipPlacements[i].split(': ');
+							battleshipCtrl.shipStatuses[items[0]] = items[1];
+						}
+						view.showShipPlacementStatus(shipPlacements);
 					}
-					view.showShipPlacementStatus(shipPlacements);
+					else {
+						var shipPlacements = JSON.parse(
+							xhttp.responseText).condition.slice(0, 5);
+						for (var i = 0; i < shipPlacements.length; i++) {
+							var items = shipPlacements[i].split(': ');
+							battleshipCtrl.shipStatuses[items[0]] = items[1];
+						}
+						view.showShipHealth(shipPlacements);
+					}
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -341,6 +352,7 @@ var battleshipCtrl = {
 		// play game
 		battleshipCtrl.getBoard(gameKey, 'user_chart');
 		battleshipCtrl.getBoard(gameKey, 'user_board');
+		battleshipCtrl.getShipStatuses(gameKey, 'user_fleet');
 
 	},
 

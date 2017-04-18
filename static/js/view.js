@@ -21,6 +21,8 @@ var shipsDropdownDiv 	= document.createElement('DIV');
 shipsDropdownDiv.id 	= 'ship-dropdown';
 var gameBoardsDiv 		= document.createElement('DIV');
 gameBoardsDiv.id 		= 'game-boards';
+var healthDiv 			= document.createElement('DIV');
+healthDiv.id			= 'health-div';
 var ship 				= null;
 var selectedShip 		= null;
 var shipList 			= [
@@ -367,7 +369,7 @@ var view = {
 		placeShipsDiv.appendChild(placeShipsUpper);
 		placeShipsDiv.appendChild(placeShipsLower);
 		battleshipCtrl.getBoard(gameKey, 'user_board');
-		battleshipCtrl.getShipPlacementStatus(gameKey, 'user_fleet');
+		battleshipCtrl.getShipStatuses(gameKey, 'user_fleet');
 		view.showDropDown();
 	},
 
@@ -548,4 +550,15 @@ var view = {
 		}
 		placeShipsUpper.append(shipPlacementsDiv);
 	},
+
+	showShipHealth: function(ships) {
+		// Displays the current health of each ship in the user fleet
+		for (var i = 0; i < ships.length; i++) {
+			var shipHealthDiv = document.createElement('DIV');
+			var healthText = document.createTextNode(ships[i]);
+			shipHealthDiv.append(healthText);
+			healthDiv.appendChild(shipHealthDiv);
+		}
+		gameBoardsDiv.appendChild(healthDiv);
+	}
 };
