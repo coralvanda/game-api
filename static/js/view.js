@@ -456,6 +456,26 @@ var view = {
 				if (board[row][col] === '0') {
 					colDiv.className += ' blue';
 				}
+				else if (board[row][col] === 'C') {
+					// carrier
+					colDiv.className += ' carrier';
+				}
+				else if (board[row][col] === 'B') {
+					// battleship
+					colDiv.className += ' battleship';
+				}
+				else if (board[row][col] === 'c') {
+					// cruiser
+					colDiv.className += ' cruiser';
+				}
+				else if (board[row][col] === 'S') {
+					// submarine
+					colDiv.className += ' submarine';
+				}
+				else if (board[row][col] === 'D') {
+					// destroyer
+					colDiv.className += ' destroyer';
+				}
 				else {
 					colDiv.className += ' red';
 				}
