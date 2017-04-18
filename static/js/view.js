@@ -19,6 +19,8 @@ var shipPlacementsDiv 	= document.createElement('DIV');
 shipPlacementsDiv.id 	= 'ship-placements-div';
 var shipsDropdownDiv 	= document.createElement('DIV');
 shipsDropdownDiv.id 	= 'ship-dropdown';
+var gameDiv 			= document.createElement('DIV');
+gameDiv.id 				= 'game-div';
 var gameBoardsDiv 		= document.createElement('DIV');
 gameBoardsDiv.id 		= 'game-boards';
 var healthDiv 			= document.createElement('DIV');
@@ -442,10 +444,7 @@ var view = {
 
 	showBoard: function(board, boardType) {
 		// Displays the given board or chart
-
-		// must have a way to distinguish charts from boards
-		// and clearly show the user which is which
-
+		containerDiv.appendChild(gameDiv);
 		var boardDiv = document.createElement('DIV');
 		boardDiv.id = 'board-div';
 		var gameBoard = document.createElement('DIV');
@@ -533,7 +532,7 @@ var view = {
 			boardTitle.append(titleText);
 			boardDiv.insertBefore(boardTitle, gameBoard);
 			gameBoardsDiv.appendChild(boardDiv);
-			containerDiv.appendChild(gameBoardsDiv);
+			gameDiv.appendChild(gameBoardsDiv);
 		}
 	},
 
@@ -559,6 +558,6 @@ var view = {
 			shipHealthDiv.append(healthText);
 			healthDiv.appendChild(shipHealthDiv);
 		}
-		gameBoardsDiv.appendChild(healthDiv);
+		gameDiv.appendChild(healthDiv);
 	}
 };
