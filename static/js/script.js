@@ -283,9 +283,8 @@ var battleshipCtrl = {
 	},
 
 	placeShip: function(gameKey, boardX, boardY, orientation, ship) {
-		var gameKey = battleshipCtrl.getCookie('activeGame');
+		// place a ship on the board
 		var board = 'user_board';
-		// need to take args and make an AJAX call with them
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
@@ -344,6 +343,27 @@ var battleshipCtrl = {
 		battleshipCtrl.getBoard(gameKey, 'user_chart');
 		battleshipCtrl.getBoard(gameKey, 'user_board');
 	},
+
+	makeMove: function(gameKey, boardX, boardY) {
+		// fire a shot at the enemy
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
+					view.refreshPage();
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		var requestOjb = {
+			'move_col': boardX,
+			'move_row': boardY
+		};
+		xhttp.open('PUT', requestPath + 'game/' + gameKey, true);
+		xhttp.send(JSON.stringify(requestOjb));
+	}
 };
 
 battleshipCtrl.init();

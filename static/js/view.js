@@ -360,6 +360,10 @@ var view = {
 	showPlaceShips: function(gameKey) {
 		// Displays the user's board and available ships which must be placed
 		containerDiv.appendChild(placeShipsDiv);
+		var placeShipsInstructions = document.createTextNode(
+			'Select ships, then click on the board position where ' +
+			'you want to place the bow of the ship.');
+		placeShipsDiv.append(placeShipsInstructions);
 		placeShipsDiv.appendChild(placeShipsUpper);
 		placeShipsDiv.appendChild(placeShipsLower);
 		battleshipCtrl.getBoard(gameKey, 'user_board');
@@ -431,8 +435,6 @@ var view = {
 				return null;
 			}
 		});
-		alert('Select ships, then click on the board position where ' +
-			'you want to place the bow of the ship.');
 	},
 
 	showBoard: function(board, boardType) {
@@ -470,7 +472,13 @@ var view = {
 								battleshipCtrl.placeShipOrientation,
 								ship);
 						}
-						// else if board is chart and user is attacking
+						else if (boardType === 'user_chart') {
+							var key = battleshipCtrl.getCookie('activeGame');
+							var ship = selectedShip;
+							battleshipCtrl.makeMove(key,
+								coordsCopy[2],
+								coordsCopy[0]);
+						}
 					};
 				})(coordinates));
 				rowDiv.appendChild(colDiv);
@@ -487,8 +495,8 @@ var view = {
 			boardTitle.className = 'board-title';
 			if (boardType === 'user_chart') {
 				gameBoard.id = 'chart';
-				var titleText = document.createTextNode('Chart your hits ' +
-					'and misses.');
+				var titleText = document.createTextNode('Click below to fire ' +
+					'on the enemy fleet.');
 			}
 			else {
 				gameBoard.id = 'board';
