@@ -476,8 +476,12 @@ var view = {
 					// destroyer
 					colDiv.className += ' destroyer';
 				}
-				else {
+				else if (board[row][col] === 'X') {
+					// hit
 					colDiv.className += ' red';
+				}
+				else {
+					colDiv.className += ' darkgrey';
 				}
 				var coordinates = row + '-' + (col - 3)
 				colDiv.id = coordinates;

@@ -54,6 +54,30 @@ h1, h3 {
 	background-color: red;
 }
 
+.darkgrey {
+	background-color: darkgrey;
+}
+
+.carrier {
+	background-color: grey;
+}
+
+.battleship {
+	background-color: orange;
+}
+
+.cruiser {
+	background-color: green;
+}
+
+.submarine {
+	background-color: lightblue;
+}
+
+.destroyer {
+	background-color: yellow;
+}
+
 .red-light {
 	background-color: red;
 	width: 10px;
