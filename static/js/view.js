@@ -276,9 +276,30 @@ var view = {
 		homeBtn.onclick = function() {
 			battleshipCtrl.clearCookie('activeGame');
 			view.refreshPage();
-		}
+		};
 		homeBtn.appendChild(homeBtnText);
 		usernameDiv.appendChild(homeBtn);
+
+		var scoresBtn = document.createElement('DIV');
+		var scoresBtnText = document.createTextNode('Scores');
+		scoresBtn.className = 'button';
+		scoresBtn.id = 'scores-btn';
+		scoresBtn.onclick = function() {
+			view.showScores();
+		};
+		scoresBtn.append(scoresBtnText);
+		usernameDiv.appendChild(scoresBtn);
+
+		// user rankings button
+		var rankingsBtn = document.createElement('DIV');
+		var rankingsBtnText = document.createTextNode('Rankings');
+		rankingsBtn.className = 'button';
+		rankingsBtn.id = 'rankings-btn';
+		rankingsBtn.onclick = function() {
+			view.showRankings();
+		};
+		rankingsBtn.append(rankingsBtnText);
+		usernameDiv.appendChild(rankingsBtn);
 
 		var logoutBtn = document.createElement('DIV');
 		var logoutBtnText = document.createTextNode('Logout');
