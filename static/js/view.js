@@ -25,6 +25,8 @@ var gameBoardsDiv 		= document.createElement('DIV');
 gameBoardsDiv.id 		= 'game-boards';
 var healthDiv 			= document.createElement('DIV');
 healthDiv.id			= 'health-div';
+var resultDiv 			= document.createElement('DIV');
+resultDiv.id 			= 'result-div';
 var ship 				= null;
 var selectedShip 		= null;
 var shipList 			= [
@@ -445,7 +447,7 @@ var view = {
 		// Displays the given board or chart
 		containerDiv.appendChild(gameDiv);
 		var boardDiv = document.createElement('DIV');
-		boardDiv.id = 'board-div';
+		boardDiv.className = 'board-div';
 		var gameBoard = document.createElement('DIV');
 		gameBoard.className = 'board';
 		for (var row = 0; row < board.length; row++) {
@@ -519,12 +521,12 @@ var view = {
 			var boardTitle = document.createElement('DIV');
 			boardTitle.className = 'board-title';
 			if (boardType === 'user_chart') {
-				gameBoard.id = 'chart';
+				boardDiv.id = 'chart';
 				var titleText = document.createTextNode('Click below to fire ' +
 					'on the enemy fleet.');
 			}
 			else {
-				gameBoard.id = 'board';
+				boardDiv.id = 'board';
 				var titleText = document.createTextNode('Keep track of ' +
 					'the condition of your fleet.');
 			}
@@ -558,5 +560,11 @@ var view = {
 			healthDiv.appendChild(shipHealthDiv);
 		}
 		gameDiv.appendChild(healthDiv);
+	},
+
+	showTurnResult: function(result) {
+		var resultText = document.createTextNode(result);
+		resultDiv.append(resultText);
+		healthDiv.appendChild(resultDiv);
 	}
 };

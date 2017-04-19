@@ -338,6 +338,11 @@ var battleshipCtrl = {
 					}
 					battleshipCtrl.gamePhase = 'attack';
 					battleshipCtrl.playGame(gameKey);
+					var result = localStorage.getItem('result');
+					if (result) {
+						view.showTurnResult(result);
+						localStorage.result = '';
+					}
 				}
 				else {
 					view.displayError(xhttp.responseText);
@@ -364,6 +369,8 @@ var battleshipCtrl = {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
 					view.refreshPage();
+					var result = JSON.parse(xhttp.responseText).message;
+					localStorage.result = result;
 				}
 				else {
 					view.displayError(xhttp.responseText);

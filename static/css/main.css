@@ -174,12 +174,26 @@ h1, h3 {
 	color: red;
 }
 
+#game-boards {
+	display: flex;
+	flex-direction: column;
+}
+
+#chart {
+	order: 1;
+}
+
+#board {
+	order: 2;
+}
+
 #health-div {
 	float: right;
 }
 
 #result-div {
 	float: right;
+	font-weight: bold;
 }
 
 @media only screen and (max-width: 350px) {
