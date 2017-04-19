@@ -383,7 +383,77 @@ var battleshipCtrl = {
 		};
 		xhttp.open('PUT', requestPath + 'game/' + gameKey, true);
 		xhttp.send(JSON.stringify(requestOjb));
-	}
+	},
+
+	displayScores: function() {
+		// starts the process of displaying game scores
+		battleshipCtrl.clearCookie('activeGame');
+		view.refreshPage();
+		view.showScores();
+	},
+
+	getScores: function() {
+		// obtains all scores from API
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
+					null;
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		var requestOjb = {
+			'move_col': boardX,
+			'move_row': boardY
+		};
+		xhttp.open('PUT', requestPath + 'game/' + gameKey, true);
+		xhttp.send(JSON.stringify(requestOjb));
+	},
+
+	getTopScores: function() {
+		// obtains top scores from API
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
+					null;
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		var requestOjb = {
+			'move_col': boardX,
+			'move_row': boardY
+		};
+		xhttp.open('PUT', requestPath + 'game/' + gameKey, true);
+		xhttp.send(JSON.stringify(requestOjb));
+	},
+
+	getUserScores: function() {
+		// obtains user scores from API
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
+					null;
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		var requestOjb = {
+			'move_col': boardX,
+			'move_row': boardY
+		};
+		xhttp.open('PUT', requestPath + 'game/' + gameKey, true);
+		xhttp.send(JSON.stringify(requestOjb));
+	},
 };
 
 battleshipCtrl.init();

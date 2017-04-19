@@ -285,7 +285,7 @@ var view = {
 		scoresBtn.className = 'button';
 		scoresBtn.id = 'scores-btn';
 		scoresBtn.onclick = function() {
-			view.showScores();
+			battleshipCtrl.displayScores();
 		};
 		scoresBtn.append(scoresBtnText);
 		usernameDiv.appendChild(scoresBtn);
@@ -315,8 +315,6 @@ var view = {
 	showHomeScreen: function() {
 		// Displays the user's home screen
 
-		// each open game listed should have a button to allow the user
-		// to cancel (delete) that game, with a confirmation alert
 		containerDiv.appendChild(homescreenDiv);
 
 		var newGameBtn = document.createElement('DIV');
@@ -587,5 +585,12 @@ var view = {
 		var resultText = document.createTextNode(result);
 		resultDiv.append(resultText);
 		healthDiv.appendChild(resultDiv);
+	},
+
+	showScores: function() {
+		homescreenDiv.parentElement.removeChild(homescreenDiv);
+		battleshipCtrl.getScores();
+		battleshipCtrl.getTopScores();
+		battleshipCtrl.getUserScores();
 	}
 };
