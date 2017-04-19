@@ -27,6 +27,8 @@ var healthDiv 			= document.createElement('DIV');
 healthDiv.id			= 'health-div';
 var resultDiv 			= document.createElement('DIV');
 resultDiv.id 			= 'result-div';
+var allScoresDiv 		= document.createElement('DIV');
+allScoresDiv.id 		= 'all-scores-div';
 var ship 				= null;
 var selectedShip 		= null;
 var shipList 			= [
@@ -589,8 +591,24 @@ var view = {
 
 	showScores: function() {
 		homescreenDiv.parentElement.removeChild(homescreenDiv);
+		containerDiv.appendChild(allScoresDiv);
 		battleshipCtrl.getScores();
 		battleshipCtrl.getTopScores();
 		battleshipCtrl.getUserScores();
+	},
+
+	addScoresToView: function(scores, text) {
+		// takes in a score object and text, then adds them as a DIV
+		// to the scores screen
+		var scoreDiv = document.createElement('DIV');
+		var scoreHeader = document.createTextNode(text);
+		scoreDiv.append(scoreHeader);
+		for (var i = 0; i < scores.length; i++) {
+			var game = document.createElement('DIV');
+			var gameScore = document.createTextNode(scores[i]);
+			game.append(gameScore);
+			scoreDiv.appendChild(game);
+		}
+		allScoresDiv.appendChild(scoreDiv);
 	}
 };

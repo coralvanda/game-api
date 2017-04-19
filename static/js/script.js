@@ -398,19 +398,16 @@ var battleshipCtrl = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					null;
+					var scores = JSON.parse(xhttp.responseText);
+					view.addScoresToView(scores, 'All scores');
 				}
 				else {
 					view.displayError(xhttp.responseText);
 				}
 			}
 		};
-		var requestOjb = {
-			'move_col': boardX,
-			'move_row': boardY
-		};
-		xhttp.open('PUT', requestPath + 'game/' + gameKey, true);
-		xhttp.send(JSON.stringify(requestOjb));
+		xhttp.open('GET', requestPath + 'scores', true);
+		xhttp.send();
 	},
 
 	getTopScores: function() {
@@ -419,19 +416,16 @@ var battleshipCtrl = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					null;
+					var scores = JSON.parse(xhttp.responseText);
+					view.addScoresToView(scores, 'Top Scores');
 				}
 				else {
 					view.displayError(xhttp.responseText);
 				}
 			}
 		};
-		var requestOjb = {
-			'move_col': boardX,
-			'move_row': boardY
-		};
-		xhttp.open('PUT', requestPath + 'game/' + gameKey, true);
-		xhttp.send(JSON.stringify(requestOjb));
+		xhttp.open('GET', requestPath + 'top-scores', true);
+		xhttp.send();
 	},
 
 	getUserScores: function() {
@@ -440,19 +434,17 @@ var battleshipCtrl = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					null;
+					var scores = JSON.parse(xhttp.responseText);
+					view.addScoresToView(scores, 'Your scores');
 				}
 				else {
 					view.displayError(xhttp.responseText);
 				}
 			}
 		};
-		var requestOjb = {
-			'move_col': boardX,
-			'move_row': boardY
-		};
-		xhttp.open('PUT', requestPath + 'game/' + gameKey, true);
-		xhttp.send(JSON.stringify(requestOjb));
+		xhttp.open('GET', requestPath + 'scores/user/' +
+			battleshipCtrl.user, true);
+		xhttp.send();
 	},
 };
 
