@@ -478,7 +478,7 @@ class BattleshipAPI(remote.Service):
             msg = 'Your shot hit!'
         elif result == 'Miss':
             msg = 'Your shot missed.'
-        else:
+        else: # hit and sunk a ship
             if ai_fleet.fleet_status().condition == ['Fleet destroyed']:
                 game.end_game(True)
                 game.game_over = True
