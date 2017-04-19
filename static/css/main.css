@@ -178,6 +178,10 @@ h1, h3 {
 	float: right;
 }
 
+#result-div {
+	float: right;
+}
+
 @media only screen and (max-width: 350px) {
 	#container {
 		width: 300px;
