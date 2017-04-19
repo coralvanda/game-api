@@ -521,12 +521,12 @@ var view = {
 			var boardTitle = document.createElement('DIV');
 			boardTitle.className = 'board-title';
 			if (boardType === 'user_chart') {
-				boardDiv.id = 'chart';
+				boardDiv.id = 'user-chart';
 				var titleText = document.createTextNode('Click below to fire ' +
 					'on the enemy fleet.');
 			}
 			else {
-				boardDiv.id = 'board';
+				boardDiv.id = 'user-board';
 				var titleText = document.createTextNode('Keep track of ' +
 					'the condition of your fleet.');
 			}

@@ -179,11 +179,11 @@ h1, h3 {
 	flex-direction: column;
 }
 
-#chart {
+#user-chart {
 	order: 1;
 }
 
-#board {
+#user-board {
 	order: 2;
 }
 
@@ -194,6 +194,7 @@ h1, h3 {
 #result-div {
 	float: right;
 	font-weight: bold;
+	w
 }
 
 @media only screen and (max-width: 350px) {
