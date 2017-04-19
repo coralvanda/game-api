@@ -112,6 +112,10 @@ h1, h3 {
 	color: green;
 }
 
+.board {
+	min-width: 300px;
+}
+
 #container {
 	width: 800px;
 	margin: auto;
@@ -177,6 +181,7 @@ h1, h3 {
 #game-boards {
 	display: flex;
 	flex-direction: column;
+	min-width: 300px;
 }
 
 #user-chart {
