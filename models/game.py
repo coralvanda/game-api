@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from datetime import date
 from user import User
 from fleet import Fleet
 from board import Board
