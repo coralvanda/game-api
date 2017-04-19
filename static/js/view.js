@@ -259,6 +259,7 @@ var view = {
 
 	showUserBanner: function() {
 		// Displays the active user at the top of the screen
+		// and site navigation
 		containerDiv.appendChild(usernameDiv);
 
 		var usernameHeader = document.createElement('H3');
@@ -275,7 +276,6 @@ var view = {
 		homeBtn.onclick = function() {
 			battleshipCtrl.clearCookie('activeGame');
 			view.refreshPage();
-			battleshipCtrl.homeScreen();
 		}
 		homeBtn.appendChild(homeBtnText);
 		usernameDiv.appendChild(homeBtn);
