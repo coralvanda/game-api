@@ -271,16 +271,24 @@ var view = {
 		usernameHeader.appendChild(usernameHeaderText);
 		usernameDiv.appendChild(usernameHeader);
 
-		var homeBtn = document.createElement('DIV');
+		var homeBtn = document.createElement('A');
 		var homeBtnText = document.createTextNode('Home');
 		homeBtn.className = 'button';
 		homeBtn.id = 'home-btn';
-		homeBtn.onclick = function() {
+		homeBtn.href = 'http://coralvanda.com';
+		homeBtn.appendChild(homeBtnText);
+		usernameDiv.appendChild(homeBtn);
+
+		var gamesBtn = document.createElement('DIV');
+		var gamesBtnText = document.createTextNode('Games list');
+		gamesBtn.className = 'button';
+		gamesBtn.id = 'games-btn';
+		gamesBtn.onclick = function() {
 			battleshipCtrl.clearCookie('activeGame');
 			view.refreshPage();
 		};
-		homeBtn.appendChild(homeBtnText);
-		usernameDiv.appendChild(homeBtn);
+		gamesBtn.append(gamesBtnText);
+		usernameDiv.appendChild(gamesBtn);
 
 		var scoresBtn = document.createElement('DIV');
 		var scoresBtnText = document.createTextNode('Scores');
