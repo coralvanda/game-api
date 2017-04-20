@@ -348,7 +348,7 @@ var view = {
 	},
 
 	showHomeScreenGamesList: function(optionalText=false) {
-		// Displays the list of actives games for the user
+		// Displays the list of active games for the user
 		var gamesListTitle = document.createElement('H3');
 		var gamesListTitleText = document.createTextNode('Active Games');
 		gamesListTitle.appendChild(gamesListTitleText);
