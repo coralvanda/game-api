@@ -616,9 +616,9 @@ var view = {
 		scoreDiv.append(scoreHeader);
 		var gamesTable = document.createElement('TABLE');
 		var tableBody = document.createElement('TBODY');
-		for (var x = 0; x < 5; x++) {
+		for (var x = 0; x < (scores.length + 1); x++) {
 			var row = document.createElement('TR');
-			for (var i = 0; i < scores.length; i++) {
+			for (var i = 0; i < 4; i++) {
 				if (x === 0) {
 					if (i === 0) {
 						var cell = document.createElement('TH');
@@ -648,25 +648,25 @@ var view = {
 				else {
 					if (i === 0) {
 						var cell = document.createElement('TD');
-						var cellText = document.createTextNode(scores[i].user_name);
+						var cellText = document.createTextNode(scores[x-1].user_name);
 						cell.append(cellText);
 						row.appendChild(cell);
 					}
 					else if (i === 1) {
 						var cell = document.createElement('TD');
-						var cellText = document.createTextNode(scores[i].won);
+						var cellText = document.createTextNode(scores[x-1].won);
 						cell.append(cellText);
 						row.appendChild(cell);
 					}
 					else if (i === 2) {
 						var cell = document.createElement('TD');
-						var cellText = document.createTextNode(scores[i].moves);
+						var cellText = document.createTextNode(scores[x-1].moves);
 						cell.append(cellText);
 						row.appendChild(cell);
 					}
 					else {
 						var cell = document.createElement('TD');
-						var cellText = document.createTextNode(scores[i].date);
+						var cellText = document.createTextNode(scores[x-1].date);
 						cell.append(cellText);
 						row.appendChild(cell);
 					}
