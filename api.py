@@ -586,7 +586,7 @@ class BattleshipAPI(remote.Service):
             scores = Score.query(Score.user == user.key)
             wins = scores.filter(Score.won == True).fetch()
             loses = scores.filter(Score.won == False).fetch()
-            win_percentage = (len(wins) / (len(wins) + len(loses))) * 100
+            win_percentage = (float(len(wins)) / (len(wins) + len(loses))) * 100
             avg_moves = 0
             for score in scores:
                 avg_moves += score.moves
@@ -596,7 +596,7 @@ class BattleshipAPI(remote.Service):
         messages = []
         for rating in user_ratings:
             message = 'Name: ' + rating[0] + ', Win rating: '
-            message += str(rating[1]) + '%, Average Moves: '
+            message += '{0:.2f}%, Average Moves: '.format(rating[1])
             message += str(rating[2])
             messages.append(message)
         return StringMessages(items=[m for m in messages])
