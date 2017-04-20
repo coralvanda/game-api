@@ -439,6 +439,24 @@ var battleshipCtrl = {
 			battleshipCtrl.user, true);
 		xhttp.send();
 	},
+
+	getRankings: function() {
+		// obtains player rankings from API
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState === XMLHttpRequest.DONE) {
+				if (xhttp.status === 200) {
+					var rankings = JSON.parse(xhttp.responseText).items;
+					view.addRankingsToView(rankings);
+				}
+				else {
+					view.displayError(xhttp.responseText);
+				}
+			}
+		};
+		xhttp.open('GET', requestPath + 'rankings', true);
+		xhttp.send();
+	},
 };
 
 battleshipCtrl.init();

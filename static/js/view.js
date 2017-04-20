@@ -31,6 +31,8 @@ var resultDiv 			= document.createElement('DIV');
 resultDiv.id 			= 'result-div';
 var allScoresDiv 		= document.createElement('DIV');
 allScoresDiv.id 		= 'all-scores-div';
+var rankingsDiv 		= document.createElement('DIV');
+rankingsDiv.id 			= 'rankings-div';
 var ship 				= null;
 var selectedShip 		= null;
 var shipList 			= [
@@ -309,6 +311,7 @@ var view = {
 		rankingsBtn.className = 'button';
 		rankingsBtn.id = 'rankings-btn';
 		rankingsBtn.onclick = function() {
+			containerDiv.innerHTML = '';
 			view.showRankings();
 		};
 		rankingsBtn.append(rankingsBtnText);
@@ -612,8 +615,10 @@ var view = {
 		// to the scores screen
 		var scoreDiv = document.createElement('DIV');
 		scoreDiv.className = 'score-div';
-		var scoreHeader = document.createTextNode(text);
-		scoreDiv.append(scoreHeader);
+		var scoreHeader = document.createElement('H3');
+		var scoreHeaderText = document.createTextNode(text);
+		scoreHeader.append(scoreHeaderText);
+		scoreDiv.appendChild(scoreHeader);
 		var gamesTable = document.createElement('TABLE');
 		var tableBody = document.createElement('TBODY');
 		for (var x = 0; x < (scores.length + 1); x++) {
@@ -677,5 +682,19 @@ var view = {
 		gamesTable.appendChild(tableBody);
 		scoreDiv.appendChild(gamesTable);
 		allScoresDiv.appendChild(scoreDiv);
+	},
+
+	showRankings: function() {
+		containerDiv.appendChild(rankingsDiv);
+		battleshipCtrl.getRankings();
+	},
+
+	addRankingsToView: function(rankings) {
+		for (var i = 0; i < rankings.length; i++) {
+			var player = document.createElement('DIV');
+			var playerText = document.createTextNode(rankings[i]);
+			player.append(playerText);
+			rankingsDiv.appendChild(player);
+		}
 	}
 };
