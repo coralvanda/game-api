@@ -385,20 +385,13 @@ var battleshipCtrl = {
 		xhttp.send(JSON.stringify(requestOjb));
 	},
 
-	displayScores: function() {
-		// starts the process of displaying game scores
-		battleshipCtrl.clearCookie('activeGame');
-		view.refreshPage();
-		view.showScores();
-	},
-
 	getScores: function() {
 		// obtains all scores from API
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					var scores = JSON.parse(xhttp.responseText);
+					var scores = JSON.parse(xhttp.responseText).items;
 					view.addScoresToView(scores, 'All scores');
 				}
 				else {
@@ -416,7 +409,7 @@ var battleshipCtrl = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					var scores = JSON.parse(xhttp.responseText);
+					var scores = JSON.parse(xhttp.responseText).items;
 					view.addScoresToView(scores, 'Top Scores');
 				}
 				else {
@@ -434,7 +427,7 @@ var battleshipCtrl = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					var scores = JSON.parse(xhttp.responseText);
+					var scores = JSON.parse(xhttp.responseText).items;
 					view.addScoresToView(scores, 'Your scores');
 				}
 				else {
