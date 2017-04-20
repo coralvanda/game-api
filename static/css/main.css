@@ -120,7 +120,8 @@ h1, h3 {
 }
 
 .score-div {
-	margin: auto;
+	margin: 0 5px 0 5px;
+	background-color: lightyellow;
 }
 
 #whole-page {
