@@ -1,5 +1,7 @@
 'use strict';
 
+var wholePageDiv 		= document.getElementById('whole-page');
+var header 				= document.getElementById('header');
 var containerDiv 		= document.getElementById('container');
 var welcomeDiv 			= document.createElement('DIV');
 welcomeDiv.id 			= 'welcome-div';
@@ -62,7 +64,7 @@ var view = {
 	},
 
 	showWelcome: function() {
-		containerDiv.appendChild(welcomeDiv);
+		header.appendChild(welcomeDiv);
 		var welcomeText = document.createTextNode('Welcome to Battleship! ');
 		welcomeDiv.appendChild(welcomeText);
 		var loginOrRegisterText = document.createTextNode('Login or register.');
@@ -262,7 +264,7 @@ var view = {
 	showUserBanner: function() {
 		// Displays the active user at the top of the screen
 		// and site navigation
-		containerDiv.appendChild(usernameDiv);
+		header.appendChild(usernameDiv);
 
 		var usernameHeader = document.createElement('H3');
 		usernameHeader.id = 'username-header';
