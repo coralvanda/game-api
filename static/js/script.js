@@ -363,6 +363,7 @@ var battleshipCtrl = {
 		// play game
 		battleshipCtrl.getBoard(gameKey, 'user_chart');
 		battleshipCtrl.getBoard(gameKey, 'user_board');
+		battleshipCtrl.getBoard(gameKey, 'ai_chart');
 		battleshipCtrl.getShipStatuses(gameKey, 'user_fleet');
 
 	},
