@@ -572,6 +572,22 @@ var view = {
 		}
 	},
 
+	modifyPlayerBoard: function(aiChart) {
+		// uses the AI chart to update the player's board to show AI attacks
+		for (var row = 0; row < aiChart.length; row++) {
+			for (var col = 0; col < aiChart[row].length; col++) {
+				if (aiChart[row][col] === 'X') {
+					var cell = document.getElementById(row + '-' + col);
+					cell.className += 'computer-hit';
+				}
+				else if (aiChart[row][col] === '-') {
+					var cell = document.getElementById(row + '-' + col);
+					cell.className += 'computer-missed';
+				}
+			}
+		}
+	},
+
 	showShipPlacementStatus: function(ships) {
 		// Displays current placement status for all user ships
 		for (var i = 0; i < ships.length; i++) {
