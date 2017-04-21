@@ -232,8 +232,13 @@ var battleshipCtrl = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === XMLHttpRequest.DONE) {
 				if (xhttp.status === 200) {
-					view.showBoard(JSON.parse(
-						xhttp.responseText).items, boardType);
+					var board = JSON.parse(xhttp.responseText).items
+					if (boardType === 'ai_chart') {
+						view.modifyPlayerBoard(board);
+					}
+					else {
+						view.showBoard(board, boardType);
+					}
 				}
 				else {
 					view.displayError(xhttp.responseText);
