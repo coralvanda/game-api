@@ -125,11 +125,11 @@ h1, h3 {
 }
 
 .computer-hit {
-	color: red;
+	background-color: red;
 }
 
 .computer-missed {
-	color: darkblue;
+	background-color: darkblue;
 }
 
 #whole-page {
