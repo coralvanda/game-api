@@ -565,6 +565,7 @@ var view = {
 				boardDiv.id = 'user-board';
 				var titleText = document.createTextNode('Keep track of ' +
 					'the condition of your fleet.');
+				battleshipCtrl.getBoard(gameKey, 'ai_chart');
 			}
 			boardTitle.append(titleText);
 			boardDiv.insertBefore(boardTitle, gameBoard);
