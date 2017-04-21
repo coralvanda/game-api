@@ -124,6 +124,14 @@ h1, h3 {
 	background-color: lightyellow;
 }
 
+.computer-hit {
+	color: red;
+}
+
+.computer-missed {
+	color: darkblue;
+}
+
 #whole-page {
 	width: 800px;
 	margin: auto;
