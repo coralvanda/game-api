@@ -489,6 +489,7 @@ var view = {
 			var rowDiv = document.createElement('DIV');
 			rowDiv.className = 'row-div';
 			for (var col = 3; col < board[row].length; col++) {
+				// col must start at 3 because of the formatting of the API output
 				var colDiv = document.createElement('DIV');
 				colDiv.className = 'col-div';
 				if (board[row][col] === '0') {
@@ -522,7 +523,7 @@ var view = {
 					colDiv.className += ' miss';
 				}
 				var coordinates = row + '-' + (col - 3)
-				colDiv.id = coordinates;
+				colDiv.id = boardType + '-' + coordinates;
 				colDiv.addEventListener('mouseup', (function(coordsCopy) {
 					return function() {
 						if (selectedShip) {
@@ -575,14 +576,17 @@ var view = {
 	modifyPlayerBoard: function(aiChart) {
 		// uses the AI chart to update the player's board to show AI attacks
 		for (var row = 0; row < aiChart.length; row++) {
-			for (var col = 0; col < aiChart[row].length; col++) {
+			for (var col = 3; col < aiChart[row].length; col++) {
+				// col must start at 3 because of the formatting of the API output
 				if (aiChart[row][col] === 'X') {
-					var cell = document.getElementById(row + '-' + col);
-					cell.className += 'computer-hit';
+					var cell = document.getElementById(
+						'user_board-' + row + '-' + (col - 3));
+					cell.className += ' computer-hit';
 				}
 				else if (aiChart[row][col] === '-') {
-					var cell = document.getElementById(row + '-' + col);
-					cell.className += 'computer-missed';
+					var cell = document.getElementById(
+						'user_board-' + row + '-' + (col - 3));
+					cell.className += ' computer-missed';
 				}
 			}
 		}
