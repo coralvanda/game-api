@@ -1,5 +1,10 @@
 # Battleship endpoints
 
+## Update:
+The project now includes a front-end written in JavaScript that accesses
+the API to make the full experience of playing a game simple and easy
+from any device.
+
 ## What is it?
 This is a project created for the Udacity Full Stack Developer
 Nanodegree program.  It uses the Python version of Google App Engine
