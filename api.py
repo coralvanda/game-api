@@ -586,6 +586,8 @@ class BattleshipAPI(remote.Service):
             scores = Score.query(Score.user == user.key)
             wins = scores.filter(Score.won == True).fetch()
             loses = scores.filter(Score.won == False).fetch()
+            if not (wins or loses):
+                continue
             win_percentage = (float(len(wins)) / (len(wins) + len(loses))) * 100
             avg_moves = 0
             for score in scores:
