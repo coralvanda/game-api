@@ -7,4 +7,9 @@ models.pyc
 settings.pyc
 utils.pyc
 
+background.xcf
+background-cropped.xcf
+
 models/fleet.pyc
+
+static/img/
