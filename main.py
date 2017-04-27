@@ -7,7 +7,8 @@ import logging
 import webapp2
 from google.appengine.api import mail, app_identity
 from api import BattleshipAPI
-from models import Game, User
+from models.game import Game
+from models.user import User
 
 
 class SendReminderEmail(webapp2.RequestHandler):
