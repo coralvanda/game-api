@@ -1,3 +1,7 @@
+header {
+	margin: 0 0 10px 0;
+}
+
 body {
     font-family: 'Crimson Text', serif, Georgia, serif;
 }
@@ -121,7 +125,7 @@ h1, h3 {
 
 .score-div {
 	margin: 0 5px 0 5px;
-	background-color: lightyellow;
+	background-color: rgba(255, 255, 255, 0.9);
 }
 
 .computer-hit {
@@ -161,12 +165,13 @@ h1, h3 {
 }
 
 #homescreen-div {
-	background-color: lightyellow;
+	background-color: rgba(255, 255, 255, 0.9);
 }
 
 #place-ships-div {
 	display: flex;
 	flex-wrap: wrap;
+	background-color: rgba(255, 255, 255, 0.9);
 }
 
 #place-ships-upper {
@@ -192,6 +197,10 @@ h1, h3 {
 
 #ship-placements-div {
 	color: red;
+}
+
+#game-div {
+	background-color: rgba(255, 255, 255, 0.9);
 }
 
 #game-boards {
@@ -223,21 +232,99 @@ h1, h3 {
 	flex-wrap: wrap;
 }
 
+#rankings-div {
+	background-color: rgba(255, 255, 255, 0.9);
+}
+
 @media only screen and (max-width: 350px) {
-	#container {
+	html {
+		background-color: white;
+		background: url("../img/sea-small.jpg") no-repeat center fixed;
+		background-size: cover;
+		-webkit-background-size: cover;
+	    -moz-background-size: cover;
+        -o-background-size: cover;
+		background-size: cover;
+	}
+
+	#whole-page {
 		width: 300px;
+	}
+
+	#username-header {
+		width: 250px;
+	}
+
+	#home-btn {
+		margin: 1px 1px 1px 1px;
+	}
+
+	#logout-btn {
+		margin: 1px 1px 1px 1px;
 	}
 }
 
 @media only screen and (min-width: 351px) and (max-width: 400px) {
-	#container {
+	html {
+		background-color: white;
+		background: url("../img/sea-small.jpg") no-repeat center center fixed;
+		-webkit-background-size: cover;
+	    -moz-background-size: cover;
+        -o-background-size: cover;
+		background-size: cover;
+	}
+
+	#whole-page {
 		width: 350px;
+	}
+
+	#username-header {
+		width: 300px;
+	}
+
+	#home-btn {
+		margin: 1px 1px 1px 1px;
+	}
+
+	#logout-btn {
+		margin: 1px 1px 1px 1px;
 	}
 }
 
 @media only screen and (min-width: 401px) and (max-width: 600px) {
-	#container {
+	html {
+		background-color: white;
+		background: url("../img/sea-medium.jpg") no-repeat center center fixed;
+		-webkit-background-size: cover;
+	    -moz-background-size: cover;
+        -o-background-size: cover;
+		background-size: cover;
+	}
+
+	#whole-page {
 		width: 400px;
 		margin: auto;
+	}
+
+	#username-header {
+		width: 400px;
+	}
+
+	#home-btn {
+		margin: 1px 1px 1px 1px;
+	}
+
+	#logout-btn {
+		margin: 1px 1px 1px 1px;
+	}
+}
+
+@media only screen and (min-width: 601px) {
+	html {
+		background: url("../img/sea-large.jpg") no-repeat center center fixed;
+		-webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+		background-size: cover;
 	}
 }
