@@ -28,6 +28,9 @@ h1, h3 {
 
 .board-title {
 	font-size: 1.5em;
+	order: 1;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .game-list-item {
@@ -40,6 +43,13 @@ h1, h3 {
 
 .cancel-game {
 	display: inline;
+}
+
+.board-div {
+	order: 1;
+	display: flex;
+	flex-wrap: wrap;
+	width: 385px;
 }
 
 .row-div {
@@ -121,6 +131,7 @@ h1, h3 {
 
 .board {
 	min-width: 300px;
+	order: 2;
 }
 
 .score-div {
@@ -175,7 +186,9 @@ h1, h3 {
 }
 
 #place-ships-upper {
-
+	display: flex;
+	flex-wrap: wrap;
+	width: 300px;
 }
 
 #place-ships-lower {
@@ -197,6 +210,7 @@ h1, h3 {
 
 #ship-placements-div {
 	color: red;
+	order: 2;
 }
 
 #game-div {

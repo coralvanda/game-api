@@ -551,7 +551,7 @@ var view = {
 		boardDiv.appendChild(gameBoard);
 		if (battleshipCtrl.gamePhase === 'placement') {
 			gameBoard.id = 'placement-board';
-			placeShipsUpper.insertBefore(boardDiv, shipPlacementsDiv);
+			placeShipsUpper.appendChild(boardDiv);
 		}
 		else {
 			var boardTitle = document.createElement('DIV');
@@ -569,7 +569,7 @@ var view = {
 				battleshipCtrl.getBoard(gameKey, 'ai_chart');
 			}
 			boardTitle.append(titleText);
-			boardDiv.insertBefore(boardTitle, gameBoard);
+			boardDiv.appendChild(boardTitle);
 			gameBoardsDiv.appendChild(boardDiv);
 			gameDiv.appendChild(gameBoardsDiv);
 		}
