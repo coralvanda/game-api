@@ -321,6 +321,7 @@ var battleshipCtrl = {
 		};
 		xhttp.open('POST', requestPath + 'game/' + gameKey +
 			'/place_ship', true);
+		xhttp.setRequestHeader('Content-type', 'application/json');
 		xhttp.send(JSON.stringify(requestOjb));
 	},
 
@@ -388,6 +389,7 @@ var battleshipCtrl = {
 			'move_row': boardY
 		};
 		xhttp.open('PUT', requestPath + 'game/' + gameKey, true);
+		xhttp.setRequestHeader('Content-type', 'application/json');
 		xhttp.send(JSON.stringify(requestOjb));
 	},
 
