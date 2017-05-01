@@ -205,6 +205,7 @@ var battleshipCtrl = {
 		};
 		var requestOjb = {"user_name": battleshipCtrl.user};
 		xhttp.open('POST', requestPath + 'game', true);
+		xhttp.setRequestHeader('Content-type', 'application/json');
 		xhttp.send(JSON.stringify(requestOjb));
 	},
 
