@@ -641,68 +641,76 @@ var view = {
 		var scoreHeaderText = document.createTextNode(text);
 		scoreHeader.append(scoreHeaderText);
 		scoreDiv.appendChild(scoreHeader);
-		var gamesTable = document.createElement('TABLE');
-		var tableBody = document.createElement('TBODY');
-		for (var x = 0; x < (scores.length + 1); x++) {
-			var row = document.createElement('TR');
-			for (var i = 0; i < 4; i++) {
-				if (x === 0) {
-					if (i === 0) {
-						var cell = document.createElement('TH');
-						var cellText = document.createTextNode('Player');
-						cell.append(cellText);
-						row.appendChild(cell);
-					}
-					else if (i === 1) {
-						var cell = document.createElement('TH');
-						var cellText = document.createTextNode('Won?');
-						cell.append(cellText);
-						row.appendChild(cell);
-					}
-					else if (i === 2) {
-						var cell = document.createElement('TH');
-						var cellText = document.createTextNode('Move count');
-						cell.append(cellText);
-						row.appendChild(cell);
-					}
-					else {
-						var cell = document.createElement('TH');
-						var cellText = document.createTextNode('Date');
-						cell.append(cellText);
-						row.appendChild(cell);
-					}
-				}
-				else {
-					if (i === 0) {
-						var cell = document.createElement('TD');
-						var cellText = document.createTextNode(scores[x-1].user_name);
-						cell.append(cellText);
-						row.appendChild(cell);
-					}
-					else if (i === 1) {
-						var cell = document.createElement('TD');
-						var cellText = document.createTextNode(scores[x-1].won);
-						cell.append(cellText);
-						row.appendChild(cell);
-					}
-					else if (i === 2) {
-						var cell = document.createElement('TD');
-						var cellText = document.createTextNode(scores[x-1].moves);
-						cell.append(cellText);
-						row.appendChild(cell);
-					}
-					else {
-						var cell = document.createElement('TD');
-						var cellText = document.createTextNode(scores[x-1].date);
-						cell.append(cellText);
-						row.appendChild(cell);
-					}
-				}
-			}
-			tableBody.appendChild(row);
+		if (!scores) {
+			noScore = document.createElement('P');
+			noScoreText = document.createTextNode('No scores found');
+			noScore.append(noScoreText);
+			scoreDiv.appendChild(noScore);
 		}
-		gamesTable.appendChild(tableBody);
-		scoreDiv.appendChild(gamesTable);
+		else {
+			var gamesTable = document.createElement('TABLE');
+			var tableBody = document.createElement('TBODY');
+			for (var x = 0; x < (scores.length + 1); x++) {
+				var row = document.createElement('TR');
+				for (var i = 0; i < 4; i++) {
+					if (x === 0) {
+						if (i === 0) {
+							var cell = document.createElement('TH');
+							var cellText = document.createTextNode('Player');
+							cell.append(cellText);
+							row.appendChild(cell);
+						}
+						else if (i === 1) {
+							var cell = document.createElement('TH');
+							var cellText = document.createTextNode('Won?');
+							cell.append(cellText);
+							row.appendChild(cell);
+						}
+						else if (i === 2) {
+							var cell = document.createElement('TH');
+							var cellText = document.createTextNode('Move count');
+							cell.append(cellText);
+							row.appendChild(cell);
+						}
+						else {
+							var cell = document.createElement('TH');
+							var cellText = document.createTextNode('Date');
+							cell.append(cellText);
+							row.appendChild(cell);
+						}
+					}
+					else {
+						if (i === 0) {
+							var cell = document.createElement('TD');
+							var cellText = document.createTextNode(scores[x-1].user_name);
+							cell.append(cellText);
+							row.appendChild(cell);
+						}
+						else if (i === 1) {
+							var cell = document.createElement('TD');
+							var cellText = document.createTextNode(scores[x-1].won);
+							cell.append(cellText);
+							row.appendChild(cell);
+						}
+						else if (i === 2) {
+							var cell = document.createElement('TD');
+							var cellText = document.createTextNode(scores[x-1].moves);
+							cell.append(cellText);
+							row.appendChild(cell);
+						}
+						else {
+							var cell = document.createElement('TD');
+							var cellText = document.createTextNode(scores[x-1].date);
+							cell.append(cellText);
+							row.appendChild(cell);
+						}
+					}
+				}
+				tableBody.appendChild(row);
+			}
+			gamesTable.appendChild(tableBody);
+			scoreDiv.appendChild(gamesTable);
+		}
 		allScoresDiv.appendChild(scoreDiv);
 	},
 
@@ -712,11 +720,19 @@ var view = {
 	},
 
 	addRankingsToView: function(rankings) {
-		for (var i = 0; i < rankings.length; i++) {
-			var player = document.createElement('DIV');
-			var playerText = document.createTextNode(rankings[i]);
-			player.append(playerText);
-			rankingsDiv.appendChild(player);
+		if (!rankings) {
+			noRankings = document.createElement('P');
+			noRankingsText = document.createTextNode('No rankings found');
+			noRankings.append(noRankingsText);
+			rankingsDiv.appendChild(noRankings);
+		}
+		else {
+			for (var i = 0; i < rankings.length; i++) {
+				var player = document.createElement('DIV');
+				var playerText = document.createTextNode(rankings[i]);
+				player.append(playerText);
+				rankingsDiv.appendChild(player);
+			}
 		}
 	}
 };
