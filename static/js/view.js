@@ -642,8 +642,8 @@ var view = {
 		scoreHeader.append(scoreHeaderText);
 		scoreDiv.appendChild(scoreHeader);
 		if (!scores) {
-			noScore = document.createElement('P');
-			noScoreText = document.createTextNode('No scores found');
+			var noScore = document.createElement('P');
+			var noScoreText = document.createTextNode('No scores found');
 			noScore.append(noScoreText);
 			scoreDiv.appendChild(noScore);
 		}
@@ -721,8 +721,8 @@ var view = {
 
 	addRankingsToView: function(rankings) {
 		if (!rankings) {
-			noRankings = document.createElement('P');
-			noRankingsText = document.createTextNode('No rankings found');
+			var noRankings = document.createElement('P');
+			var noRankingsText = document.createTextNode('No rankings found');
 			noRankings.append(noRankingsText);
 			rankingsDiv.appendChild(noRankings);
 		}
