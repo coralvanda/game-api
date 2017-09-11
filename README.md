@@ -1,5 +1,10 @@
 # Battleship endpoints
 
+## Known bugs:
+Upon registering a new user, the site will display an error that the user was not 
+found, but it will proceed correctly. The cause of the bug has been indentified 
+and a fix is coming ASAP.
+
 ## Update:
 The project now includes a front-end written in JavaScript that accesses
 the API to make the full experience of playing a game simple and easy
