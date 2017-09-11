@@ -1,4 +1,4 @@
-# Battleship endpoints
+# Battleship
 
 ## Known bugs:
 Upon registering a new user, the site will display an error that the user was not 
